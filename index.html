@@ -4,17 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Session Notes</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <!-- ===== Navigation ===== -->
-  <nav>
-    <a href="index.html" class="logo">⚔️ DM Companion</a>
-    <a href="index.html" class="active">📜 Session Notes</a>
-    <a href="characters.html">🐉 Characters</a>
-    <a href="players.html">🧙 Players</a>
-  </nav>
+  <nav id="main-nav"></nav>
 
   <!-- ===== Main Content ===== -->
   <main>
@@ -61,8 +56,10 @@
 
   </main>
 
-  <script src="app.js"></script>
+  <script>window.ACTIVE_PAGE = 'index.html';</script>
+  <script src="js/app.js"></script>
   <script>
+    renderNav();
     // ---- Load saved notes when the page opens ----
     window.addEventListener('load', function () {
       document.getElementById('session-title').value = load('session-title') || '';

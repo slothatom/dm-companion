@@ -100,7 +100,7 @@
     // ---- Roll a single die ----
     function roll(sides) {
       const result = Math.floor(Math.random() * sides) + 1;
-      displayResult(result, `d${sides}`, [result]);
+      displayResult(result, `d${sides}`, [result], 0);
       addToHistory(`d${sides}`, result, [result], 0);
     }
 
@@ -116,7 +116,7 @@
       }
 
       const total = rolls.reduce((a, b) => a + b, 0) + modifier;
-      const label = `${num}d${sides}${modifier >= 0 ? '+' : ''}${modifier !== 0 ? modifier : ''}`;
+      const label = `${num}d${sides}${modifier !== 0 ? (modifier > 0 ? '+' : '') + modifier : ''}`;
       displayResult(total, label, rolls, modifier);
       addToHistory(label, total, rolls, modifier);
     }

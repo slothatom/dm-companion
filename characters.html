@@ -4,18 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Characters</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
 
   <!-- ===== Navigation ===== -->
-  <nav>
-    <a href="index.html" class="logo">⚔️ DM Companion</a>
-    <a href="index.html">📜 Session Notes</a>
-    <a href="characters.html" class="active">🐉 Characters</a>
-    <a href="players.html">🧙 Players</a>
-  </nav>
+  <nav id="main-nav"></nav>
 
   <!-- ===== Main Content ===== -->
   <main>
@@ -44,8 +39,10 @@
 
   </main>
 
-  <script src="app.js"></script>
+  <script>window.ACTIVE_PAGE = 'characters.html';</script>
+  <script src="js/app.js"></script>
   <script>
+    renderNav();
 
     // ---- Each NPC/Creature is stored as an object in an array ----
     let npcs      = [];

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Players</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <a href="index.html" class="logo">⚔️ DM Companion</a>
+    <a href="index.html">📜 Session Notes</a>
+    <a href="characters.html">🐉 Characters</a>
+    <a href="players.html" class="active">🧙 Players</a>
+  </nav>
+
+  <!-- ===== Main Content ===== -->
+  <main>
+    <h1>🧙 Players</h1>
+    <p class="subtitle">Keep track of your adventuring party.</p>
+
+    <div id="player-list">
+      <!-- Player cards are added here by JavaScript -->
+    </div>
+
+    <button onclick="addPlayer()">+ Add Player</button>
+
+    <br /><br />
+    <button onclick="savePlayers()">💾 Save All</button>
+    <span id="save-status">Saved!</span>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+
+    let players = [];
+
+    // ---- Load data when page opens ----
+    window.addEventListener('load', function () {
+      players = loadJSON('players') || [];
+      renderPlayers();
+    });
+
+    // ---- Render all player cards ----
+    function renderPlayers() {
+      const container = document.getElementById('player-list');
+      container.innerHTML = '';
+      players.forEach(function (player, index) {
+        container.innerHTML += buildPlayerCard(player, index);
+      });
+    }
+
+    // ---- Build HTML for one player card ----
+    function buildPlayerCard(player, index) {
+      return `
+        <div class="card">
+          <div class="stat-grid">
+            <div>
+              <label>Player Name</label>
+              <input type="text" value="${player.playerName || ''}"
+                onchange="updatePlayer(${index}, 'playerName', this.value)"
+                placeholder="e.g. Sarah" />
+            </div>
+            <div>
+              <label>Character Name</label>
+              <input type="text" value="${player.charName || ''}"
+                onchange="updatePlayer(${index}, 'charName', this.value)"
+                placeholder="e.g. Aria Swiftblade" />
+            </div>
+            <div>
+              <label>Class</label>
+              <input type="text" value="${player.charClass || ''}"
+                onchange="updatePlayer(${index}, 'charClass', this.value)"
+                placeholder="e.g. Rogue" />
+            </div>
+          </div>
+
+          <div class="stat-grid">
+            <div>
+              <label>Race</label>
+              <input type="text" value="${player.race || ''}"
+                onchange="updatePlayer(${index}, 'race', this.value)"
+                placeholder="e.g. Half-Elf" />
+            </div>
+            <div>
+              <label>Level</label>
+              <input type="number" value="${player.level || ''}"
+                onchange="updatePlayer(${index}, 'level', this.value)"
+                placeholder="e.g. 5" />
+            </div>
+            <div>
+              <label>HP</label>
+              <input type="number" value="${player.hp || ''}"
+                onchange="updatePlayer(${index}, 'hp', this.value)"
+                placeholder="e.g. 38" />
+            </div>
+          </div>
+
+          <label>Notes (backstory hooks, personality, things to keep in mind)</label>
+          <textarea
+            onchange="updatePlayer(${index}, 'notes', this.value)"
+            placeholder="e.g. Looking for her missing brother. Doesn't trust clerics. Has a soft spot for animals."
+            style="min-height: 80px;"
+          >${player.notes || ''}</textarea>
+
+          <button class="danger" onclick="removePlayer(${index})">🗑 Remove</button>
+        </div>
+      `;
+    }
+
+    // ---- Add a blank player ----
+    function addPlayer() {
+      players.push({ playerName: '', charName: '', charClass: '', race: '', level: '', hp: '', notes: '' });
+      renderPlayers();
+    }
+
+    // ---- Update a field ----
+    function updatePlayer(index, field, value) {
+      players[index][field] = value;
+    }
+
+    // ---- Remove a player ----
+    function removePlayer(index) {
+      players.splice(index, 1);
+      renderPlayers();
+    }
+
+    // ---- Save ----
+    function savePlayers() {
+      saveJSON('players', players);
+      showSaved();
+    }
+
+  </script>
+
+</body>
+</html>

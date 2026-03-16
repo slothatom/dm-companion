@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Session Notes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <a href="index.html" class="logo">⚔️ DM Companion</a>
+    <a href="index.html" class="active">📜 Session Notes</a>
+    <a href="characters.html">🐉 Characters</a>
+    <a href="players.html">🧙 Players</a>
+  </nav>
+
+  <!-- ===== Main Content ===== -->
+  <main>
+    <h1>📜 Session Notes</h1>
+    <p class="subtitle">Plan your one-shot. Write everything you need to run a great game.</p>
+
+    <!-- Session title -->
+    <label for="session-title">Session Title</label>
+    <input
+      type="text"
+      id="session-title"
+      placeholder="e.g. The Curse of Strahd – One Shot"
+    />
+
+    <!-- Story / Overview -->
+    <h2>The Story</h2>
+    <label for="story">Overview & plot hooks</label>
+    <textarea
+      id="story"
+      placeholder="What's the main story? What are the key plot points? What do the players need to find out or do?"
+    ></textarea>
+
+    <!-- Locations -->
+    <h2>Key Locations</h2>
+    <label for="locations">Places the players will visit</label>
+    <textarea
+      id="locations"
+      placeholder="Describe each location briefly. What's there? Any secrets? Any traps?"
+      style="min-height: 140px;"
+    ></textarea>
+
+    <!-- DM Notes -->
+    <h2>DM Notes</h2>
+    <label for="dm-notes">Your private notes, reminders, and ideas</label>
+    <textarea
+      id="dm-notes"
+      placeholder="Anything you want to remember: pacing tips, improvised NPC names, contingencies if players go off-script..."
+      style="min-height: 160px;"
+    ></textarea>
+
+    <!-- Save button -->
+    <button onclick="saveNotes()">💾 Save Notes</button>
+    <span id="save-status">Saved!</span>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // ---- Load saved notes when the page opens ----
+    window.addEventListener('load', function () {
+      document.getElementById('session-title').value = load('session-title') || '';
+      document.getElementById('story').value         = load('story')         || '';
+      document.getElementById('locations').value     = load('locations')     || '';
+      document.getElementById('dm-notes').value      = load('dm-notes')      || '';
+    });
+
+    // ---- Save all fields ----
+    function saveNotes() {
+      save('session-title', document.getElementById('session-title').value);
+      save('story',         document.getElementById('story').value);
+      save('locations',     document.getElementById('locations').value);
+      save('dm-notes',      document.getElementById('dm-notes').value);
+      showSaved();
+    }
+  </script>
+
+</body>
+</html>

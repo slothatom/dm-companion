@@ -1,0 +1,197 @@
+/* =====================
+   DM Companion Styles
+   ===================== */
+
+/* Import a fantasy-style font from Google */
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* Reset some browser defaults */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #1a1009;
+  background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
+  color: #e8d5a3;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 18px;
+  min-height: 100vh;
+}
+
+/* ---- Top navigation bar ---- */
+nav {
+  background-color: #2c1a0e;
+  border-bottom: 3px solid #8b0000;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+nav .logo {
+  font-size: 22px;
+  font-weight: 600;
+  color: #c9a84c;
+  text-decoration: none;
+  margin-right: auto;
+}
+
+nav a {
+  color: #e8d5a3;
+  text-decoration: none;
+  font-size: 17px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+  background-color: #8b0000;
+  color: #fff;
+}
+
+/* ---- Main content area ---- */
+main {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  font-size: 32px;
+  color: #c9a84c;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 24px;
+  color: #c9a84c;
+  margin: 24px 0 12px;
+  border-bottom: 1px solid #5a3e1b;
+  padding-bottom: 6px;
+}
+
+p.subtitle {
+  color: #a89060;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+/* ---- Cards (used for NPCs, Creatures, Players) ---- */
+.card {
+  background-color: #2c1a0e;
+  border: 1px solid #5a3e1b;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.card h3 {
+  color: #c9a84c;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+/* ---- Form elements ---- */
+label {
+  display: block;
+  margin-bottom: 4px;
+  color: #a89060;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  background-color: #1a1009;
+  border: 1px solid #5a3e1b;
+  border-radius: 4px;
+  color: #e8d5a3;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 17px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #c9a84c;
+}
+
+textarea {
+  min-height: 200px;
+}
+
+/* ---- Buttons ---- */
+button {
+  background-color: #8b0000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 22px;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background-color: #a00000;
+}
+
+button.secondary {
+  background-color: #3a2510;
+  border: 1px solid #5a3e1b;
+}
+
+button.secondary:hover {
+  background-color: #4a3520;
+}
+
+button.danger {
+  background-color: #4a1010;
+}
+
+button.danger:hover {
+  background-color: #6a1010;
+}
+
+/* ---- Save status message ---- */
+#save-status {
+  display: inline-block;
+  margin-left: 14px;
+  color: #6aaa6a;
+  font-style: italic;
+  font-size: 15px;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+#save-status.visible {
+  opacity: 1;
+}
+
+/* ---- Grid for stat fields ---- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+/* ---- Divider ---- */
+hr {
+  border: none;
+  border-top: 1px solid #3a2510;
+  margin: 24px 0;
+}

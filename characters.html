@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Characters</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <a href="index.html" class="logo">⚔️ DM Companion</a>
+    <a href="index.html">📜 Session Notes</a>
+    <a href="characters.html" class="active">🐉 Characters</a>
+    <a href="players.html">🧙 Players</a>
+  </nav>
+
+  <!-- ===== Main Content ===== -->
+  <main>
+    <h1>🐉 Characters</h1>
+    <p class="subtitle">Track your NPCs and creatures. Never forget a stat mid-combat again.</p>
+
+    <!-- ===== NPCs Section ===== -->
+    <h2>NPCs</h2>
+    <div id="npc-list">
+      <!-- NPC cards are added here by JavaScript -->
+    </div>
+    <button onclick="addNPC()">+ Add NPC</button>
+
+    <hr />
+
+    <!-- ===== Creatures Section ===== -->
+    <h2>Creatures & Monsters</h2>
+    <div id="creature-list">
+      <!-- Creature cards are added here by JavaScript -->
+    </div>
+    <button onclick="addCreature()">+ Add Creature</button>
+
+    <br /><br />
+    <button onclick="saveCharacters()">💾 Save All</button>
+    <span id="save-status">Saved!</span>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+
+    // ---- Each NPC/Creature is stored as an object in an array ----
+    let npcs      = [];
+    let creatures = [];
+
+    // ---- Load data when page opens ----
+    window.addEventListener('load', function () {
+      npcs      = loadJSON('npcs')      || [];
+      creatures = loadJSON('creatures') || [];
+      renderAll();
+    });
+
+    // ---- Render all NPCs and Creatures ----
+    function renderAll() {
+      renderList('npc-list',      npcs,      'npc');
+      renderList('creature-list', creatures, 'creature');
+    }
+
+    function renderList(containerId, list, type) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      list.forEach(function (item, index) {
+        container.innerHTML += buildCard(item, index, type);
+      });
+    }
+
+    // ---- Build a card's HTML for one NPC or Creature ----
+    function buildCard(item, index, type) {
+      return `
+        <div class="card">
+          <div class="stat-grid">
+            <div>
+              <label>Name</label>
+              <input type="text" value="${item.name || ''}"
+                onchange="updateField('${type}', ${index}, 'name', this.value)"
+                placeholder="e.g. Gareth the Innkeeper" />
+            </div>
+            <div>
+              <label>HP</label>
+              <input type="number" value="${item.hp || ''}"
+                onchange="updateField('${type}', ${index}, 'hp', this.value)"
+                placeholder="e.g. 30" />
+            </div>
+            <div>
+              <label>AC</label>
+              <input type="number" value="${item.ac || ''}"
+                onchange="updateField('${type}', ${index}, 'ac', this.value)"
+                placeholder="e.g. 13" />
+            </div>
+          </div>
+
+          <label>Notes (personality, role, special abilities)</label>
+          <textarea
+            onchange="updateField('${type}', ${index}, 'notes', this.value)"
+            placeholder="e.g. Friendly innkeeper. Secretly a spy. Has a dagger hidden under the bar."
+            style="min-height: 80px;"
+          >${item.notes || ''}</textarea>
+
+          <button class="danger" onclick="removeItem('${type}', ${index})">🗑 Remove</button>
+        </div>
+      `;
+    }
+
+    // ---- Add a blank NPC or Creature ----
+    function addNPC() {
+      npcs.push({ name: '', hp: '', ac: '', notes: '' });
+      renderAll();
+    }
+
+    function addCreature() {
+      creatures.push({ name: '', hp: '', ac: '', notes: '' });
+      renderAll();
+    }
+
+    // ---- Update a single field in the array ----
+    function updateField(type, index, field, value) {
+      if (type === 'npc')      npcs[index][field]      = value;
+      if (type === 'creature') creatures[index][field] = value;
+    }
+
+    // ---- Remove an entry ----
+    function removeItem(type, index) {
+      if (type === 'npc')      npcs.splice(index, 1);
+      if (type === 'creature') creatures.splice(index, 1);
+      renderAll();
+    }
+
+    // ---- Save everything ----
+    function saveCharacters() {
+      saveJSON('npcs',      npcs);
+      saveJSON('creatures', creatures);
+      showSaved();
+    }
+
+  </script>
+
+</body>
+</html>

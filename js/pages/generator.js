@@ -12,7 +12,28 @@ let currentUserId  = null;
   if (!user) return;
   currentUserId = user.id;
   renderNav(user);
+  await loadGenCampaigns();
 })();
+
+async function loadGenCampaigns() {
+  const { data } = await db
+    .from('campaigns')
+    .select('id, name')
+    .eq('user_id', currentUserId)
+    .order('created_at');
+
+  const sel = document.getElementById('gen-campaign-select');
+  if (!data || data.length === 0) {
+    sel.style.display = 'none';
+    return;
+  }
+  data.forEach(function (c) {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+}
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -159,39 +180,46 @@ function copyEntry() {
 async function saveToCharacters() {
   if (!currentEntry) { showToast('Generate something first!', 'info'); return; }
 
-  let error;
-  if (currentEntry._type === 'npc') {
-    const result = await db.from('npcs').insert({
-      user_id: currentUserId,
-      name:    currentEntry.name,
-      hp:      '',
-      ac:      '',
-      notes:   currentEntry.race + ' ' + currentEntry.occupation + '. ' +
-               currentEntry.personality + '. ' + currentEntry.quirk +
-               '. Motivation: ' + currentEntry.motivation
-    });
-    error = result.error;
-  } else {
-    const result = await db.from('creatures').insert({
-      user_id: currentUserId,
-      name:    currentEntry.name,
-      hp:      '',
-      ac:      '',
-      cr:      currentEntry.cr,
-      notes:   currentEntry.type + ' · ' + currentEntry.size + ' · CR ' + currentEntry.cr +
-               '\nTrait: ' + currentEntry.trait +
-               '\nAttack: ' + currentEntry.attack +
-               '\nHabitat: ' + currentEntry.habitat
-    });
-    error = result.error;
-  }
+  const table = currentEntry._type === 'npc' ? 'npcs' : 'creatures';
+  const row = currentEntry._type === 'npc'
+    ? {
+        user_id: currentUserId,
+        name:    currentEntry.name,
+        hp:      '',
+        ac:      '',
+        notes:   currentEntry.race + ' ' + currentEntry.occupation + '. ' +
+                 currentEntry.personality + '. ' + currentEntry.quirk +
+                 '. Motivation: ' + currentEntry.motivation
+      }
+    : {
+        user_id: currentUserId,
+        name:    currentEntry.name,
+        hp:      '',
+        ac:      '',
+        cr:      currentEntry.cr,
+        notes:   currentEntry.type + ' · ' + currentEntry.size + ' · CR ' + currentEntry.cr +
+                 '\nTrait: ' + currentEntry.trait +
+                 '\nAttack: ' + currentEntry.attack +
+                 '\nHabitat: ' + currentEntry.habitat
+      };
 
-  if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
+  const result = await db.from(table).insert(row).select('id').single();
+  if (result.error) { showToast('Save failed: ' + result.error.message, 'error'); return; }
+
+  // Associate with selected campaign via localStorage map
+  const campaignId = document.getElementById('gen-campaign-select').value;
+  if (campaignId && result.data) {
+    const mapKey = 'char-campaign-map-' + currentUserId;
+    const map = JSON.parse(localStorage.getItem(mapKey) || '{}');
+    map[currentEntry._type + ':' + result.data.id] = campaignId;
+    localStorage.setItem(mapKey, JSON.stringify(map));
+  }
 
   sessionEntries.push(currentEntry);
   localStorage.setItem('generator-session-entries', JSON.stringify(sessionEntries));
   renderSessionList();
-  showToast(currentEntry.name + ' saved to Characters!', 'success');
+  const campaignNote = campaignId ? ' (linked to campaign)' : '';
+  showToast(currentEntry.name + ' saved to Characters!' + campaignNote, 'success');
 }
 
 function renderSessionList() {

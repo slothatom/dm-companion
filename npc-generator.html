@@ -26,10 +26,13 @@
       <p class="empty-state" id="gen-placeholder">Hit "Generate NPC" to bring someone to life.</p>
     </div>
 
-    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px;">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:32px;">
       <button id="gen-btn" onclick="generate()">🎲 Generate NPC</button>
       <button class="secondary" onclick="copyEntry()">📋 Copy</button>
       <button class="secondary" id="save-chars-btn" onclick="saveToCharacters()">💾 Save to Characters</button>
+      <select id="gen-campaign-select" style="margin:0; min-width:160px;">
+        <option value="">🌐 No Campaign</option>
+      </select>
     </div>
 
     <hr />

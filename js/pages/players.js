@@ -2,11 +2,13 @@
 //   players.js — Players page
 // =============================================
 
-let players          = [];
-let currentUserId    = null;
-let deletedPlayerIds = [];
-let isDirty          = false;
-let autosaveTimer    = null;
+let players              = [];
+let currentUserId        = null;
+let deletedPlayerIds     = [];
+let isDirty              = false;
+let autosaveTimer        = null;
+let activeCampaignFilter = '';   // '' = show all
+let campaignsList        = [];   // [{id, name}, ...]
 
 setupDirtyGuard(function () { return isDirty; });
 
@@ -16,11 +18,88 @@ setupDirtyGuard(function () { return isDirty; });
     if (!user) return;
     currentUserId = user.id;
     renderNav(user);
+    await loadPlayerCampaigns();
     await loadPlayers();
   } catch (err) {
     showToast('Failed to load players page: ' + err.message, 'error');
   }
 })();
+
+// ── Campaign helpers ─────────────────────────────────────
+
+function getPlayerCampaignMap() {
+  try {
+    return JSON.parse(localStorage.getItem('player-campaign-map-' + currentUserId)) || {};
+  } catch (e) { return {}; }
+}
+
+function savePlayerCampaignMap(map) {
+  localStorage.setItem('player-campaign-map-' + currentUserId, JSON.stringify(map));
+}
+
+async function loadPlayerCampaigns() {
+  const { data } = await db
+    .from('campaigns')
+    .select('id, name')
+    .eq('user_id', currentUserId)
+    .order('created_at');
+
+  const bar = document.getElementById('player-campaign-bar');
+  if (!data || data.length === 0) { bar.style.display = 'none'; return; }
+
+  campaignsList = data;
+  bar.style.display = '';
+  const sel = document.getElementById('player-campaign-select');
+  data.forEach(function (c) {
+    const opt = document.createElement('option');
+    opt.value       = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+
+  const stored = localStorage.getItem('player-campaign-filter-' + currentUserId);
+  if (stored) {
+    const exists = Array.from(sel.options).some(function (o) { return o.value === stored; });
+    if (exists) sel.value = stored;
+  }
+  activeCampaignFilter = sel.value;
+}
+
+function filterByCampaign() {
+  const sel = document.getElementById('player-campaign-select');
+  activeCampaignFilter = sel.value;
+  localStorage.setItem('player-campaign-filter-' + currentUserId, activeCampaignFilter);
+  renderPlayers();
+}
+
+function filteredPlayers() {
+  if (!activeCampaignFilter) return players;
+  const map = getPlayerCampaignMap();
+  return players.filter(function (p) {
+    if (!p._id) return true;
+    var cid = map[p._id];
+    return cid === activeCampaignFilter || !cid;
+  });
+}
+
+function setPlayerCampaign(id, campaignId) {
+  var map = getPlayerCampaignMap();
+  if (campaignId) { map[id] = campaignId; } else { delete map[id]; }
+  savePlayerCampaignMap(map);
+  showToast('Campaign updated.', 'success');
+}
+
+function buildPlayerCampaignDropdown(player) {
+  if (campaignsList.length === 0 || !player._id) return '';
+  var map = getPlayerCampaignMap();
+  var current = map[player._id] || '';
+  var options = '<option value="">No Campaign</option>' +
+    campaignsList.map(function (c) {
+      var sel = c.id === current ? ' selected' : '';
+      return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + escapeHtml(c.name) + '</option>';
+    }).join('');
+  return '<select onchange="setPlayerCampaign(\'' + player._id + '\', this.value)" style="margin:0; min-width:140px; flex:1;">' + options + '</select>';
+}
 
 async function loadPlayers() {
   const { data, error } = await db
@@ -52,9 +131,10 @@ async function loadPlayers() {
 
 function renderPlayers() {
   const container = document.getElementById('player-list');
-  container.innerHTML = players.length === 0
+  const visible = filteredPlayers();
+  container.innerHTML = visible.length === 0
     ? '<p class="empty-state">No players yet. Add your party!</p>'
-    : players.map(function (p, i) { return buildPlayerCard(p, i); }).join('');
+    : visible.map(function (p, i) { return buildPlayerCard(p, i); }).join('');
 }
 
 function buildPlayerCard(player, index) {
@@ -126,7 +206,10 @@ function buildPlayerCard(player, index) {
               ${renderSlots(player, index)}
             </div>
           </div>
-          <button class="danger" onclick="removePlayer(${index})"><i class="fi fi-rr-trash"></i> Remove</button>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            ${buildPlayerCampaignDropdown(player)}
+            <button class="danger" onclick="removePlayer(${index})"><i class="fi fi-rr-trash"></i> Remove</button>
+          </div>
         </div>`;
 }
 
@@ -144,13 +227,24 @@ function addPlayer() {
 }
 
 function updatePlayer(index, field, value) {
-  players[index][field] = value;
+  const visible = filteredPlayers();
+  const item = visible[index];
+  if (item) item[field] = value;
   markDirty();
 }
 
 function removePlayer(index) {
-  if (players[index]._id) deletedPlayerIds.push(players[index]._id);
-  players.splice(index, 1);
+  const visible = filteredPlayers();
+  const item = visible[index];
+  if (!item) return;
+  const masterIndex = players.indexOf(item);
+  if (item._id) {
+    deletedPlayerIds.push(item._id);
+    var map = getPlayerCampaignMap();
+    delete map[item._id];
+    savePlayerCampaignMap(map);
+  }
+  players.splice(masterIndex, 1);
   renderPlayers();
   markDirty();
 }
@@ -204,10 +298,28 @@ async function savePlayers() {
     }
   }
 
-  // Reload to get server-assigned IDs for newly inserted rows
-  await loadPlayers();
+  // Fetch server-assigned IDs for newly inserted rows
+  const newWithoutId = players.filter(function (p) { return !p._id; });
+  if (newWithoutId.length > 0) {
+    const { data: newRows } = await db.from('players').select('id')
+      .eq('user_id', currentUserId).order('created_at', { ascending: false }).limit(newWithoutId.length);
+    if (newRows) {
+      const reversed = newRows.slice().reverse();
+      for (var ni = 0; ni < newWithoutId.length && ni < reversed.length; ni++) {
+        newWithoutId[ni]._id = reversed[ni].id;
+        if (activeCampaignFilter) {
+          var pmap = getPlayerCampaignMap();
+          pmap[reversed[ni].id] = activeCampaignFilter;
+          savePlayerCampaignMap(pmap);
+        }
+      }
+    }
+  }
+
+  deletedPlayerIds = [];
   setButtonLoading(btn, false);
   isDirty = false;
+  renderPlayers();
   showSaved();
 }
 
@@ -241,6 +353,10 @@ function toggleSlots(index) {
   }
 }
 
+function getVisiblePlayer(index) {
+  return filteredPlayers()[index];
+}
+
 function renderSlots(player, index) {
   const slots = getSlots(player._id);
   let html  = '';
@@ -263,14 +379,15 @@ function renderSlots(player, index) {
 
 function refreshSlotsUI(index) {
   const body = document.getElementById('slots-body-' + index);
-  if (body) {
-    body.innerHTML = renderSlots(players[index], index);
+  const player = getVisiblePlayer(index);
+  if (body && player) {
+    body.innerHTML = renderSlots(player, index);
   }
 }
 
 function updateSlotMax(index, level, max) {
-  const player = players[index];
-  if (!player._id) return;
+  const player = getVisiblePlayer(index);
+  if (!player || !player._id) return;
   const slots = getSlots(player._id);
   max = Math.max(0, Math.min(9, parseInt(max, 10) || 0));
   const prev  = slots[level] || { max: 0, used: 0 };
@@ -280,12 +397,10 @@ function updateSlotMax(index, level, max) {
 }
 
 function toggleSlot(index, level, pipIndex) {
-  const player = players[index];
-  if (!player._id) return;
+  const player = getVisiblePlayer(index);
+  if (!player || !player._id) return;
   const slots = getSlots(player._id);
   const data  = slots[level] || { max: 0, used: 0 };
-  // Clicking pip at pipIndex: if it's within 'used' range, reduce used to that pip.
-  // Otherwise, increase used to include that pip.
   if (pipIndex < data.used) {
     data.used = pipIndex;
   } else {

@@ -1,5 +1,5 @@
 // =============================================
-//   dm-screen.js — DM Screen Quick Reference Grid
+//   dm-screen.js - DM Screen Quick Reference Grid
 // =============================================
 
 (async function () {
@@ -49,7 +49,7 @@ var DM_SCREEN_SECTIONS = [
   {
     title: 'Damage Types',
     summary: 'Acid, Bludgeoning, Cold, Fire, Force, Lightning, Necrotic, Piercing, Poison, Psychic, Radiant, Slashing, Thunder',
-    detail: 'Acid: Corrosive spray, black dragon breath.\nBludgeoning: Blunt force — clubs, falling, constriction.\nCold: Frigid energy — ice storms, frost breath.\nFire: Flames and heat — fireballs, dragon breath, lava.\nForce: Pure magical energy — magic missile, spiritual weapon.\nLightning: Electrical energy — lightning bolt, blue dragon breath.\nNecrotic: Life-draining energy — certain undead attacks, blight.\nPiercing: Puncturing — arrows, spears, bites.\nPoison: Venomous — toxic gas, spider bites, poisoned weapons.\nPsychic: Mental energy — mind blast, psychic scream.\nRadiant: Holy/divine power — searing light, angel attacks.\nSlashing: Cutting — swords, axes, claws.\nThunder: Concussive sound — thunderwave, shatter.\n\nResistance: Take half damage of that type.\nVulnerability: Take double damage of that type.\nImmunity: Take no damage of that type.'
+    detail: 'Acid: Corrosive spray, black dragon breath.\nBludgeoning: Blunt force - clubs, falling, constriction.\nCold: Frigid energy - ice storms, frost breath.\nFire: Flames and heat - fireballs, dragon breath, lava.\nForce: Pure magical energy - magic missile, spiritual weapon.\nLightning: Electrical energy - lightning bolt, blue dragon breath.\nNecrotic: Life-draining energy - certain undead attacks, blight.\nPiercing: Puncturing - arrows, spears, bites.\nPoison: Venomous - toxic gas, spider bites, poisoned weapons.\nPsychic: Mental energy - mind blast, psychic scream.\nRadiant: Holy/divine power - searing light, angel attacks.\nSlashing: Cutting - swords, axes, claws.\nThunder: Concussive sound - thunderwave, shatter.\n\nResistance: Take half damage of that type.\nVulnerability: Take double damage of that type.\nImmunity: Take no damage of that type.'
   },
   {
     title: 'Common DCs Table',

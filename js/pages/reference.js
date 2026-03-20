@@ -1,5 +1,5 @@
 // =============================================
-//   reference.js — Quick Reference page
+//   reference.js - Quick Reference page
 // =============================================
 
 let activeCategory = 'all';
@@ -62,7 +62,7 @@ const REFERENCE = [
   { category: 'action', name: 'Ready',
     desc: 'Choose a perceivable trigger and a reaction to take when it occurs. Reaction fires before or after the trigger. Concentration starts now for readied spells and is lost if not triggered before your next turn.' },
   { category: 'action', name: 'Search',
-    desc: 'Devote attention to locating something — typically a WIS (Perception) or INT (Investigation) check.' },
+    desc: 'Devote attention to locating something - typically a WIS (Perception) or INT (Investigation) check.' },
   { category: 'action', name: 'Use an Object',
     desc: "Interact with a second object (you get one free object interaction per turn). Use a magic item, administer a potion, etc." },
   { category: 'action', name: 'Grapple',

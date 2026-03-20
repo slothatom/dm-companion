@@ -1,5 +1,5 @@
 // =============================================
-//   languages-data.js — D&D 5e Languages
+//   languages-data.js - D&D 5e Languages
 // =============================================
 
 var LANGUAGES = [

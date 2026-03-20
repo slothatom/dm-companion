@@ -1,5 +1,5 @@
 // =============================================
-//   bestiary.js — Monster / Bestiary Reference page
+//   bestiary.js - Monster / Bestiary Reference page
 // =============================================
 
 var activeCrRange = 'all';

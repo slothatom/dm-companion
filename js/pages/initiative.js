@@ -1,5 +1,5 @@
 // =============================================
-//   initiative.js — Initiative Tracker page
+//   initiative.js - Initiative Tracker page
 // =============================================
 
 const CONDITIONS = ['Prone','Stunned','Poisoned','Blinded','Frightened','Incapacitated','Paralyzed','Restrained'];
@@ -63,7 +63,7 @@ function addCombatant() {
   const hp   = document.getElementById('new-hp').value;
   const type = document.getElementById('new-type').value;
   if (!name) { showToast('Please enter a name.', 'error'); return; }
-  combatants.push({ name, init, hp: hp || '—', maxHp: hp || '—', type, conditions: [] });
+  combatants.push({ name, init, hp: hp || '-', maxHp: hp || '-', type, conditions: [] });
   document.getElementById('new-name').value = '';
   document.getElementById('new-init').value = '';
   document.getElementById('new-hp').value   = '';
@@ -75,11 +75,11 @@ async function importPlayers() {
   const { data, error } = await db
     .from('players').select('*').eq('user_id', currentUserId).order('created_at');
   if (error || !data || data.length === 0) {
-    showToast('No players found — add them on the Players page first.', 'info'); return;
+    showToast('No players found - add them on the Players page first.', 'info'); return;
   }
   data.forEach(function (p) {
     combatants.push({ name: p.char_name || p.player_name || 'Unknown',
-      init: 0, hp: p.hp || '—', maxHp: p.hp || '—', type: 'player', conditions: [] });
+      init: 0, hp: p.hp || '-', maxHp: p.hp || '-', type: 'player', conditions: [] });
   });
   showToast('Imported ' + data.length + ' player(s).', 'success');
   renderList();
@@ -89,11 +89,11 @@ async function importCreatures() {
   const { data, error } = await db
     .from('creatures').select('*').eq('user_id', currentUserId).order('created_at');
   if (error || !data || data.length === 0) {
-    showToast('No creatures found — add them on the Characters page first.', 'info'); return;
+    showToast('No creatures found - add them on the Characters page first.', 'info'); return;
   }
   data.forEach(function (c) {
     combatants.push({ name: c.name || 'Unknown Creature',
-      init: 0, hp: c.hp || '—', maxHp: c.hp || '—', type: 'creature', conditions: [] });
+      init: 0, hp: c.hp || '-', maxHp: c.hp || '-', type: 'creature', conditions: [] });
   });
   showToast('Imported ' + data.length + ' creature(s).', 'success');
   renderList();
@@ -189,13 +189,13 @@ function renderList() {
   saveInitiativeState();
 
   if (combatants.length === 0) {
-    container.innerHTML = '<p class="empty-state">No combatants yet — add them below or import your party.</p>';
-    document.getElementById('turn-counter').textContent = '—';
+    container.innerHTML = '<p class="empty-state">No combatants yet - add them below or import your party.</p>';
+    document.getElementById('turn-counter').textContent = '-';
     return;
   }
 
   document.getElementById('turn-counter').textContent =
-    combatants[currentTurn] ? combatants[currentTurn].name : '—';
+    combatants[currentTurn] ? combatants[currentTurn].name : '-';
 
   const typeIcons = { player: '<i class="fi fi-rr-user"></i>', npc: '<i class="fi fi-rr-user-speaking"></i>', creature: '<i class="fi fi-rr-dragon"></i>' };
 

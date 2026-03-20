@@ -1,5 +1,5 @@
 // =============================================
-//   dice.js — Dice Roller page
+//   dice.js - Dice Roller page
 // =============================================
 
 let rollHistory = [];
@@ -52,7 +52,7 @@ function rollExpression() {
   if (!raw) return;
   const expr = raw.replace(/\s/g, '').toLowerCase();
   const match = expr.match(/^(\d*)d(\d+)([+-]\d+)?$/);
-  if (!match) { showToast('Invalid — try "2d6+3" or "d20"', 'error'); return; }
+  if (!match) { showToast('Invalid - try "2d6+3" or "d20"', 'error'); return; }
   const num      = parseInt(match[1]) || 1;
   const sides    = parseInt(match[2]);
   const modifier = parseInt(match[3]) || 0;

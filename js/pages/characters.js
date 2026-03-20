@@ -1,5 +1,5 @@
 // =============================================
-//   characters.js — Characters page
+//   characters.js - Characters page
 // =============================================
 
 let npcs      = [];
@@ -230,7 +230,7 @@ function addCreature() {
 }
 
 function updateField(type, index, field, value) {
-  // index is relative to the filtered list — resolve back to the master array
+  // index is relative to the filtered list - resolve back to the master array
   const master = type === 'npc' ? npcs : creatures;
   const visible = filteredList(master, type);
   const item = visible[index];
@@ -239,7 +239,7 @@ function updateField(type, index, field, value) {
 }
 
 function removeItem(type, index) {
-  // index is relative to the filtered list — resolve back to the master array
+  // index is relative to the filtered list - resolve back to the master array
   const master = type === 'npc' ? npcs : creatures;
   const visible = filteredList(master, type);
   const item = visible[index];

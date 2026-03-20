@@ -1,5 +1,5 @@
 // =============================================
-//   notes.js — Session Notes page
+//   notes.js - Session Notes page
 // =============================================
 
 let currentUserId    = null;

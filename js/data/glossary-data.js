@@ -1,5 +1,5 @@
 // =============================================
-//   glossary-data.js — D&D 5e Glossary of Terms
+//   glossary-data.js - D&D 5e Glossary of Terms
 // =============================================
 
 var GLOSSARY = [
@@ -121,7 +121,7 @@ var GLOSSARY = [
   {
     term: "Damage Resistance",
     category: "combat",
-    def: "When a creature has resistance to a damage type, damage of that type is halved against it. Multiple instances of resistance do not stack — you either have resistance or you don't."
+    def: "When a creature has resistance to a damage type, damage of that type is halved against it. Multiple instances of resistance do not stack - you either have resistance or you don't."
   },
   {
     term: "Damage Type",
@@ -291,7 +291,7 @@ var GLOSSARY = [
   {
     term: "Ritual",
     category: "magic",
-    def: "A spell with the ritual tag can be cast as a ritual, taking 10 extra minutes but not expending a spell slot. Not all casters can ritual cast — it depends on class features."
+    def: "A spell with the ritual tag can be cast as a ritual, taking 10 extra minutes but not expending a spell slot. Not all casters can ritual cast - it depends on class features."
   },
   {
     term: "Round",
@@ -346,7 +346,7 @@ var GLOSSARY = [
   {
     term: "Temporary Hit Points",
     category: "combat",
-    def: "A buffer of extra HP granted by spells or abilities. Temporary HP is lost before regular HP. They don't stack — you choose the higher value. They can't be healed and disappear after a long rest unless otherwise specified."
+    def: "A buffer of extra HP granted by spells or abilities. Temporary HP is lost before regular HP. They don't stack - you choose the higher value. They can't be healed and disappear after a long rest unless otherwise specified."
   },
   {
     term: "Unarmed Strike",

@@ -1,5 +1,5 @@
 // =============================================
-//   feats.js — Feats Reference page
+//   feats.js - Feats Reference page
 // =============================================
 
 (async function () {

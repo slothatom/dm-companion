@@ -1,5 +1,5 @@
 // =============================================
-//   rules.js — Fast Rules Reference (Searchable)
+//   rules.js - Fast Rules Reference (Searchable)
 // =============================================
 
 (async function () {

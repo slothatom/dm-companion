@@ -1,5 +1,5 @@
 // =============================================
-//   encounter.js — Encounter Builder page
+//   encounter.js - Encounter Builder page
 // =============================================
 
 let creatures      = [];
@@ -82,7 +82,7 @@ async function importCreatures() {
   const { data, error } = await db
     .from('creatures').select('*').eq('user_id', currentUserId).order('created_at');
   if (error || !data || data.length === 0) {
-    showToast('No creatures found — add them on the Characters page first.', 'info');
+    showToast('No creatures found - add them on the Characters page first.', 'info');
     return;
   }
   data.forEach(function (c) {
@@ -97,7 +97,7 @@ async function importCreatures() {
 function importFromGenerator() {
   const raw = localStorage.getItem('generator-session-entries');
   if (!raw) {
-    showToast('No generator session entries found — generate and save creatures first.', 'info');
+    showToast('No generator session entries found - generate and save creatures first.', 'info');
     return;
   }
   let entries;
@@ -223,14 +223,14 @@ function recalculate() {
     ? creatures.length + ' monster' + (creatures.length > 1 ? 's' : '') +
       ' → ×' + multi + ' multiplier' +
       (partySize < 3 ? ' (small party)' : partySize >= 6 ? ' (large party)' : '')
-    : '1 monster — no multiplier';
+    : '1 monster - no multiplier';
   document.getElementById('multiplier-note').textContent = note;
 }
 
 function sendToInitiative() {
   if (creatures.length === 0) return;
   const combatants = creatures.map(function (c) {
-    return { name: c.name, init: 0, hp: c.hp || '—', maxHp: c.hp || '—', type: 'creature', conditions: [] };
+    return { name: c.name, init: 0, hp: c.hp || '-', maxHp: c.hp || '-', type: 'creature', conditions: [] };
   });
   localStorage.setItem('encounter-import', JSON.stringify(combatants));
   window.location.href = 'initiative.html';
@@ -340,7 +340,7 @@ function filterMonsterBrowser() {
   // Store filtered list for click handler
   window._monsterBrowserList = filtered;
   if (filtered.length > 60) {
-    container.innerHTML += '<p style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:8px;">Showing 60 of ' + filtered.length + ' — narrow your search.</p>';
+    container.innerHTML += '<p style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:8px;">Showing 60 of ' + filtered.length + ' - narrow your search.</p>';
   }
 }
 

@@ -1,5 +1,5 @@
 // =============================================
-//   market-generator.js — Random Market/Shop Generator
+//   market-generator.js - Random Market/Shop Generator
 // =============================================
 
 (async function () {

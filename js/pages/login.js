@@ -1,5 +1,5 @@
 // =============================================
-//   login.js — Auth page logic
+//   login.js - Auth page logic
 // =============================================
 
 let isSignUp = false;
@@ -102,7 +102,7 @@ async function sendPasswordReset() {
     errorEl.textContent = error.message;
   } else {
     errorEl.style.color = '#6aaa6a';
-    errorEl.textContent = '✓ Reset link sent — check your email!';
+    errorEl.textContent = '✓ Reset link sent - check your email!';
   }
 }
 

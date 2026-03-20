@@ -1,5 +1,5 @@
 // =============================================
-//   loot-generator.js — Loot & Treasure Generator
+//   loot-generator.js - Loot & Treasure Generator
 // =============================================
 
 (async function () {
@@ -249,7 +249,7 @@ function renderLoot(loot) {
 
   // Header
   htmlStr += '<div class="card" style="padding:18px;">';
-  htmlStr += '<h3 style="margin:0 0 10px; color:var(--accent);">' + escapeHtml(loot.type) + ' — CR ' + escapeHtml(loot.tier) + '</h3>';
+  htmlStr += '<h3 style="margin:0 0 10px; color:var(--accent);">' + escapeHtml(loot.type) + ' - CR ' + escapeHtml(loot.tier) + '</h3>';
 
   // Coins
   var coinParts = [];

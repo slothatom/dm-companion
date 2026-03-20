@@ -1,5 +1,5 @@
 // =============================================
-//   auth.js — Auth helpers for DM Companion
+//   auth.js - Auth helpers for DM Companion
 // =============================================
 
 // Check if user is logged in; redirect to login.html if not.

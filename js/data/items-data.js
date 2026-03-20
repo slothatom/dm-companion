@@ -56,7 +56,7 @@ var ITEMS = [
     category: "weapon",
     cost: "5 gp",
     weight: "4 lb.",
-    properties: "—",
+    properties: "-",
     desc: "Simple melee weapon. 1d6 bludgeoning damage."
   },
   {
@@ -115,7 +115,7 @@ var ITEMS = [
     name: "Sling",
     category: "weapon",
     cost: "1 sp",
-    weight: "—",
+    weight: "-",
     properties: "Ammunition (30/120)",
     desc: "Simple ranged weapon. 1d4 bludgeoning damage."
   },
@@ -136,7 +136,7 @@ var ITEMS = [
     category: "weapon",
     cost: "10 gp",
     weight: "2 lb.",
-    properties: "—",
+    properties: "-",
     desc: "Martial melee weapon. 1d8 bludgeoning damage."
   },
   {
@@ -200,7 +200,7 @@ var ITEMS = [
     category: "weapon",
     cost: "15 gp",
     weight: "4 lb.",
-    properties: "—",
+    properties: "-",
     desc: "Martial melee weapon. 1d8 piercing damage."
   },
   {
@@ -248,7 +248,7 @@ var ITEMS = [
     category: "weapon",
     cost: "5 gp",
     weight: "2 lb.",
-    properties: "—",
+    properties: "-",
     desc: "Martial melee weapon. 1d8 piercing damage."
   },
   {
@@ -507,7 +507,7 @@ var ITEMS = [
     name: "Bell",
     category: "gear",
     cost: "1 gp",
-    weight: "—",
+    weight: "-",
     properties: "Signal device",
     desc: "A small metal bell."
   },
@@ -547,7 +547,7 @@ var ITEMS = [
     name: "Candle",
     category: "gear",
     cost: "1 cp",
-    weight: "—",
+    weight: "-",
     properties: "Light (5 ft.)",
     desc: "For 1 hour, a candle sheds bright light in a 5-foot radius and dim light for an additional 5 feet."
   },
@@ -563,7 +563,7 @@ var ITEMS = [
     name: "Chalk (1 piece)",
     category: "gear",
     cost: "1 cp",
-    weight: "—",
+    weight: "-",
     properties: "Writing/marking",
     desc: "A piece of chalk for writing on stone or other surfaces."
   },
@@ -659,7 +659,7 @@ var ITEMS = [
     name: "Ink (1 ounce bottle)",
     category: "gear",
     cost: "10 gp",
-    weight: "—",
+    weight: "-",
     properties: "Writing",
     desc: "A one-ounce bottle of black or colored ink."
   },
@@ -667,7 +667,7 @@ var ITEMS = [
     name: "Ink Pen",
     category: "gear",
     cost: "2 cp",
-    weight: "—",
+    weight: "-",
     properties: "Writing",
     desc: "A pen for writing with ink."
   },
@@ -707,7 +707,7 @@ var ITEMS = [
     name: "Magnifying Glass",
     category: "gear",
     cost: "100 gp",
-    weight: "—",
+    weight: "-",
     properties: "Investigation aid",
     desc: "This lens allows a closer look at small objects. It is also useful as a substitute for flint and steel when starting fires. Lighting a fire with a magnifying glass requires light as bright as sunlight to focus, tinder to ignite, and about 5 minutes for the fire to ignite."
   },
@@ -747,7 +747,7 @@ var ITEMS = [
     name: "Paper (one sheet)",
     category: "gear",
     cost: "2 sp",
-    weight: "—",
+    weight: "-",
     properties: "Writing",
     desc: "A single sheet of parchment-quality paper."
   },
@@ -827,7 +827,7 @@ var ITEMS = [
     name: "Sealing Wax",
     category: "gear",
     cost: "5 sp",
-    weight: "—",
+    weight: "-",
     properties: "Writing",
     desc: "A stick of sealing wax used to seal letters and documents."
   },
@@ -843,7 +843,7 @@ var ITEMS = [
     name: "Signal Whistle",
     category: "gear",
     cost: "5 cp",
-    weight: "—",
+    weight: "-",
     properties: "Signal device",
     desc: "A small whistle for signaling."
   },
@@ -877,7 +877,7 @@ var ITEMS = [
     cost: "5 sp",
     weight: "1 lb.",
     properties: "Fire starting",
-    desc: "This small container holds flint, fire steel, and tinder used to kindle a fire. Using it to light a torch — or anything else with abundant, exposed fuel — takes an action. Lighting any other fire takes 1 minute."
+    desc: "This small container holds flint, fire steel, and tinder used to kindle a fire. Using it to light a torch - or anything else with abundant, exposed fuel - takes an action. Lighting any other fire takes 1 minute."
   },
   {
     name: "Torch",
@@ -891,7 +891,7 @@ var ITEMS = [
     name: "Vial",
     category: "gear",
     cost: "1 gp",
-    weight: "—",
+    weight: "-",
     properties: "Holds 4 ounces",
     desc: "A glass vial that can hold up to 4 ounces of liquid."
   },
@@ -912,7 +912,7 @@ var ITEMS = [
     desc: "A flat stone used for sharpening blades."
   },
   {
-    name: "Arcane Focus — Crystal",
+    name: "Arcane Focus - Crystal",
     category: "gear",
     cost: "10 gp",
     weight: "1 lb.",
@@ -920,7 +920,7 @@ var ITEMS = [
     desc: "An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus."
   },
   {
-    name: "Arcane Focus — Orb",
+    name: "Arcane Focus - Orb",
     category: "gear",
     cost: "20 gp",
     weight: "3 lb.",
@@ -928,7 +928,7 @@ var ITEMS = [
     desc: "An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus."
   },
   {
-    name: "Arcane Focus — Rod",
+    name: "Arcane Focus - Rod",
     category: "gear",
     cost: "10 gp",
     weight: "2 lb.",
@@ -936,7 +936,7 @@ var ITEMS = [
     desc: "An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus."
   },
   {
-    name: "Arcane Focus — Staff",
+    name: "Arcane Focus - Staff",
     category: "gear",
     cost: "5 gp",
     weight: "4 lb.",
@@ -944,7 +944,7 @@ var ITEMS = [
     desc: "An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus."
   },
   {
-    name: "Arcane Focus — Wand",
+    name: "Arcane Focus - Wand",
     category: "gear",
     cost: "10 gp",
     weight: "1 lb.",
@@ -952,15 +952,15 @@ var ITEMS = [
     desc: "An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus."
   },
   {
-    name: "Druidic Focus — Sprig of Mistletoe",
+    name: "Druidic Focus - Sprig of Mistletoe",
     category: "gear",
     cost: "1 gp",
-    weight: "—",
+    weight: "-",
     properties: "Spellcasting focus",
     desc: "A druidic focus might be a sprig of mistletoe, a totem, a wooden staff, or a yew wand. A druid can use such an item as a spellcasting focus."
   },
   {
-    name: "Druidic Focus — Wooden Staff",
+    name: "Druidic Focus - Wooden Staff",
     category: "gear",
     cost: "5 gp",
     weight: "4 lb.",
@@ -968,7 +968,7 @@ var ITEMS = [
     desc: "A druidic focus might be a sprig of mistletoe, a totem, a wooden staff, or a yew wand. A druid can use such an item as a spellcasting focus."
   },
   {
-    name: "Druidic Focus — Yew Wand",
+    name: "Druidic Focus - Yew Wand",
     category: "gear",
     cost: "10 gp",
     weight: "1 lb.",
@@ -979,7 +979,7 @@ var ITEMS = [
     name: "Antitoxin (vial)",
     category: "gear",
     cost: "50 gp",
-    weight: "—",
+    weight: "-",
     properties: "Consumable",
     desc: "A creature that drinks this vial of liquid gains advantage on saving throws against poison for 1 hour. It confers no benefit to undead or constructs."
   },
@@ -1001,7 +1001,7 @@ var ITEMS = [
     cost: "20 gp",
     weight: "8 lb.",
     properties: "Metalworking",
-    desc: "These special tools include the items needed to pursue a craft or trade — hammers, tongs, and other smithing implements."
+    desc: "These special tools include the items needed to pursue a craft or trade - hammers, tongs, and other smithing implements."
   },
   {
     name: "Brewer's Supplies",
@@ -1167,7 +1167,7 @@ var ITEMS = [
     name: "Dice Set",
     category: "tool",
     cost: "1 sp",
-    weight: "—",
+    weight: "-",
     properties: "Gaming set",
     desc: "A set of dice for gaming. Proficiency lets you add your proficiency bonus to ability checks made to play games with that set."
   },
@@ -1175,7 +1175,7 @@ var ITEMS = [
     name: "Playing Card Set",
     category: "tool",
     cost: "5 sp",
-    weight: "—",
+    weight: "-",
     properties: "Gaming set",
     desc: "A deck of playing cards for gaming. Proficiency lets you add your proficiency bonus to ability checks made to play games with that set."
   },
@@ -1235,7 +1235,7 @@ var ITEMS = [
     name: "Camel",
     category: "mount",
     cost: "50 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 50 ft., capacity 480 lb.",
     desc: "A desert mount with a carrying capacity of 480 pounds. Speed 50 ft."
   },
@@ -1243,7 +1243,7 @@ var ITEMS = [
     name: "Donkey / Mule",
     category: "mount",
     cost: "8 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 40 ft., capacity 420 lb.",
     desc: "A sturdy beast of burden with a carrying capacity of 420 pounds. Speed 40 ft."
   },
@@ -1251,7 +1251,7 @@ var ITEMS = [
     name: "Elephant",
     category: "mount",
     cost: "200 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 40 ft., capacity 1,320 lb.",
     desc: "A massive mount with a carrying capacity of 1,320 pounds. Speed 40 ft."
   },
@@ -1259,7 +1259,7 @@ var ITEMS = [
     name: "Horse, Draft",
     category: "mount",
     cost: "50 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 40 ft., capacity 540 lb.",
     desc: "A large horse bred for heavy labor and pulling carts. Carrying capacity of 540 pounds. Speed 40 ft."
   },
@@ -1267,7 +1267,7 @@ var ITEMS = [
     name: "Horse, Riding",
     category: "mount",
     cost: "75 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 60 ft., capacity 480 lb.",
     desc: "A horse bred for speed and riding. Carrying capacity of 480 pounds. Speed 60 ft."
   },
@@ -1275,7 +1275,7 @@ var ITEMS = [
     name: "Mastiff",
     category: "mount",
     cost: "25 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 40 ft., capacity 195 lb.",
     desc: "A large war dog that can serve as a mount for Small creatures. Carrying capacity of 195 pounds. Speed 40 ft."
   },
@@ -1283,7 +1283,7 @@ var ITEMS = [
     name: "Pony",
     category: "mount",
     cost: "30 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 40 ft., capacity 225 lb.",
     desc: "A small horse suitable as a mount for Small creatures. Carrying capacity of 225 pounds. Speed 40 ft."
   },
@@ -1291,7 +1291,7 @@ var ITEMS = [
     name: "Warhorse",
     category: "mount",
     cost: "400 gp",
-    weight: "—",
+    weight: "-",
     properties: "Speed 60 ft., capacity 540 lb.",
     desc: "A horse trained for combat. Carrying capacity of 540 pounds. Speed 60 ft. Has advantage on saving throws against being frightened."
   },
@@ -1374,23 +1374,23 @@ var ITEMS = [
   {
     name: "Bag of Holding",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "15 lb.",
     properties: "Wondrous item, uncommon",
-    desc: "This bag has an interior space considerably larger than its outside dimensions — roughly 2 feet in diameter at the mouth and 4 feet deep. The bag can hold up to 500 pounds, not exceeding a volume of 64 cubic feet. The bag weighs 15 pounds, regardless of its contents. Retrieving an item requires an action. If the bag is overloaded, pierced, or torn, it ruptures and is destroyed, and its contents are scattered in the Astral Plane. Placing a bag of holding inside an extradimensional space created by a Handy Haversack, Portable Hole, or similar item instantly destroys both items and opens a gate to the Astral Plane."
+    desc: "This bag has an interior space considerably larger than its outside dimensions - roughly 2 feet in diameter at the mouth and 4 feet deep. The bag can hold up to 500 pounds, not exceeding a volume of 64 cubic feet. The bag weighs 15 pounds, regardless of its contents. Retrieving an item requires an action. If the bag is overloaded, pierced, or torn, it ruptures and is destroyed, and its contents are scattered in the Astral Plane. Placing a bag of holding inside an extradimensional space created by a Handy Haversack, Portable Hole, or similar item instantly destroys both items and opens a gate to the Astral Plane."
   },
   {
     name: "Cloak of Protection",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "You gain a +1 bonus to AC and saving throws while you wear this cloak."
   },
   {
     name: "Weapon, +1",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "Varies",
     properties: "Weapon (any), uncommon",
     desc: "You have a +1 bonus to attack and damage rolls made with this magic weapon."
@@ -1398,7 +1398,7 @@ var ITEMS = [
   {
     name: "Weapon, +2",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "Varies",
     properties: "Weapon (any), rare",
     desc: "You have a +2 bonus to attack and damage rolls made with this magic weapon."
@@ -1406,7 +1406,7 @@ var ITEMS = [
   {
     name: "Weapon, +3",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "Varies",
     properties: "Weapon (any), very rare",
     desc: "You have a +3 bonus to attack and damage rolls made with this magic weapon."
@@ -1414,7 +1414,7 @@ var ITEMS = [
   {
     name: "Armor, +1",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "Varies",
     properties: "Armor (any), rare",
     desc: "You have a +1 bonus to AC while wearing this armor."
@@ -1422,7 +1422,7 @@ var ITEMS = [
   {
     name: "Armor, +2",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "Varies",
     properties: "Armor (any), very rare",
     desc: "You have a +2 bonus to AC while wearing this armor."
@@ -1430,7 +1430,7 @@ var ITEMS = [
   {
     name: "Armor, +3",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "Varies",
     properties: "Armor (any), legendary",
     desc: "You have a +3 bonus to AC while wearing this armor."
@@ -1438,7 +1438,7 @@ var ITEMS = [
   {
     name: "Shield, +1",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "6 lb.",
     properties: "Armor (shield), uncommon",
     desc: "While holding this shield, you have a +1 bonus to AC in addition to the shield's normal bonus to AC."
@@ -1446,7 +1446,7 @@ var ITEMS = [
   {
     name: "Shield, +2",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "6 lb.",
     properties: "Armor (shield), rare",
     desc: "While holding this shield, you have a +2 bonus to AC in addition to the shield's normal bonus to AC."
@@ -1454,7 +1454,7 @@ var ITEMS = [
   {
     name: "Shield, +3",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "6 lb.",
     properties: "Armor (shield), very rare",
     desc: "While holding this shield, you have a +3 bonus to AC in addition to the shield's normal bonus to AC."
@@ -1462,87 +1462,87 @@ var ITEMS = [
   {
     name: "Amulet of Proof against Detection and Location",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "While wearing this amulet, you are hidden from divination magic. You can't be targeted by such magic or perceived through magical scrying sensors."
   },
   {
     name: "Boots of Elvenkind",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon",
     desc: "While you wear these boots, your steps make no sound, regardless of the surface you are moving across. You also have advantage on Dexterity (Stealth) checks that rely on moving silently."
   },
   {
     name: "Boots of Speed",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, rare (requires attunement)",
     desc: "While you wear these boots, you can use a bonus action to click the boots' heels together. If you do, the boots double your walking speed, and any creature that makes an opportunity attack against you has disadvantage on the attack roll. The effect ends after 10 minutes or when you click your heels together again. The boots can be used in this way for up to 10 minutes, regaining all expended time after a long rest."
   },
   {
     name: "Boots of Striding and Springing",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "While you wear these boots, your walking speed becomes 30 feet, unless your walking speed is higher, and your speed isn't reduced if you are encumbered or wearing heavy armor. In addition, you can jump three times the normal distance, though you can't jump farther than your remaining movement would allow."
   },
   {
     name: "Bracers of Defense",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, rare (requires attunement)",
     desc: "While wearing these bracers, you gain a +2 bonus to AC if you are wearing no armor and using no shield."
   },
   {
     name: "Brooch of Shielding",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "While wearing this brooch, you have resistance to force damage, and you have immunity to damage from the magic missile spell."
   },
   {
     name: "Cape of the Mountebank",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, rare",
     desc: "This cape smells faintly of brimstone. While wearing it, you can use it to cast the dimension door spell as an action. This property of the cape can't be used again until the next dawn. When you disappear, you leave behind a cloud of smoke, and you appear in a similar cloud of smoke at your destination."
   },
   {
     name: "Cloak of Displacement",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, rare (requires attunement)",
     desc: "While you wear this cloak, it projects an illusion that makes you appear to be standing in a place near your actual location, causing any creature to have disadvantage on attack rolls against you. If you take damage, the property ceases to function until the start of your next turn. This property is suppressed while you are incapacitated, restrained, or otherwise unable to move."
   },
   {
     name: "Cloak of Elvenkind",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "While you wear this cloak with its hood up, Wisdom (Perception) checks made to see you have disadvantage, and you have advantage on Dexterity (Stealth) checks made to hide, as the cloak's color shifts to camouflage you. Pulling the hood up or down requires an action."
   },
   {
     name: "Cloak of the Bat",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, rare (requires attunement)",
     desc: "While wearing this cloak, you have advantage on Dexterity (Stealth) checks. In an area of dim light or darkness, you can grip the edges of the cloak with both hands and use it to fly at a speed of 40 feet. If you ever fail to grip the cloak's edges while flying in this way, or if you are no longer in dim light or darkness, you lose this flying speed. While wearing the cloak in an area of dim light or darkness, you can use your action to cast polymorph on yourself, transforming into a bat."
   },
   {
     name: "Decanter of Endless Water",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "2 lb.",
     properties: "Wondrous item, uncommon",
     desc: "This stoppered flask sloshes when shaken, as if it contains water. You can use an action to remove the stopper and speak one of three command words, whereupon an amount of fresh water or salt water pours out: Stream (1 gallon per round), Fountain (5 gallons per round), or Geyser (30 gallons per round, 30 ft. long, 1 ft. wide; DC 13 Strength check or take 1d4 bludgeoning damage and fall prone)."
@@ -1550,23 +1550,23 @@ var ITEMS = [
   {
     name: "Gauntlets of Ogre Power",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "Your Strength score is 19 while you wear these gauntlets. They have no effect on you if your Strength is already 19 or higher."
   },
   {
     name: "Goggles of Night",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon",
     desc: "While wearing these dark lenses, you have darkvision out to a range of 60 feet. If you already have darkvision, wearing the goggles increases its range by 60 feet."
   },
   {
     name: "Handy Haversack",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "5 lb.",
     properties: "Wondrous item, rare",
     desc: "This backpack has a central pouch and two side pouches, each of which is an extradimensional space. Each side pouch can hold up to 20 pounds (2 cubic feet). The central pouch can hold up to 80 pounds (8 cubic feet). The backpack always weighs 5 pounds. Retrieving an item from the haversack requires a bonus action rather than an action."
@@ -1574,15 +1574,15 @@ var ITEMS = [
   {
     name: "Headband of Intellect",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "Your Intelligence score is 19 while you wear this headband. It has no effect on you if your Intelligence is already 19 or higher."
   },
   {
     name: "Immovable Rod",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "2 lb.",
     properties: "Rod, uncommon",
     desc: "This flat iron rod has a button on one end. You can use an action to press the button, which causes the rod to become magically fixed in place. Until you or another creature uses an action to push the button again, the rod doesn't move, even if it is defying gravity. The rod can hold up to 8,000 pounds of weight. More weight causes the rod to deactivate and fall."
@@ -1590,7 +1590,7 @@ var ITEMS = [
   {
     name: "Lantern of Revealing",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "2 lb.",
     properties: "Wondrous item, uncommon",
     desc: "While lit, this hooded lantern burns for 6 hours on 1 pint of oil, shedding bright light in a 30-foot radius and dim light for an additional 30 feet. Invisible creatures and objects are visible as long as they are in the lantern's bright light."
@@ -1598,47 +1598,47 @@ var ITEMS = [
   {
     name: "Pearl of Power",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement by a spellcaster)",
     desc: "While this pearl is on your person, you can use an action to speak its command word and regain one expended spell slot. If the expended slot was of 4th level or higher, the new slot is 3rd level. Once you use the pearl, it can't be used again until the next dawn."
   },
   {
     name: "Periapt of Wound Closure",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "While you wear this pendant, you stabilize whenever you are dying at the start of your turn. In addition, whenever you roll a Hit Die to regain hit points, double the number of hit points it restores."
   },
   {
     name: "Portable Hole",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, rare",
     desc: "This fine black cloth, soft as silk, is folded up to the dimensions of a handkerchief. It unfolds into a circular sheet 6 feet in diameter. You can use an action to unfold and place it on a solid surface, whereupon it creates an extradimensional hole 10 feet deep. The cylindrical space exists on a different plane. Placing a portable hole inside an extradimensional space created by a bag of holding or similar item instantly destroys both items and opens a gate to the Astral Plane."
   },
   {
     name: "Ring of Protection",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Ring, rare (requires attunement)",
     desc: "You gain a +1 bonus to AC and saving throws while wearing this ring."
   },
   {
     name: "Ring of Resistance",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Ring, rare (requires attunement)",
     desc: "You have resistance to one damage type while wearing this ring. The gem in the ring indicates the type: Acid (pearl), Cold (tourmaline), Fire (garnet), Force (sapphire), Lightning (citrine), Necrotic (jet), Poison (amethyst), Psychic (jade), Radiant (topaz), Thunder (spinel)."
   },
   {
     name: "Rope of Climbing",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "3 lb.",
     properties: "Wondrous item, uncommon",
     desc: "This 60-foot length of silk rope weighs 3 pounds and can hold up to 3,000 pounds. If you hold one end of the rope and use an action to speak the command word, the rope animates. As a bonus action, you can command the other end to move toward a destination at a speed of 10 feet per round. The rope has AC 20, 20 hit points, and regains 1 hit point every 5 minutes."
@@ -1646,47 +1646,47 @@ var ITEMS = [
   {
     name: "Sending Stones",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon",
     desc: "Sending stones come in pairs, with each smooth stone carved to match the other so the pairing is easily recognized. While you touch one stone, you can use an action to cast the sending spell from it. The target is the bearer of the other stone. Once the sending spell is cast through the stones, they can't be used again until the next dawn."
   },
   {
     name: "Wand of Magic Missiles",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wand, uncommon",
     desc: "This wand has 7 charges. While holding it, you can use an action to expend 1 or more of its charges to cast the magic missile spell from it. For 1 charge, you cast the 1st-level version of the spell. You can increase the spell slot level by one for each additional charge you expend. The wand regains 1d6 + 1 expended charges daily at dawn. If you expend the wand's last charge, roll a d20. On a 1, the wand crumbles into ashes and is destroyed."
   },
   {
     name: "Wand of Web",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wand, uncommon (requires attunement by a spellcaster)",
     desc: "This wand has 7 charges. While holding it, you can use an action to expend 1 of its charges to cast the web spell (save DC 15) from it. The wand regains 1d6 + 1 expended charges daily at dawn. If you expend the wand's last charge, roll a d20. On a 1, the wand crumbles into ashes and is destroyed."
   },
   {
     name: "Eyes of the Eagle",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "These crystal lenses fit over the eyes. While wearing them, you have advantage on Wisdom (Perception) checks that rely on sight. In conditions of clear visibility, you can make out details of even extremely distant creatures and objects as small as 2 feet across."
   },
   {
     name: "Gloves of Missile Snaring",
     category: "magic",
-    cost: "—",
-    weight: "—",
+    cost: "-",
+    weight: "-",
     properties: "Wondrous item, uncommon (requires attunement)",
     desc: "These gloves seem to almost meld into your hands when you don them. When a ranged weapon attack hits you while you're wearing them, you can use your reaction to reduce the damage by 1d10 + your Dexterity modifier, provided that you have a free hand. If you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in that hand."
   },
   {
     name: "Eversmoking Bottle",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "1 lb.",
     properties: "Wondrous item, uncommon",
     desc: "Smoke leaks from the lead-stoppered mouth of this brass bottle, which weighs 1 pound. When you use an action to remove the stopper, a cloud of thick smoke pours out in a 60-foot radius from the bottle. The cloud's area is heavily obscured. Each minute the bottle remains open, the radius increases by 10 feet until it reaches 120 feet. The cloud persists until the bottle is closed. Once closed, the cloud dissipates after 10 minutes."
@@ -1694,7 +1694,7 @@ var ITEMS = [
   {
     name: "Bag of Tricks",
     category: "magic",
-    cost: "—",
+    cost: "-",
     weight: "1/2 lb.",
     properties: "Wondrous item, uncommon",
     desc: "This ordinary bag, made from gray, rust, or tan cloth, appears empty. Reaching inside the bag reveals the presence of a small, fuzzy object. You can use an action to pull the fuzzy object from the bag and throw it up to 20 feet. When the object lands, it transforms into a random creature determined by the bag's color. The creature is friendly to you and your companions, vanishes at the next dawn, and acts on your turn."

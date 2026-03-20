@@ -1,5 +1,5 @@
 // =============================================
-//   languages-ref.js — Languages Reference page
+//   languages-ref.js - Languages Reference page
 // =============================================
 
 (async function () {

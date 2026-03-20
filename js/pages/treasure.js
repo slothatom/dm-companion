@@ -1,5 +1,5 @@
 // =============================================
-//   treasure.js — Currency Converter & Random Purse
+//   treasure.js - Currency Converter & Random Purse
 // =============================================
 
 (async function () {
@@ -116,7 +116,7 @@ function renderPurse(label, desc, coins) {
   var htmlStr = '';
 
   htmlStr += '<div class="card" style="padding:18px;">';
-  htmlStr += '<h3 style="margin:0 0 4px; color:var(--accent);">Random Purse — ' + escapeHtml(label) + '</h3>';
+  htmlStr += '<h3 style="margin:0 0 4px; color:var(--accent);">Random Purse - ' + escapeHtml(label) + '</h3>';
   htmlStr += '<div style="color:var(--text-dim); margin-bottom:12px; font-style:italic;">Roll: ' + escapeHtml(desc) + '</div>';
 
   htmlStr += '<div class="scores-grid">';

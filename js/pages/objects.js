@@ -1,5 +1,5 @@
 // =============================================
-//   objects.js — Object Statistics Reference
+//   objects.js - Object Statistics Reference
 // =============================================
 
 (async function () {
@@ -70,7 +70,7 @@ var COMMON_OBJECTS = [
 
 var SIEGE_RULES = {
   title: 'Siege Damage',
-  description: 'Objects and structures that are Huge or Gargantuan are immune to damage from normal weapons unless the DM decides otherwise. A siege weapon (such as a battering ram, catapult, or ballista) deals double damage to objects and structures. Fire can also damage objects and structures — an object that takes fire damage catches fire if it is flammable.',
+  description: 'Objects and structures that are Huge or Gargantuan are immune to damage from normal weapons unless the DM decides otherwise. A siege weapon (such as a battering ram, catapult, or ballista) deals double damage to objects and structures. Fire can also damage objects and structures - an object that takes fire damage catches fire if it is flammable.',
   notes: [
     'Huge/Gargantuan objects: immune to normal weapon damage (DM discretion)',
     'Siege weapons deal double damage to objects and structures',

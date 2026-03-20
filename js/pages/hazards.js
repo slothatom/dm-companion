@@ -1,5 +1,5 @@
 // =============================================
-//   hazards.js — Environmental Hazards Reference
+//   hazards.js - Environmental Hazards Reference
 // =============================================
 
 (async function () {
@@ -95,7 +95,7 @@ var HAZARDS = [
     description: 'Brown mold feeds on warmth, drawing heat from anything around it. A patch of brown mold typically covers a 10-foot square, and the temperature within 30 feet of it is always frigid cold. When a creature moves to within 5 feet of the mold for the first time on a turn or starts its turn there, it must make a DC 12 Constitution saving throw, taking 22 (4d10) cold damage on a failed save, or half as much on a success. Brown mold is immune to fire, and any source of fire brought within 5 feet of it causes it to expand.',
     damage: '4d10 cold',
     dc: 'DC 12 Constitution save',
-    notes: 'IMMUNE to fire — fire makes it grow! Destroyed by cold damage (e.g. Cone of Cold). Freezes surrounding area within 30 ft.'
+    notes: 'IMMUNE to fire - fire makes it grow! Destroyed by cold damage (e.g. Cone of Cold). Freezes surrounding area within 30 ft.'
   },
   {
     name: 'Yellow Mold',

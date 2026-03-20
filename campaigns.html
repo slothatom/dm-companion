@@ -30,7 +30,7 @@
         <!-- Select + action buttons -->
         <div class="row-actions" style="margin-bottom:12px;">
           <select id="campaign-select" onchange="switchCampaign()" style="flex:1; min-width:180px; margin:0;">
-            <option value="">— Select a campaign —</option>
+            <option value="">- Select a campaign -</option>
           </select>
           <button id="new-campaign-btn" onclick="showCreateCampaign()" style="white-space:nowrap;">+ New Campaign</button>
           <button class="danger" onclick="deleteCampaign()"
@@ -69,7 +69,7 @@
       <div class="card">
         <h3><i class="fi fi-rr-world"></i> World Notes</h3>
         <textarea id="world-notes"
-          placeholder="Lore, factions, geography, recurring themes — anything the world needs you to remember."
+          placeholder="Lore, factions, geography, recurring themes - anything the world needs you to remember."
           style="min-height:160px;" oninput="markWorldDirty()"></textarea>
         <div class="row-actions">
           <button id="world-save-btn" onclick="saveWorldNotes()"><i class="fi fi-rr-disk"></i> Save Notes</button>

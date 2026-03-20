@@ -1,5 +1,5 @@
 // =============================================
-//   campaigns.js — Campaign Manager page
+//   campaigns.js - Campaign Manager page
 // =============================================
 
 let campaigns          = [];
@@ -101,8 +101,8 @@ function renderCampaignSelect() {
     return (typeMap[c.id] || 'campaign') === activeCampaignTab;
   });
   const placeholder = activeCampaignTab === 'oneshot'
-    ? '— Select a one-shot —'
-    : '— Select a campaign —';
+    ? '- Select a one-shot -'
+    : '- Select a campaign -';
   sel.innerHTML = '<option value="">' + placeholder + '</option>' +
     filtered.map(function (c) {
       return '<option value="' + escapeHtml(c.id) + '">' + escapeHtml(c.name) + '</option>';

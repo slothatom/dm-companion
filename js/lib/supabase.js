@@ -1,11 +1,11 @@
 // =============================================
-//   supabase.js — Supabase client for DM Companion
+//   supabase.js - Supabase client for DM Companion
 // =============================================
 
 // ── Supabase credentials ──────────────────────────────────
 // The anon key below is safe to expose publicly in client-side code.
 // Row-Level Security (RLS) is enabled on all tables and protects data.
-// This key only grants access that the RLS policies explicitly allow —
+// This key only grants access that the RLS policies explicitly allow -
 // unauthenticated users cannot read or modify other users' data.
 // This is intentional by design, not a security oversight.
 const SUPABASE_URL      = 'https://ocqorodigunshmhefaes.supabase.co';

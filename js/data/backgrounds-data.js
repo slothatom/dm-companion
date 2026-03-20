@@ -1,5 +1,5 @@
 // =============================================
-//   backgrounds-data.js — D&D 5e SRD Backgrounds
+//   backgrounds-data.js - D&D 5e SRD Backgrounds
 // =============================================
 
 var BACKGROUNDS = [
@@ -78,7 +78,7 @@ var BACKGROUNDS = [
     feature: "Discovery",
     featureDesc: "The quiet seclusion of your extended hermitage gave you access to a unique and powerful discovery. The exact nature of this revelation depends on the nature of your seclusion. It might be a great truth about the cosmos, the deities, the powerful beings of the outer planes, or the forces of nature. It could be a site that no one else has ever seen.",
     personality: "I've been isolated for so long that I rarely speak, preferring gestures and the occasional grunt. I connect everything that happens to me to a grand, cosmic plan. I feel tremendous empathy for all who suffer.",
-    desc: "You lived in seclusion — either in a sheltered community such as a monastery, or entirely alone — for a formative period of your life. In your time apart from the clamor of society, you found quiet, solitude, and perhaps some of the answers you were looking for."
+    desc: "You lived in seclusion - either in a sheltered community such as a monastery, or entirely alone - for a formative period of your life. In your time apart from the clamor of society, you found quiet, solitude, and perhaps some of the answers you were looking for."
   },
   {
     name: "Noble",
@@ -110,7 +110,7 @@ var BACKGROUNDS = [
     equipment: "A bottle of black ink, a quill, a small knife, a letter from a dead colleague posing a question you have not yet been able to answer, a set of common clothes, and a pouch containing 10 gp",
     feature: "Researcher",
     featureDesc: "When you attempt to learn or recall a piece of lore, if you do not know that information, you often know where and from whom you can obtain it. Usually, this information comes from a library, scriptorium, university, or a sage or other learned person or creature. Your DM might rule that the knowledge you seek is secreted away in an almost inaccessible place, or that it simply cannot be found.",
-    personality: "I use polysyllabic words that convey the impression of great erudition. I've read every book in the world's greatest libraries — or I like to boast that I have. There's nothing I like more than a good mystery.",
+    personality: "I use polysyllabic words that convey the impression of great erudition. I've read every book in the world's greatest libraries - or I like to boast that I have. There's nothing I like more than a good mystery.",
     desc: "You spent years learning the lore of the multiverse. You scoured manuscripts, studied scrolls, and listened to the greatest experts on the subjects that interest you. Your efforts have made you a master in your fields of study."
   },
   {

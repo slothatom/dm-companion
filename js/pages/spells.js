@@ -1,5 +1,5 @@
 // =============================================
-//   spells.js — Spell Reference page
+//   spells.js - Spell Reference page
 // =============================================
 
 let activeLevel  = 'all';

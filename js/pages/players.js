@@ -1,5 +1,5 @@
 // =============================================
-//   players.js — Players page
+//   players.js - Players page
 // =============================================
 
 let players              = [];
@@ -376,7 +376,7 @@ function renderSlots(player, index) {
           + '<span class="slot-level">' + lvl + '</span>'
           + '<input type="number" class="slot-max-input" value="' + data.max + '" min="0" max="9" '
           + 'onchange="updateSlotMax(' + index + ',' + lvl + ',this.value)" title="Max slots" />'
-          + '<span class="slot-pips">' + (pips || '<span class="slot-none">—</span>') + '</span>'
+          + '<span class="slot-pips">' + (pips || '<span class="slot-none">-</span>') + '</span>'
           + '</div>';
   }
   return html;

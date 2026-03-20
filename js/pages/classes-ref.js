@@ -1,5 +1,5 @@
 // =============================================
-//   classes-ref.js — Class Reference page
+//   classes-ref.js - Class Reference page
 // =============================================
 
 (async function () {

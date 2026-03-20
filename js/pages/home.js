@@ -1,5 +1,5 @@
 // =============================================
-//   home.js — Dashboard / landing page
+//   home.js - Dashboard / landing page
 // =============================================
 
 (async function () {

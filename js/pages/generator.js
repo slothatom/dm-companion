@@ -1,5 +1,5 @@
 // =============================================
-//   generator.js — NPC & Creature Generator page
+//   generator.js - NPC & Creature Generator page
 // =============================================
 
 let generatorMode  = 'npc';   // 'npc' | 'creature'
@@ -188,7 +188,7 @@ function copyEntry() {
   }
   navigator.clipboard.writeText(text)
     .then(function ()  { showToast('Copied to clipboard!', 'success'); })
-    .catch(function () { showToast('Copy failed — try manually.', 'error'); });
+    .catch(function () { showToast('Copy failed - try manually.', 'error'); });
 }
 
 async function saveToCharacters() {

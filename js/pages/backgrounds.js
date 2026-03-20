@@ -1,5 +1,5 @@
 // =============================================
-//   backgrounds.js — Backgrounds Reference page
+//   backgrounds.js - Backgrounds Reference page
 // =============================================
 
 (async function () {

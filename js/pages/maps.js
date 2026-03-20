@@ -1,5 +1,5 @@
 // =============================================
-//   maps.js — Maps page (placeholder)
+//   maps.js - Maps page (placeholder)
 // =============================================
 
 (async function () {

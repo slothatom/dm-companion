@@ -1,5 +1,5 @@
 // =============================================
-//   stats-generator.js — Ability Score Generator
+//   stats-generator.js - Ability Score Generator
 // =============================================
 
 (async function () {

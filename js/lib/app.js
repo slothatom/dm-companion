@@ -1,10 +1,10 @@
 // =============================================
-//   app.js — Shared utilities for DM Companion
+//   app.js - Shared utilities for DM Companion
 // =============================================
 
 // ── Save-status indicator ──────────────────────────────────
 
-// Generic variants — pass any element id
+// Generic variants - pass any element id
 function showSavedFor(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -353,7 +353,7 @@ function setupLoadingTimeout() {
     const loaders = document.querySelectorAll('.loading-state');
     loaders.forEach(function (el) {
       if (el.offsetParent !== null) {
-        el.innerHTML = '<p style="color:#aa4040;">Something went wrong — data failed to load. Please refresh the page.</p>';
+        el.innerHTML = '<p style="color:#aa4040;">Something went wrong - data failed to load. Please refresh the page.</p>';
       }
     });
   }, 15000);
@@ -361,7 +361,7 @@ function setupLoadingTimeout() {
 
 // ── Tagged template literal helper for safe HTML ─────────
 // Auto-escapes all interpolated values to prevent XSS.
-// Usage: html`<div>${userInput}</div>` — each ${} value is escaped.
+// Usage: html`<div>${userInput}</div>` - each ${} value is escaped.
 // This is a utility for future use; existing code is not refactored to use it.
 function html(strings) {
   let result = strings[0];

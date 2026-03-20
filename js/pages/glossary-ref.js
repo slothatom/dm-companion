@@ -1,5 +1,5 @@
 // =============================================
-//   glossary-ref.js — Glossary Reference page
+//   glossary-ref.js - Glossary Reference page
 // =============================================
 
 var activeGlossCat = 'all';

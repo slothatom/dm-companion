@@ -1,5 +1,5 @@
 // =============================================
-//   trap-generator.js — Random Trap Generator
+//   trap-generator.js - Random Trap Generator
 // =============================================
 
 (async function () {

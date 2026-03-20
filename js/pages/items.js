@@ -1,5 +1,5 @@
 // =============================================
-//   items.js — Items & Equipment Reference page
+//   items.js - Items & Equipment Reference page
 // =============================================
 
 var activeItemCat = 'all';

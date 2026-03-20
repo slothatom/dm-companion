@@ -37,6 +37,17 @@
       <button class="filter-btn" id="filter-conc"   onclick="toggleFilter('conc',   this)"><i class="fi fi-rr-bullseye"></i> Concentration</button>
       <button class="filter-btn" id="filter-ritual" onclick="toggleFilter('ritual', this)"><i class="fi fi-rr-star"></i> Ritual</button>
     </div>
+    <div class="spell-filters" id="class-filters" style="margin-top:8px;">
+      <button class="filter-btn active-filter" onclick="setClass('all', this)">All Classes</button>
+      <button class="filter-btn" onclick="setClass('Bard', this)">Bard</button>
+      <button class="filter-btn" onclick="setClass('Cleric', this)">Cleric</button>
+      <button class="filter-btn" onclick="setClass('Druid', this)">Druid</button>
+      <button class="filter-btn" onclick="setClass('Paladin', this)">Paladin</button>
+      <button class="filter-btn" onclick="setClass('Ranger', this)">Ranger</button>
+      <button class="filter-btn" onclick="setClass('Sorcerer', this)">Sorcerer</button>
+      <button class="filter-btn" onclick="setClass('Warlock', this)">Warlock</button>
+      <button class="filter-btn" onclick="setClass('Wizard', this)">Wizard</button>
+    </div>
 
     <div id="spell-list"></div>
   </main>
@@ -47,6 +58,7 @@
   <script src="js/lib/auth.js"></script>
   <script src="js/lib/app.js"></script>
   <script src="js/data/spells-data.js"></script>
+  <script src="js/data/spell-classes.js"></script>
   <script src="js/pages/spells.js"></script>
 </body>
 </html>

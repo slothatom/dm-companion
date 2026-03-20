@@ -3,6 +3,7 @@
 // =============================================
 
 let activeLevel  = 'all';
+let activeClass  = 'all';
 let filterConc   = false;
 let filterRitual = false;
 
@@ -55,8 +56,10 @@ function openSpellDetail(index) {
   if (s.conc)   tags.push('Concentration');
   if (s.ritual) tags.push('Ritual');
 
+  var classes = SPELL_CLASSES[s.name] || [];
   const body =
-    tags.join(' · ') + '\n\n' +
+    tags.join(' · ') + '\n' +
+    (classes.length ? 'Classes: ' + classes.join(', ') : '') + '\n\n' +
     'Cast: ' + s.cast + '\n' +
     'Range: ' + s.range + '\n' +
     'Duration: ' + s.duration +
@@ -69,6 +72,13 @@ function openSpellDetail(index) {
 function setLevel(level, btn) {
   activeLevel = level;
   document.querySelectorAll('#level-filters .filter-btn').forEach(function (b) { b.classList.remove('active-filter'); });
+  btn.classList.add('active-filter');
+  filterSpells();
+}
+
+function setClass(cls, btn) {
+  activeClass = cls;
+  document.querySelectorAll('#class-filters .filter-btn').forEach(function (b) { b.classList.remove('active-filter'); });
   btn.classList.add('active-filter');
   filterSpells();
 }
@@ -89,7 +99,8 @@ function filterSpells() {
                           s.school.toLowerCase().includes(query);
     const matchesConc   = !filterConc   || s.conc   === true;
     const matchesRitual = !filterRitual || s.ritual === true;
-    return matchesLevel && matchesSearch && matchesConc && matchesRitual;
+    const matchesClass  = activeClass === 'all' || (SPELL_CLASSES[s.name] && SPELL_CLASSES[s.name].indexOf(activeClass) !== -1);
+    return matchesLevel && matchesSearch && matchesConc && matchesRitual && matchesClass;
   });
   renderSpells(filtered);
 }

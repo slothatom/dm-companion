@@ -28,6 +28,10 @@
       <button class="filter-btn" onclick="setLevel('4', this)">Level 4</button>
       <button class="filter-btn" onclick="setLevel('5', this)">Level 5</button>
     </div>
+    <div class="spell-filters" style="margin-top:8px;">
+      <button class="filter-btn" id="filter-conc"   onclick="toggleFilter('conc',   this)">🔵 Concentration</button>
+      <button class="filter-btn" id="filter-ritual" onclick="toggleFilter('ritual', this)">📿 Ritual</button>
+    </div>
 
     <div id="spell-list"></div>
   </main>
@@ -40,7 +44,9 @@
   <script src="js/spells-data.js"></script>
   <script>
 
-    let activeLevel = 'all';
+    let activeLevel  = 'all';
+    let filterConc   = false;
+    let filterRitual = false;
 
     (async function () {
       const user = await requireAuth();
@@ -56,13 +62,16 @@
         return;
       }
       container.innerHTML = list.map(function (s) {
-        const levelLabel = s.level === 'cantrip' ? 'Cantrip' : `Level ${s.level}`;
+        const levelLabel = s.level === 'cantrip' ? 'Cantrip' : 'Level ' + s.level;
+        const concBadge  = s.conc   ? '<span class="spell-badge badge-conc">Concentration</span>'  : '';
+        const ritualBadge= s.ritual ? '<span class="spell-badge badge-ritual">Ritual</span>' : '';
         return `
           <div class="spell-card">
             <div class="spell-header">
               <span class="spell-name">${s.name}</span>
               <span class="spell-level">${levelLabel}</span>
               <span class="spell-school">${s.school}</span>
+              ${concBadge}${ritualBadge}
             </div>
             <div class="spell-stats">
               <span class="spell-stat">⏱ <span>${s.cast}</span></span>
@@ -76,8 +85,15 @@
 
     function setLevel(level, btn) {
       activeLevel = level;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+      document.querySelectorAll('#level-filters .filter-btn').forEach(function (b) { b.classList.remove('active-filter'); });
       btn.classList.add('active-filter');
+      filterSpells();
+    }
+
+    function toggleFilter(type, btn) {
+      if (type === 'conc')   filterConc   = !filterConc;
+      if (type === 'ritual') filterRitual = !filterRitual;
+      btn.classList.toggle('active-filter');
       filterSpells();
     }
 
@@ -88,7 +104,9 @@
         const matchesSearch = s.name.toLowerCase().includes(query) ||
                               s.desc.toLowerCase().includes(query) ||
                               s.school.toLowerCase().includes(query);
-        return matchesLevel && matchesSearch;
+        const matchesConc   = !filterConc   || s.conc   === true;
+        const matchesRitual = !filterRitual || s.ritual === true;
+        return matchesLevel && matchesSearch && matchesConc && matchesRitual;
       });
       renderSpells(filtered);
     }

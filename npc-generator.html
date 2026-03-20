@@ -21,6 +21,7 @@
 
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px;">
       <button onclick="generateNPC()">🎲 Generate NPC</button>
+      <button class="secondary" onclick="copyNPC()">📋 Copy</button>
       <button class="secondary" onclick="saveToCharacters()">💾 Save to Characters</button>
     </div>
 
@@ -90,8 +91,22 @@
         </div>`;
     }
 
+    function copyNPC() {
+      if (!currentNPC) { showToast('Generate an NPC first!', 'info'); return; }
+      var text = [
+        currentNPC.name,
+        currentNPC.race + ' ' + currentNPC.occupation,
+        'Personality: ' + currentNPC.personality,
+        'Quirk: '       + currentNPC.quirk,
+        'Motivation: '  + currentNPC.motivation
+      ].join('\n');
+      navigator.clipboard.writeText(text)
+        .then(function ()  { showToast('NPC copied to clipboard!', 'success'); })
+        .catch(function () { showToast('Copy failed — try manually.', 'error'); });
+    }
+
     async function saveToCharacters() {
-      if (!currentNPC) { alert('Generate an NPC first!'); return; }
+      if (!currentNPC) { showToast('Generate an NPC first!', 'info'); return; }
 
       const { error } = await db.from('npcs').insert({
         user_id: currentUserId,
@@ -101,11 +116,11 @@
         notes:   `${currentNPC.race} ${currentNPC.occupation}. ${currentNPC.personality}. ${currentNPC.quirk}. Motivation: ${currentNPC.motivation}`
       });
 
-      if (error) { alert('Save failed: ' + error.message); return; }
+      if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
 
       sessionNPCs.push(currentNPC);
       renderSessionList();
-      alert(`${currentNPC.name} saved to Characters! 🐉`);
+      showToast(currentNPC.name + ' saved to Characters! 🐉', 'success');
     }
 
     function renderSessionList() {

@@ -77,6 +77,8 @@
   <script src="js/app.js"></script>
   <script>
 
+    const CONDITIONS = ['Prone','Stunned','Poisoned','Blinded','Frightened','Incapacitated','Paralyzed','Restrained'];
+
     let combatants    = [];
     let currentTurn   = 0;
     let round         = 1;
@@ -95,64 +97,45 @@
       const init = parseInt(document.getElementById('new-init').value) || 0;
       const hp   = document.getElementById('new-hp').value;
       const type = document.getElementById('new-type').value;
-
-      if (!name) { alert('Please enter a name.'); return; }
-      combatants.push({ name, init, hp: hp || '—', type, maxHp: hp || '—' });
-
+      if (!name) { showToast('Please enter a name.', 'error'); return; }
+      combatants.push({ name, init, hp: hp || '—', maxHp: hp || '—', type, conditions: [] });
       document.getElementById('new-name').value = '';
       document.getElementById('new-init').value = '';
       document.getElementById('new-hp').value   = '';
+      document.getElementById('new-name').focus();
       renderList();
     }
 
     async function importPlayers() {
       const { data, error } = await db
-        .from('players')
-        .select('*')
-        .eq('user_id', currentUserId)
-        .order('created_at');
-
+        .from('players').select('*').eq('user_id', currentUserId).order('created_at');
       if (error || !data || data.length === 0) {
-        alert('No players found. Go to the Players page and add your party first!');
-        return;
+        showToast('No players found — add them on the Players page first.', 'info'); return;
       }
       data.forEach(function (p) {
-        combatants.push({
-          name:  p.char_name || p.player_name || 'Unknown',
-          init:  0,
-          hp:    p.hp || '—',
-          maxHp: p.hp || '—',
-          type:  'player'
-        });
+        combatants.push({ name: p.char_name || p.player_name || 'Unknown',
+          init: 0, hp: p.hp || '—', maxHp: p.hp || '—', type: 'player', conditions: [] });
       });
+      showToast('Imported ' + data.length + ' player(s).', 'success');
       renderList();
     }
 
     async function importCreatures() {
       const { data, error } = await db
-        .from('creatures')
-        .select('*')
-        .eq('user_id', currentUserId)
-        .order('created_at');
-
+        .from('creatures').select('*').eq('user_id', currentUserId).order('created_at');
       if (error || !data || data.length === 0) {
-        alert('No creatures found. Go to the Characters page and add some first!');
-        return;
+        showToast('No creatures found — add them on the Characters page first.', 'info'); return;
       }
       data.forEach(function (c) {
-        combatants.push({
-          name:  c.name || 'Unknown Creature',
-          init:  0,
-          hp:    c.hp || '—',
-          maxHp: c.hp || '—',
-          type:  'creature'
-        });
+        combatants.push({ name: c.name || 'Unknown Creature',
+          init: 0, hp: c.hp || '—', maxHp: c.hp || '—', type: 'creature', conditions: [] });
       });
+      showToast('Imported ' + data.length + ' creature(s).', 'success');
       renderList();
     }
 
     function sortByInitiative() {
-      combatants.sort((a, b) => b.init - a.init);
+      combatants.sort(function (a, b) { return b.init - a.init; });
       currentTurn = 0;
       renderList();
     }
@@ -169,17 +152,14 @@
     }
 
     function resetTurn() {
-      currentTurn = 0;
-      round = 1;
+      currentTurn = 0; round = 1;
       document.getElementById('round-counter').textContent = 1;
       renderList();
     }
 
     function clearAll() {
       if (!confirm('Clear all combatants?')) return;
-      combatants  = [];
-      currentTurn = 0;
-      round       = 1;
+      combatants = []; currentTurn = 0; round = 1;
       document.getElementById('round-counter').textContent = 1;
       renderList();
     }
@@ -192,6 +172,40 @@
 
     function updateHp(index, value) {
       combatants[index].hp = value;
+    }
+
+    function applyDamage(index) {
+      const input  = document.getElementById('hp-adj-' + index);
+      const amount = parseInt(input.value) || 0;
+      if (amount === 0) return;
+      const c       = combatants[index];
+      const current = parseInt(c.hp);
+      if (!isNaN(current)) {
+        c.hp = Math.max(0, current - amount);
+        if (c.hp === 0) showToast(c.name + ' dropped to 0 HP! ☠️', 'info');
+      }
+      renderList();
+    }
+
+    function applyHeal(index) {
+      const input  = document.getElementById('hp-adj-' + index);
+      const amount = parseInt(input.value) || 0;
+      if (amount === 0) return;
+      const c       = combatants[index];
+      const current = parseInt(c.hp);
+      const max     = parseInt(c.maxHp);
+      if (!isNaN(current)) {
+        c.hp = isNaN(max) ? current + amount : Math.min(max, current + amount);
+      }
+      renderList();
+    }
+
+    function toggleCondition(index, condition) {
+      if (!combatants[index].conditions) combatants[index].conditions = [];
+      const idx = combatants[index].conditions.indexOf(condition);
+      if (idx === -1) combatants[index].conditions.push(condition);
+      else            combatants[index].conditions.splice(idx, 1);
+      renderList();
     }
 
     function renderList() {
@@ -208,22 +222,39 @@
       const typeIcons = { player: '🧙', npc: '🗣', creature: '🐉' };
 
       container.innerHTML = combatants.map(function (c, i) {
-        const isActive = i === currentTurn;
+        const isActive  = i === currentTurn;
+        const isZeroHp  = parseInt(c.hp) === 0;
+        const conds     = c.conditions || [];
+        const condChips = CONDITIONS.map(function (cond) {
+          return '<span class="cond-chip' + (conds.includes(cond) ? ' cond-active' : '') + '"' +
+            ' onclick="toggleCondition(' + i + ', \'' + cond + '\')">' + cond + '</span>';
+        }).join('');
+
         return `
-          <div class="init-row ${isActive ? 'active-turn' : ''}">
-            <span class="turn-arrow">▶</span>
-            <span class="init-score">${c.init}</span>
-            <span class="init-name">${c.name}</span>
-            <span class="init-type">${typeIcons[c.type] || '?'} ${c.type}</span>
-            <span class="init-hp">
-              ❤️ <input type="number" value="${c.hp}"
-                onchange="updateHp(${i}, this.value)"
-                style="width:55px; padding:2px 6px; font-size:15px; margin:0; display:inline;"
-                title="Current HP" />
-              <span style="color:#5a4a30;">/ ${c.maxHp}</span>
-            </span>
-            <button class="danger" style="padding:5px 10px; font-size:14px;"
-              onclick="removeCombatant(${i})">✕</button>
+          <div class="init-row ${isActive ? 'active-turn' : ''}${isZeroHp ? ' hp-zero' : ''}">
+            <div class="init-row-main">
+              <span class="turn-arrow">▶</span>
+              <span class="init-score">${c.init}</span>
+              <span class="init-name">${escapeHtml(c.name)}</span>
+              <span class="init-type">${typeIcons[c.type] || '?'} ${c.type}</span>
+              <span class="init-hp">
+                ❤️ <input type="number" value="${c.hp}"
+                  onchange="updateHp(${i}, this.value)"
+                  style="width:55px; padding:2px 6px; font-size:15px; margin:0; display:inline;"
+                  title="Current HP" />
+                <span style="color:#5a4a30;">/ ${c.maxHp}</span>
+              </span>
+              <button class="danger" style="padding:5px 10px; font-size:14px;"
+                onclick="removeCombatant(${i})">✕</button>
+            </div>
+            <div class="init-row-sub">
+              <div class="hp-adj">
+                <input type="number" id="hp-adj-${i}" placeholder="amt" min="0" style="width:64px;" />
+                <button onclick="applyDamage(${i})" style="padding:4px 10px; font-size:13px;" class="danger">🗡 Dmg</button>
+                <button onclick="applyHeal(${i})"   style="padding:4px 10px; font-size:13px;" class="secondary">💚 Heal</button>
+              </div>
+              <div class="cond-row">${condChips}</div>
+            </div>
           </div>`;
       }).join('');
     }

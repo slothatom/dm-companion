@@ -58,14 +58,16 @@
 
       players = (data || []).map(function (r) {
         return {
-          _id:        r.id,
-          playerName: r.player_name,
-          charName:   r.char_name,
-          charClass:  r.char_class,
-          race:       r.race,
-          level:      r.level,
-          hp:         r.hp,
-          notes:      r.notes
+          _id:              r.id,
+          playerName:       r.player_name,
+          charName:         r.char_name,
+          charClass:        r.char_class,
+          race:             r.race,
+          level:            r.level,
+          hp:               r.hp,
+          ac:               r.ac,
+          passivePerception: r.passive_perception,
+          notes:            r.notes
         };
       });
       deletedPlayerIds = [];
@@ -122,6 +124,18 @@
                 onchange="updatePlayer(${index}, 'hp', this.value)"
                 placeholder="e.g. 38" />
             </div>
+            <div>
+              <label>AC</label>
+              <input type="number" value="${escapeHtml(player.ac)}"
+                onchange="updatePlayer(${index}, 'ac', this.value)"
+                placeholder="e.g. 15" />
+            </div>
+            <div>
+              <label>Passive Perception</label>
+              <input type="number" value="${escapeHtml(player.passivePerception)}"
+                onchange="updatePlayer(${index}, 'passivePerception', this.value)"
+                placeholder="e.g. 13" />
+            </div>
           </div>
           <label>Notes (backstory hooks, personality, things to keep in mind)</label>
           <textarea
@@ -141,7 +155,7 @@
     }
 
     function addPlayer() {
-      players.push({ playerName: '', charName: '', charClass: '', race: '', level: '', hp: '', notes: '' });
+      players.push({ playerName: '', charName: '', charClass: '', race: '', level: '', hp: '', ac: '', passivePerception: '', notes: '' });
       renderPlayers();
       markDirty();
     }
@@ -175,10 +189,10 @@
 
       // Step 2: upsert existing rows (have _id), insert new rows (no _id)
       const existing = players.filter(function (p) { return  p._id; }).map(function (p) {
-        return { id: p._id, user_id: currentUserId, player_name: p.playerName, char_name: p.charName, char_class: p.charClass, race: p.race, level: p.level, hp: p.hp, notes: p.notes };
+        return { id: p._id, user_id: currentUserId, player_name: p.playerName, char_name: p.charName, char_class: p.charClass, race: p.race, level: p.level, hp: p.hp, ac: p.ac, passive_perception: p.passivePerception, notes: p.notes };
       });
       const newRows = players.filter(function (p) { return !p._id; }).map(function (p) {
-        return { user_id: currentUserId, player_name: p.playerName, char_name: p.charName, char_class: p.charClass, race: p.race, level: p.level, hp: p.hp, notes: p.notes };
+        return { user_id: currentUserId, player_name: p.playerName, char_name: p.charName, char_class: p.charClass, race: p.race, level: p.level, hp: p.hp, ac: p.ac, passive_perception: p.passivePerception, notes: p.notes };
       });
 
       const saveOps = [];

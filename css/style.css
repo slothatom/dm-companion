@@ -698,3 +698,69 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   color: var(--accent) !important;
   font-size: 13px;
 }
+
+/* =============================================
+   Initiative — HP adjust + condition chips
+   ============================================= */
+
+.init-row {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+}
+
+.init-row-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 4px 0;
+}
+
+.init-row-sub {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 4px 6px 36px;
+  border-top: 1px solid var(--border-dim);
+  margin-top: 6px;
+}
+
+.hp-adj { display: flex; align-items: center; gap: 5px; }
+
+.cond-row { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.cond-chip {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border-dim);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  white-space: nowrap;
+}
+.cond-chip:hover { border-color: var(--border); color: var(--text-muted); }
+.cond-chip.cond-active { background: #3a1e1e; border-color: #7a3030; color: #c48080; }
+
+.init-row.hp-zero .init-name { opacity: 0.45; text-decoration: line-through; }
+
+/* =============================================
+   Spell badges — Concentration / Ritual
+   ============================================= */
+
+.spell-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.badge-conc   { background: #1a2a40; color: #7aaad4; border: 1px solid #3a5a80; }
+.badge-ritual { background: #2a1a3a; color: #b07ad4; border: 1px solid #5a3a80; }

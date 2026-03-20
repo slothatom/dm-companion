@@ -68,7 +68,7 @@
         return;
       }
       npcs      = (npcRes.data      || []).map(function (r) { return { _id: r.id, name: r.name, hp: r.hp, ac: r.ac, notes: r.notes }; });
-      creatures = (creatureRes.data || []).map(function (r) { return { _id: r.id, name: r.name, hp: r.hp, ac: r.ac, notes: r.notes }; });
+      creatures = (creatureRes.data || []).map(function (r) { return { _id: r.id, name: r.name, hp: r.hp, ac: r.ac, cr: r.cr || '', notes: r.notes }; });
       deletedNpcIds      = [];
       deletedCreatureIds = [];
       isDirty            = false;
@@ -88,6 +88,13 @@
     }
 
     function buildCard(item, index, type) {
+      const crField = type === 'creature' ? `
+            <div>
+              <label>CR</label>
+              <input type="text" value="${escapeHtml(item.cr)}"
+                onchange="updateField('${type}', ${index}, 'cr', this.value)"
+                placeholder="e.g. 2 or 1/2" />
+            </div>` : '';
       return `
         <div class="card">
           <div class="stat-grid">
@@ -109,6 +116,7 @@
                 onchange="updateField('${type}', ${index}, 'ac', this.value)"
                 placeholder="e.g. 13" />
             </div>
+            ${crField}
           </div>
           <label>Notes (personality, role, special abilities)</label>
           <textarea
@@ -134,7 +142,7 @@
     }
 
     function addCreature() {
-      creatures.push({ name: '', hp: '', ac: '', notes: '' });
+      creatures.push({ name: '', hp: '', ac: '', cr: '', notes: '' });
       renderAll();
       markDirty();
     }
@@ -184,8 +192,8 @@
       // Step 2: upsert existing rows (have _id) and insert new rows (no _id)
       const npcExisting      = npcs.filter(function (n) { return  n._id; }).map(function (n) { return { id: n._id, user_id: currentUserId, name: n.name, hp: n.hp, ac: n.ac, notes: n.notes }; });
       const npcNew           = npcs.filter(function (n) { return !n._id; }).map(function (n) { return {           user_id: currentUserId, name: n.name, hp: n.hp, ac: n.ac, notes: n.notes }; });
-      const creatureExisting = creatures.filter(function (c) { return  c._id; }).map(function (c) { return { id: c._id, user_id: currentUserId, name: c.name, hp: c.hp, ac: c.ac, notes: c.notes }; });
-      const creatureNew      = creatures.filter(function (c) { return !c._id; }).map(function (c) { return {           user_id: currentUserId, name: c.name, hp: c.hp, ac: c.ac, notes: c.notes }; });
+      const creatureExisting = creatures.filter(function (c) { return  c._id; }).map(function (c) { return { id: c._id, user_id: currentUserId, name: c.name, hp: c.hp, ac: c.ac, cr: c.cr, notes: c.notes }; });
+      const creatureNew      = creatures.filter(function (c) { return !c._id; }).map(function (c) { return {           user_id: currentUserId, name: c.name, hp: c.hp, ac: c.ac, cr: c.cr, notes: c.notes }; });
 
       const saveOps = [];
       if (npcExisting.length > 0)      saveOps.push(db.from('npcs').upsert(npcExisting));

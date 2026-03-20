@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Players</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>🧙 Players</h1>
+    <h1><i class="fi fi-rr-users"></i> Players</h1>
     <p class="subtitle">Keep track of your adventuring party.</p>
 
     <div id="player-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
@@ -20,7 +21,7 @@
     <button onclick="addPlayer()">+ Add Player</button>
 
     <br /><br />
-    <button id="save-btn" onclick="savePlayers()">💾 Save All</button>
+    <button id="save-btn" onclick="savePlayers()"><i class="fi fi-rr-disk"></i> Save All</button>
     <span id="save-status" class="save-status"></span>
   </main>
 

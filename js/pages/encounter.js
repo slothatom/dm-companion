@@ -265,7 +265,7 @@ function showMonsterBrowser() {
     modal.className = 'dm-modal-overlay';
     modal.innerHTML =
       '<div class="dm-modal" style="max-width:680px; max-height:80vh; display:flex; flex-direction:column;" role="dialog" aria-modal="true">' +
-        '<h3 class="dm-modal-title">📖 SRD Bestiary <span style="font-weight:400; font-size:13px; color:var(--text-muted);">(' + MONSTERS.length + ' monsters)</span></h3>' +
+        '<h3 class="dm-modal-title"><i class="fi fi-rr-book"></i> SRD Bestiary <span style="font-weight:400; font-size:13px; color:var(--text-muted);">(' + MONSTERS.length + ' monsters)</span></h3>' +
         '<div style="display:flex; gap:8px; margin-bottom:12px;">' +
           '<input type="text" id="monster-search" placeholder="Search by name or type..." oninput="filterMonsterBrowser()" style="flex:1; margin:0;" />' +
           '<select id="monster-cr-filter" onchange="filterMonsterBrowser()" style="margin:0; width:auto;">' +

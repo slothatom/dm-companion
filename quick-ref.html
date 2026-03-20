@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Quick Reference</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,20 +13,20 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>📋 Quick Reference</h1>
+    <h1><i class="fi fi-rr-clipboard-list"></i> Quick Reference</h1>
     <p class="subtitle">Conditions, combat actions, cover, and skills — everything mid-session demands at a glance.</p>
 
     <div class="spell-search">
-      <input type="text" id="ref-search" placeholder="🔍 Search reference..."
+      <input type="text" id="ref-search" placeholder="Search reference..."
         oninput="filterRef()" style="margin-bottom:10px;" />
     </div>
 
     <div class="spell-filters" id="cat-filters">
       <button class="filter-btn active-filter" onclick="setCat('all', this)">All</button>
-      <button class="filter-btn" onclick="setCat('condition', this)">⚡ Conditions</button>
-      <button class="filter-btn" onclick="setCat('action', this)">⚔️ Actions</button>
-      <button class="filter-btn" onclick="setCat('cover', this)">🛡 Cover</button>
-      <button class="filter-btn" onclick="setCat('skill', this)">🎯 Skills</button>
+      <button class="filter-btn" onclick="setCat('condition', this)"><i class="fi fi-rr-bolt"></i> Conditions</button>
+      <button class="filter-btn" onclick="setCat('action', this)"><i class="fi fi-rr-sword"></i> Actions</button>
+      <button class="filter-btn" onclick="setCat('cover', this)"><i class="fi fi-rr-shield"></i> Cover</button>
+      <button class="filter-btn" onclick="setCat('skill', this)"><i class="fi fi-rr-target"></i> Skills</button>
     </div>
 
     <div id="ref-list"></div>

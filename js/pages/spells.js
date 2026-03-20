@@ -32,10 +32,10 @@ function renderSpells(list) {
               ${concBadge}${ritualBadge}
             </div>
             <div class="spell-stats">
-              <span class="spell-stat">⏱ <span>${s.cast}</span></span>
-              <span class="spell-stat">📍 <span>${s.range}</span></span>
-              <span class="spell-stat">⏳ <span>${s.duration}</span></span>
-              ${s.components ? '<span class="spell-stat">🧩 <span>' + s.components + '</span></span>' : ''}
+              <span class="spell-stat"><i class="fi fi-rr-clock"></i> <span>${s.cast}</span></span>
+              <span class="spell-stat"><i class="fi fi-rr-map-marker"></i> <span>${s.range}</span></span>
+              <span class="spell-stat"><i class="fi fi-rr-hourglass-end"></i> <span>${s.duration}</span></span>
+              ${s.components ? '<span class="spell-stat"><i class="fi fi-rr-puzzle-piece"></i> <span>' + s.components + '</span></span>' : ''}
             </div>
             <div class="spell-desc">${s.desc}</div>
           </div>`;

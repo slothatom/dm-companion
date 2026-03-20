@@ -55,12 +55,12 @@ function setGenMode(mode, btn) {
   const placeholder = document.getElementById('gen-placeholder');
 
   if (mode === 'npc') {
-    genBtn.textContent = '🎲 Generate NPC';
-    savBtn.textContent = '💾 Save to Characters';
+    genBtn.innerHTML = '<i class="fi fi-rr-dice-d20"></i> Generate NPC';
+    savBtn.innerHTML = '<i class="fi fi-rr-disk"></i> Save to Characters';
     if (placeholder) placeholder.textContent = 'Hit "Generate NPC" to bring someone to life.';
   } else {
-    genBtn.textContent = '🎲 Generate Creature';
-    savBtn.textContent = '💾 Save to Characters';
+    genBtn.innerHTML = '<i class="fi fi-rr-dice-d20"></i> Generate Creature';
+    savBtn.innerHTML = '<i class="fi fi-rr-disk"></i> Save to Characters';
     if (placeholder) placeholder.textContent = 'Hit "Generate Creature" to roll up a monster.';
   }
 

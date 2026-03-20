@@ -5,10 +5,10 @@
 let activeCategory = 'all';
 
 const CAT_HEADINGS = {
-  condition: '⚡ Conditions',
-  action:    '⚔️ Combat Actions',
-  cover:     '🛡 Cover',
-  skill:     '🎯 Skills',
+  condition: '<i class="fi fi-rr-bolt"></i> Conditions',
+  action:    '<i class="fi fi-rr-sword"></i> Combat Actions',
+  cover:     '<i class="fi fi-rr-shield"></i> Cover',
+  skill:     '<i class="fi fi-rr-target"></i> Skills',
 };
 
 const REFERENCE = [

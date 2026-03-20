@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Initiative Tracker</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>⚔️ Initiative Tracker</h1>
+    <h1><i class="fi fi-rr-sword"></i> Initiative Tracker</h1>
     <p class="subtitle">Track combat turn order. Never lose your place mid-battle again.</p>
 
     <!-- ── Combat Controls (primary) ─────────────────────── -->
@@ -25,10 +26,10 @@
         <strong id="turn-counter" class="init-status-val">—</strong>
       </div>
       <div class="row-actions">
-        <button class="gold" onclick="nextTurn()">▶ Next Turn</button>
-        <button onclick="sortByInitiative()">⬆ Sort</button>
-        <button class="secondary" onclick="resetTurn()">↩ Reset Round</button>
-        <button class="danger" onclick="clearAll()">🗑 Clear</button>
+        <button class="gold" onclick="nextTurn()"><i class="fi fi-rr-play"></i> Next Turn</button>
+        <button onclick="sortByInitiative()"><i class="fi fi-rr-sort-alt"></i> Sort</button>
+        <button class="secondary" onclick="resetTurn()"><i class="fi fi-rr-refresh"></i> Reset Round</button>
+        <button class="danger" onclick="clearAll()"><i class="fi fi-rr-trash"></i> Clear</button>
       </div>
     </div>
 
@@ -40,10 +41,10 @@
     <!-- ── Add Combatant (secondary) ──────────────────────── -->
     <div class="card init-add-card">
       <div class="init-add-header">
-        <h3 style="margin:0; font-size:14px;">➕ Add Combatant</h3>
+        <h3 style="margin:0; font-size:14px;"><i class="fi fi-rr-plus"></i> Add Combatant</h3>
         <div class="row-actions">
-          <button class="secondary" style="padding:5px 14px; font-size:12px;" onclick="importPlayers()">📥 Import Players</button>
-          <button class="secondary" style="padding:5px 14px; font-size:12px;" onclick="importCreatures()">📥 Import Creatures</button>
+          <button class="secondary" style="padding:5px 14px; font-size:12px;" onclick="importPlayers()"><i class="fi fi-rr-download"></i> Import Players</button>
+          <button class="secondary" style="padding:5px 14px; font-size:12px;" onclick="importCreatures()"><i class="fi fi-rr-download"></i> Import Creatures</button>
         </div>
       </div>
 
@@ -56,7 +57,7 @@
           <label>Initiative</label>
           <div style="display:flex; gap:6px; align-items:flex-start;">
             <input type="number" id="new-init" placeholder="e.g. 14" style="flex:1;" />
-            <button type="button" onclick="rollInitiative()" style="padding:10px 12px; margin-bottom:16px; white-space:nowrap;" title="Roll d20 for initiative">🎲</button>
+            <button type="button" onclick="rollInitiative()" style="padding:10px 12px; margin-bottom:16px; white-space:nowrap;" title="Roll d20 for initiative"><i class="fi fi-rr-dice-d20"></i></button>
           </div>
         </div>
         <div>
@@ -68,9 +69,9 @@
         <div>
           <label>Type</label>
           <select id="new-type">
-            <option value="player">🧙 Player</option>
-            <option value="npc">🗣 NPC</option>
-            <option value="creature">🐉 Creature</option>
+            <option value="player"> Player</option>
+            <option value="npc"> NPC</option>
+            <option value="creature"> Creature</option>
           </select>
         </div>
         <div style="display:flex; align-items:flex-end; padding-bottom:16px;">

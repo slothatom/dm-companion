@@ -120,13 +120,13 @@ function buildPlayerCard(player, index) {
           >${escapeHtml(player.notes)}</textarea>
           <div class="spell-slots-section" id="spell-slots-${index}">
             <button class="spell-slots-toggle" onclick="toggleSlots(${index})">
-              🔮 Spell Slots <span class="spell-slots-arrow" id="slots-arrow-${index}">▾</span>
+              <i class="fi fi-rr-book-spells"></i> Spell Slots <span class="spell-slots-arrow" id="slots-arrow-${index}">▾</span>
             </button>
             <div class="spell-slots-body" id="slots-body-${index}" style="display:none;">
               ${renderSlots(player, index)}
             </div>
           </div>
-          <button class="danger" onclick="removePlayer(${index})">🗑 Remove</button>
+          <button class="danger" onclick="removePlayer(${index})"><i class="fi fi-rr-trash"></i> Remove</button>
         </div>`;
 }
 

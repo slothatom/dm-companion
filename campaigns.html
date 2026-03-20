@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Campaigns</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>🗺 Campaigns</h1>
+    <h1><i class="fi fi-rr-map"></i> Campaigns</h1>
     <p class="subtitle">Manage your campaigns. Log sessions, keep world notes, and never lose the thread.</p>
 
     <!-- Campaign selector -->
@@ -28,7 +29,7 @@
           </select>
           <button onclick="showCreateCampaign()" style="white-space:nowrap;">+ New Campaign</button>
           <button class="danger" onclick="deleteCampaign()"
-            id="delete-campaign-btn" style="white-space:nowrap; display:none;">🗑 Delete</button>
+            id="delete-campaign-btn" style="white-space:nowrap; display:none;"><i class="fi fi-rr-trash"></i> Delete</button>
         </div>
 
         <!-- Inline new-campaign form (hidden until + New Campaign is clicked) -->
@@ -61,18 +62,18 @@
 
       <!-- World Notes -->
       <div class="card">
-        <h3>🌍 World Notes</h3>
+        <h3><i class="fi fi-rr-world"></i> World Notes</h3>
         <textarea id="world-notes"
           placeholder="Lore, factions, geography, recurring themes — anything the world needs you to remember."
           style="min-height:160px;" oninput="markWorldDirty()"></textarea>
         <div class="row-actions">
-          <button id="world-save-btn" onclick="saveWorldNotes()">💾 Save Notes</button>
+          <button id="world-save-btn" onclick="saveWorldNotes()"><i class="fi fi-rr-disk"></i> Save Notes</button>
           <span id="world-save-status" class="save-status"></span>
         </div>
       </div>
 
       <!-- Session log -->
-      <h2>📜 Session Log</h2>
+      <h2><i class="fi fi-rr-scroll"></i> Session Log</h2>
       <button onclick="addSession()" style="margin-bottom:16px;">+ Log New Session</button>
 
       <div id="session-list">
@@ -80,7 +81,7 @@
       </div>
 
       <div class="row-actions" style="margin-top:12px;">
-        <button id="sessions-save-btn" onclick="saveSessions()" style="display:none;">💾 Save Sessions</button>
+        <button id="sessions-save-btn" onclick="saveSessions()" style="display:none;"><i class="fi fi-rr-disk"></i> Save Sessions</button>
         <span id="sessions-save-status" class="save-status"></span>
       </div>
 

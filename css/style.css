@@ -1373,3 +1373,39 @@ input[type="time"] {
   color: var(--text-dim);
   font-size: 13px;
 }
+
+/* =============================================
+   Uicons — Integration Helpers
+   ============================================= */
+
+/* Inline icon inside buttons / headings */
+h1 .fi, h2 .fi, h3 .fi, button .fi, a .fi, label .fi, .filter-btn .fi {
+  vertical-align: -0.1em;
+  line-height: 1;
+}
+
+h1 .fi { font-size: 0.85em; margin-right: 6px; }
+h2 .fi { font-size: 0.85em; margin-right: 4px; }
+
+button .fi { margin-right: 5px; font-size: 1em; }
+
+/* Sidebar icon sizing */
+.sidebar-icon .fi { font-size: 17px; }
+
+/* Home card icon sizing */
+.home-card-icon .fi { font-size: 26px; }
+.home-quick-btn .fi { font-size: 14px; }
+
+/* Die button icon */
+.die-btn .die-icon .fi { font-size: 26px; }
+
+/* Filter button icon */
+.filter-btn .fi { margin-right: 3px; }
+
+/* Page title wizard logo */
+.page-logo-icon {
+  width: 28px;
+  height: 28px;
+  vertical-align: -0.15em;
+  margin-right: 6px;
+}

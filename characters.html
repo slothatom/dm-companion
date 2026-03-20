@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Characters</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,21 +13,21 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>🐉 Characters</h1>
+    <h1><i class="fi fi-rr-skull"></i> Characters</h1>
     <p class="subtitle">Track your NPCs and creatures. Never forget a stat mid-combat again.</p>
 
     <div class="notes-campaign-bar" id="char-campaign-bar" style="display:none;">
       <div class="campaign-select-wrap">
         <label for="char-campaign-select">Campaign</label>
         <select id="char-campaign-select" onchange="filterByCampaign()">
-          <option value="">🌐 All Characters</option>
+          <option value=""><i class="fi fi-rr-world"></i> All Characters</option>
         </select>
       </div>
     </div>
 
     <div class="gen-type-tabs" style="margin-bottom:20px;">
-      <button class="gen-tab active-gen-tab" id="tab-npc" onclick="setCharTab('npc', this)">🗣 NPCs</button>
-      <button class="gen-tab" id="tab-creature" onclick="setCharTab('creature', this)">🐉 Creatures</button>
+      <button class="gen-tab active-gen-tab" id="tab-npc" onclick="setCharTab('npc', this)"><i class="fi fi-rr-user-speaking"></i> NPCs</button>
+      <button class="gen-tab" id="tab-creature" onclick="setCharTab('creature', this)"><i class="fi fi-rr-dragon"></i> Creatures</button>
     </div>
 
     <div id="panel-npc">
@@ -40,7 +41,7 @@
     </div>
 
     <br />
-    <button id="save-btn" onclick="saveCharacters()">💾 Save All</button>
+    <button id="save-btn" onclick="saveCharacters()"><i class="fi fi-rr-disk"></i> Save All</button>
     <span id="save-status" class="save-status"></span>
   </main>
 

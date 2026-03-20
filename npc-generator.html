@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – NPC &amp; Creature Generator</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,13 +13,13 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>🎭 NPC &amp; Creature Generator</h1>
+    <h1><i class="fi fi-rr-magic-wand"></i> NPC &amp; Creature Generator</h1>
     <p class="subtitle">Instant characters and monsters, ready to drop into any scene.</p>
 
     <!-- Mode tabs -->
     <div class="gen-type-tabs">
-      <button class="gen-tab active-gen-tab" onclick="setGenMode('npc', this)">🎭 NPC</button>
-      <button class="gen-tab" onclick="setGenMode('creature', this)">🐉 Creature</button>
+      <button class="gen-tab active-gen-tab" onclick="setGenMode('npc', this)"><i class="fi fi-rr-user-speaking"></i> NPC</button>
+      <button class="gen-tab" onclick="setGenMode('creature', this)"><i class="fi fi-rr-dragon"></i> Creature</button>
     </div>
 
     <!-- Output panel -->
@@ -27,9 +28,9 @@
     </div>
 
     <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
-      <button id="gen-btn" onclick="generate()">🎲 Generate NPC</button>
-      <button class="secondary" onclick="copyEntry()">📋 Copy</button>
-      <button class="secondary" id="save-chars-btn" onclick="saveToCharacters()">💾 Save to Characters</button>
+      <button id="gen-btn" onclick="generate()"><i class="fi fi-rr-dice-d20"></i> Generate NPC</button>
+      <button class="secondary" onclick="copyEntry()"><i class="fi fi-rr-copy"></i> Copy</button>
+      <button class="secondary" id="save-chars-btn" onclick="saveToCharacters()"><i class="fi fi-rr-disk"></i> Save to Characters</button>
     </div>
     <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:32px;">
       <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0; font-size:14px;">
@@ -37,13 +38,13 @@
         Auto-save on generate
       </label>
       <select id="gen-campaign-select" style="margin:0; min-width:160px;">
-        <option value="">🌐 No Campaign</option>
+        <option value=""><i class="fi fi-rr-world"></i> No Campaign</option>
       </select>
     </div>
 
     <hr />
 
-    <h2>🎭 Generated This Session <span style="font-size:13px; font-weight:400; color:var(--text-muted);">(this session only — saved entries persist on the Characters page)</span></h2>
+    <h2><i class="fi fi-rr-magic-wand"></i> Generated This Session <span style="font-size:13px; font-weight:400; color:var(--text-muted);">(this session only — saved entries persist on the Characters page)</span></h2>
     <div id="generated-list">
       <p class="empty-state">Nothing generated yet.</p>
     </div>

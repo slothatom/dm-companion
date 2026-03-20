@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Dice Roller</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,22 +13,22 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>🎲 Dice Roller</h1>
+    <h1><i class="fi fi-rr-dice-d20"></i> Dice Roller</h1>
     <p class="subtitle">May your rolls be ever in your favour.</p>
 
     <div class="dice-grid">
-      <button class="die-btn" onclick="roll(4)"><span class="die-icon">🔺</span><span>d4</span></button>
-      <button class="die-btn" onclick="roll(6)"><span class="die-icon">🎲</span><span>d6</span></button>
-      <button class="die-btn" onclick="roll(8)"><span class="die-icon">💎</span><span>d8</span></button>
-      <button class="die-btn" onclick="roll(10)"><span class="die-icon">🔷</span><span>d10</span></button>
-      <button class="die-btn" onclick="roll(12)"><span class="die-icon">⬡</span><span>d12</span></button>
-      <button class="die-btn" onclick="roll(20)"><span class="die-icon">⭐</span><span>d20</span></button>
-      <button class="die-btn" onclick="roll(100)"><span class="die-icon">💯</span><span>d100</span></button>
+      <button class="die-btn" onclick="roll(4)"><span class="die-icon"><i class="fi fi-rr-dice-d4"></i></span><span>d4</span></button>
+      <button class="die-btn" onclick="roll(6)"><span class="die-icon"><i class="fi fi-rr-dice-d6"></i></span><span>d6</span></button>
+      <button class="die-btn" onclick="roll(8)"><span class="die-icon"><i class="fi fi-rr-dice-d8"></i></span><span>d8</span></button>
+      <button class="die-btn" onclick="roll(10)"><span class="die-icon"><i class="fi fi-rr-dice-d10"></i></span><span>d10</span></button>
+      <button class="die-btn" onclick="roll(12)"><span class="die-icon"><i class="fi fi-rr-dice-d12"></i></span><span>d12</span></button>
+      <button class="die-btn" onclick="roll(20)"><span class="die-icon"><i class="fi fi-rr-dice-d20"></i></span><span>d20</span></button>
+      <button class="die-btn" onclick="roll(100)"><span class="die-icon"><i class="fi fi-rr-dice"></i></span><span>d100</span></button>
     </div>
 
     <div style="display:flex; gap:10px; justify-content:center; margin: 4px 0 20px;">
-      <button class="secondary" onclick="rollAdvantage()">⬆️ Advantage</button>
-      <button class="secondary" onclick="rollDisadvantage()">⬇️ Disadvantage</button>
+      <button class="secondary" onclick="rollAdvantage()"><i class="fi fi-rr-arrow-up"></i> Advantage</button>
+      <button class="secondary" onclick="rollDisadvantage()"><i class="fi fi-rr-arrow-down"></i> Disadvantage</button>
     </div>
 
     <div class="card">
@@ -39,7 +40,7 @@
         <input type="text" id="dice-expr" placeholder="e.g. 2d6+3"
           style="margin:0; flex:1;"
           onkeydown="if(event.key==='Enter') rollExpression()" />
-        <button onclick="rollExpression()" style="white-space:nowrap;">🎲 Roll</button>
+        <button onclick="rollExpression()" style="white-space:nowrap;"><i class="fi fi-rr-dice-d20"></i> Roll</button>
       </div>
     </div>
 
@@ -67,7 +68,7 @@
           <input type="number" id="modifier" value="0" />
         </div>
       </div>
-      <button onclick="rollCustom()">🎲 Roll</button>
+      <button onclick="rollCustom()"><i class="fi fi-rr-dice-d20"></i> Roll</button>
     </div>
 
     <div style="text-align:center; margin: 28px 0 8px;">
@@ -75,7 +76,7 @@
       <div class="roll-label" id="roll-label">Click a die to roll</div>
     </div>
 
-    <h2>🎲 Roll History</h2>
+    <h2><i class="fi fi-rr-dice-d20"></i> Roll History</h2>
     <div class="roll-history" id="roll-history">
       <span style="color:#5a4a30; font-style:italic;">No rolls yet.</span>
     </div>

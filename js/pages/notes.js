@@ -36,7 +36,7 @@ async function loadCampaigns() {
   (data || []).forEach(function (c) {
     const opt = document.createElement('option');
     opt.value       = c.id;
-    opt.textContent = '🗺 ' + c.name;
+    opt.textContent = c.name;
     sel.appendChild(opt);
   });
 

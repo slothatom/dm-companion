@@ -156,7 +156,7 @@ function applyDamage(index) {
   const current = parseInt(c.hp);
   if (!isNaN(current)) {
     c.hp = Math.max(0, current - amount);
-    if (c.hp === 0) showToast(c.name + ' dropped to 0 HP! ☠️', 'info');
+    if (c.hp === 0) showToast(c.name + ' dropped to 0 HP!', 'info');
   }
   renderList();
 }
@@ -197,7 +197,7 @@ function renderList() {
   document.getElementById('turn-counter').textContent =
     combatants[currentTurn] ? combatants[currentTurn].name : '—';
 
-  const typeIcons = { player: '🧙', npc: '🗣', creature: '🐉' };
+  const typeIcons = { player: '<i class="fi fi-rr-user"></i>', npc: '<i class="fi fi-rr-user-speaking"></i>', creature: '<i class="fi fi-rr-dragon"></i>' };
 
   container.innerHTML = combatants.map(function (c, i) {
     const isActive  = i === currentTurn;
@@ -211,12 +211,12 @@ function renderList() {
     return `
           <div class="init-row ${isActive ? 'active-turn' : ''}${isZeroHp ? ' hp-zero' : ''}">
             <div class="init-row-main">
-              <span class="turn-arrow">▶</span>
+              <span class="turn-arrow"><i class="fi fi-rr-play"></i></span>
               <span class="init-score">${c.init}</span>
               <span class="init-name">${escapeHtml(c.name)}</span>
               <span class="init-type">${typeIcons[c.type] || '?'} ${c.type}</span>
               <span class="init-hp">
-                ❤️ <input type="number" value="${c.hp}"
+                <i class="fi fi-rr-heart"></i> <input type="number" value="${c.hp}"
                   onchange="updateHp(${i}, this.value)"
                   style="width:55px; padding:2px 6px; font-size:15px; margin:0; display:inline;"
                   title="Current HP" />
@@ -228,8 +228,8 @@ function renderList() {
             <div class="init-row-sub">
               <div class="hp-adj">
                 <input type="number" id="hp-adj-${i}" placeholder="amt" min="0" style="width:64px;" />
-                <button onclick="applyDamage(${i})" style="padding:4px 10px; font-size:13px;" class="danger">🗡 Dmg</button>
-                <button onclick="applyHeal(${i})"   style="padding:4px 10px; font-size:13px;" class="secondary">💚 Heal</button>
+                <button onclick="applyDamage(${i})" style="padding:4px 10px; font-size:13px;" class="danger"><i class="fi fi-rr-sword"></i> Dmg</button>
+                <button onclick="applyHeal(${i})"   style="padding:4px 10px; font-size:13px;" class="secondary"><i class="fi fi-rr-heart"></i> Heal</button>
               </div>
               <div class="cond-row">${condChips}</div>
             </div>

@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Spell Reference</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
 </head>
 <body>
 
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>📖 Spell Reference</h1>
+    <h1><i class="fi fi-rr-book-spells"></i> Spell Reference</h1>
     <p class="subtitle">Full SRD spell reference — 319 spells. Search by name, school, or filter by level.</p>
 
     <div class="spell-search">
-      <input type="text" id="spell-search" placeholder="🔍 Search spells..."
+      <input type="text" id="spell-search" placeholder="Search spells..."
         oninput="filterSpells()" style="margin-bottom: 10px;" />
     </div>
 
@@ -33,8 +34,8 @@
       <button class="filter-btn" onclick="setLevel(9, this)">9</button>
     </div>
     <div class="spell-filters" style="margin-top:8px;">
-      <button class="filter-btn" id="filter-conc"   onclick="toggleFilter('conc',   this)">🔵 Concentration</button>
-      <button class="filter-btn" id="filter-ritual" onclick="toggleFilter('ritual', this)">📿 Ritual</button>
+      <button class="filter-btn" id="filter-conc"   onclick="toggleFilter('conc',   this)"><i class="fi fi-rr-bullseye"></i> Concentration</button>
+      <button class="filter-btn" id="filter-ritual" onclick="toggleFilter('ritual', this)"><i class="fi fi-rr-star"></i> Ritual</button>
     </div>
 
     <div id="spell-list"></div>

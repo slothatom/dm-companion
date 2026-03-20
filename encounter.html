@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – Encounter Builder</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -12,7 +13,7 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>⚔️ Encounter Builder</h1>
+    <h1><i class="fi fi-rr-dragon"></i> Encounter Builder</h1>
     <p class="subtitle">Calculate XP budget and difficulty. Export directly to the initiative tracker.</p>
 
     <!-- Party config -->
@@ -101,14 +102,14 @@
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <button onclick="addCreature()">+ Add Monster</button>
-        <button class="secondary" onclick="showMonsterBrowser()">📖 SRD Bestiary</button>
-        <button class="secondary" onclick="importCreatures()">📥 Import from Characters</button>
-        <button class="secondary" onclick="importFromGenerator()">📥 Import from Generator</button>
+        <button class="secondary" onclick="showMonsterBrowser()"><i class="fi fi-rr-book"></i> SRD Bestiary</button>
+        <button class="secondary" onclick="importCreatures()"><i class="fi fi-rr-download"></i> Import from Characters</button>
+        <button class="secondary" onclick="importFromGenerator()"><i class="fi fi-rr-download"></i> Import from Generator</button>
       </div>
     </div>
 
     <!-- Creature list -->
-    <h2>⚔️ Monsters in Encounter</h2>
+    <h2><i class="fi fi-rr-sword"></i> Monsters in Encounter</h2>
     <div id="creature-list">
       <p class="empty-state">No monsters yet. Add some above!</p>
     </div>
@@ -137,14 +138,14 @@
     </div>
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; margin-bottom:40px;">
-      <button class="gold" onclick="sendToInitiative()" id="send-btn" style="display:none;">▶ Send to Initiative Tracker</button>
-      <button onclick="saveEncounter()" id="save-btn" style="display:none;">💾 Save Encounter</button>
-      <button class="danger" onclick="clearAll()" id="clear-btn" style="display:none;">🗑 Clear Encounter</button>
+      <button class="gold" onclick="sendToInitiative()" id="send-btn" style="display:none;"><i class="fi fi-rr-play"></i> Send to Initiative Tracker</button>
+      <button onclick="saveEncounter()" id="save-btn" style="display:none;"><i class="fi fi-rr-disk"></i> Save Encounter</button>
+      <button class="danger" onclick="clearAll()" id="clear-btn" style="display:none;"><i class="fi fi-rr-trash"></i> Clear Encounter</button>
     </div>
 
     <!-- Saved Encounters -->
     <div class="card" id="saved-encounters-card">
-      <h3>📁 Saved Encounters</h3>
+      <h3><i class="fi fi-rr-folder"></i> Saved Encounters</h3>
       <div id="saved-encounters-list"></div>
     </div>
 

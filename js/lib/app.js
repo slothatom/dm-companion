@@ -167,17 +167,17 @@ function confirmSignOut() {
 
 function renderNav(user) {
   const pages = [
-    { href: 'home.html',          icon: '🏠', label: 'Home'       },
-    { href: 'index.html',         icon: '🪶', label: 'Notes'      },
-    { href: 'campaigns.html',     icon: '🗺', label: 'Campaigns'  },
-    { href: 'characters.html',    icon: '💀', label: 'Characters' },
-    { href: 'players.html',       icon: '🍺', label: 'Players'    },
-    { href: 'initiative.html',    icon: '⚔️', label: 'Initiative' },
-    { href: 'encounter.html',     icon: '🐉', label: 'Encounters' },
-    { href: 'dice.html',          icon: '🎲', label: 'Dice'       },
-    { href: 'spells.html',        icon: '🔮', label: 'Spells'     },
-    { href: 'npc-generator.html', icon: '🎭', label: 'Generator'  },
-    { href: 'quick-ref.html',     icon: '📋', label: 'Reference'  },
+    { href: 'home.html',          icon: '<i class="fi fi-rr-home"></i>',           label: 'Home'       },
+    { href: 'index.html',         icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Notes'      },
+    { href: 'campaigns.html',     icon: '<i class="fi fi-rr-map"></i>',            label: 'Campaigns'  },
+    { href: 'characters.html',    icon: '<i class="fi fi-rr-skull"></i>',          label: 'Characters' },
+    { href: 'players.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Players'    },
+    { href: 'initiative.html',    icon: '<i class="fi fi-rr-sword"></i>',          label: 'Initiative' },
+    { href: 'encounter.html',     icon: '<i class="fi fi-rr-dragon"></i>',         label: 'Encounters' },
+    { href: 'dice.html',          icon: '<i class="fi fi-rr-dice-d20"></i>',       label: 'Dice'       },
+    { href: 'spells.html',        icon: '<i class="fi fi-rr-book-spells"></i>',    label: 'Spells'     },
+    { href: 'npc-generator.html', icon: '<i class="fi fi-rr-magic-wand"></i>',     label: 'Generator'  },
+    { href: 'quick-ref.html',     icon: '<i class="fi fi-rr-clipboard-list"></i>', label: 'Reference'  },
   ];
 
   const links = pages.map(function (p) {
@@ -205,7 +205,7 @@ function renderNav(user) {
         <span class="sidebar-profile-email">${email}</span>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn"></button>
-      <button class="sidebar-signout" onclick="confirmSignOut()">🚪 Sign Out</button>`;
+      <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>`;
   }
 
   const nav = document.getElementById('main-nav');
@@ -216,7 +216,7 @@ function renderNav(user) {
         <span class="sidebar-logo-text">DM Companion</span>
       </a>
       <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar" title="Toggle sidebar">
-        ☰
+        <i class="fi fi-rr-bars-sort"></i>
       </button>
     </div>
 
@@ -266,7 +266,7 @@ function renderNav(user) {
     btn.id        = 'mobile-menu-btn';
     btn.className = 'mobile-menu-btn';
     btn.setAttribute('aria-label', 'Open menu');
-    btn.textContent = '☰';
+    btn.innerHTML = '<i class="fi fi-rr-bars-sort"></i>';
     btn.onclick = openMobileSidebar;
     document.body.appendChild(btn);
   }
@@ -307,7 +307,7 @@ function updateThemeButton() {
   const btn = document.getElementById('theme-toggle-btn');
   if (!btn) return;
   const isLight = document.documentElement.dataset.theme === 'light';
-  btn.textContent = isLight ? '\u2600\uFE0F Light' : '\uD83C\uDF19 Dark';
+  btn.innerHTML = isLight ? '<i class="fi fi-rr-sun"></i> Light' : '<i class="fi fi-rr-moon"></i> Dark';
 }
 
 // ── Loading timeout safety net ────────────────────────────

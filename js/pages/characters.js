@@ -175,7 +175,7 @@ function buildCard(item, index, type) {
           >${escapeHtml(item.notes)}</textarea>
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             ${buildCampaignDropdown(item, type)}
-            <button class="danger" onclick="removeItem('${type}', ${index})">🗑 Remove</button>
+            <button class="danger" onclick="removeItem('${type}', ${index})"><i class="fi fi-rr-trash"></i> Remove</button>
           </div>
         </div>`;
 }
@@ -184,7 +184,7 @@ function buildCampaignDropdown(item, type) {
   if (campaignsList.length === 0 || !item._id) return '';
   const map = getCharCampaignMap();
   const current = map[charKey(type, item._id)] || '';
-  const options = '<option value="">🌐 No Campaign</option>' +
+  const options = '<option value=""><i class="fi fi-rr-world"></i> No Campaign</option>' +
     campaignsList.map(function (c) {
       const sel = c.id === current ? ' selected' : '';
       return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + escapeHtml(c.name) + '</option>';

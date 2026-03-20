@@ -29,21 +29,44 @@ function renderNav(user) {
     return `<a href="${p.href}" ${isActive}>${p.label}</a>`;
   }).join('');
 
-  let userHtml = '';
+  let profileHtml = '';
   if (user) {
-    const displayName = user.user_metadata?.full_name
-                     || user.user_metadata?.name
-                     || user.email
-                     || 'Adventurer';
+    const email  = user.email || 'Adventurer';
     const avatar = user.user_metadata?.avatar_url;
-    userHtml = `
-      <div class="nav-user">
-        ${avatar ? `<img src="${avatar}" class="nav-avatar" alt="" />` : ''}
-        <span class="nav-email">${displayName}</span>
-        <button class="nav-logout" onclick="signOut()">Sign Out</button>
+    const initials = email.charAt(0).toUpperCase();
+
+    const avatarHtml = avatar
+      ? `<img src="${avatar}" class="profile-avatar" alt="" />`
+      : `<div class="profile-initials">${initials}</div>`;
+
+    profileHtml = `
+      <div class="nav-profile" id="nav-profile">
+        <button class="profile-btn" onclick="toggleProfileMenu(event)" aria-label="Profile menu">
+          ${avatarHtml}
+        </button>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <div class="profile-dropdown-email">👤 ${email}</div>
+          <hr class="profile-dropdown-divider" />
+          <button class="profile-signout" onclick="signOut()">🚪 Sign Out</button>
+        </div>
       </div>`;
   }
 
   document.getElementById('main-nav').innerHTML =
-    `<a href="index.html" class="logo">⚔️ DM Companion</a>` + links + userHtml;
+    `<a href="index.html" class="logo">⚔️ DM Companion</a>` + links + profileHtml;
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function (e) {
+    const profile = document.getElementById('nav-profile');
+    if (profile && !profile.contains(e.target)) {
+      const dd = document.getElementById('profile-dropdown');
+      if (dd) dd.classList.remove('open');
+    }
+  });
+}
+
+function toggleProfileMenu(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('profile-dropdown');
+  if (dd) dd.classList.toggle('open');
 }

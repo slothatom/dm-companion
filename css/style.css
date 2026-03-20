@@ -463,46 +463,87 @@ hr {
   padding: 20px 0;
 }
 
-/* ---- Nav User (auth) ---- */
-.nav-user {
+/* ---- Nav Profile Dropdown ---- */
+.nav-profile {
   margin-left: auto;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-btn {
+  background: transparent;
+  border: 2px solid #5a3e1b;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  padding-left: 12px;
-  border-left: 1px solid #3a2510;
-}
-
-.nav-avatar {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #5a3e1b;
-  flex-shrink: 0;
-}
-
-.nav-email {
-  font-size: 13px;
-  color: #a89060;
-  max-width: 140px;
+  justify-content: center;
+  transition: border-color 0.2s;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+.profile-btn:hover {
+  border-color: #c9a84c;
+  background: transparent;
 }
 
-.nav-logout {
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-initials {
+  font-size: 15px;
+  font-weight: 600;
+  color: #c9a84c;
+  line-height: 1;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #2c1a0e;
+  border: 1px solid #5a3e1b;
+  border-radius: 8px;
+  min-width: 220px;
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 999;
+}
+.profile-dropdown.open { display: block; }
+
+.profile-dropdown-email {
+  font-size: 14px;
+  color: #a89060;
+  padding: 4px 2px 8px;
+  word-break: break-all;
+}
+
+.profile-dropdown-divider {
+  border: none;
+  border-top: 1px solid #3a2510;
+  margin: 8px 0;
+}
+
+.profile-signout {
+  width: 100%;
   background: #3a1010;
   border: 1px solid #8b0000;
   color: #e8d5a3;
-  font-size: 13px;
-  padding: 4px 12px;
+  font-size: 15px;
+  padding: 8px 12px;
   border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.nav-logout:hover {
+.profile-signout:hover {
   background: #8b0000;
   color: #fff;
 }

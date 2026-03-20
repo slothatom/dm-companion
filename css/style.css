@@ -460,8 +460,8 @@ button.gold {
 }
 button.gold:hover { background: var(--accent); color: var(--bg); }
 
-/* ---- Save status ---- */
-#save-status {
+/* ---- Save status (add class="save-status" to any span) ---- */
+.save-status {
   display: inline-block;
   margin-left: 14px;
   color: var(--secondary);
@@ -469,11 +469,22 @@ button.gold:hover { background: var(--accent); color: var(--bg); }
   opacity: 0;
   transition: opacity 0.4s;
 }
-#save-status.visible { opacity: 1; }
+.save-status.visible { opacity: 1; }
 
 /* ---- Grids ---- */
 .stat-grid   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .stat-grid-2 { display: grid; grid-template-columns: 1fr 1fr;     gap: 12px; }
+
+/* Prevent grid children from overflowing their cell */
+.stat-grid > *, .stat-grid-2 > * { min-width: 0; }
+
+/* ---- Row actions (flex row with gap, wraps on small screens) ---- */
+.row-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
 /* ---- Divider ---- */
 hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
@@ -693,7 +704,7 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
    Save-status — Unsaved indicator
    ============================================= */
 
-#save-status.unsaved {
+.save-status.unsaved {
   opacity: 1 !important;
   color: var(--accent) !important;
   font-size: 13px;
@@ -901,7 +912,27 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   margin-bottom: 4px;
 }
 
+/* =============================================
+   Date / Time inputs — themed to match app
+   ============================================= */
+
+input[type="date"],
+input[type="time"] {
+  color-scheme: dark;
+  width: auto;
+}
+
+/* =============================================
+   Responsive grid breakpoints
+   ============================================= */
+
 @media (max-width: 640px) {
-  .xp-budget-row { grid-template-columns: repeat(2, 1fr); }
-  .ref-grid       { grid-template-columns: 1fr; }
+  .xp-budget-row  { grid-template-columns: repeat(2, 1fr); }
+  .ref-grid        { grid-template-columns: 1fr; }
+  .stat-grid       { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 420px) {
+  .stat-grid       { grid-template-columns: 1fr; }
+  .stat-grid-2     { grid-template-columns: 1fr; }
 }

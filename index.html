@@ -46,7 +46,7 @@
       ></textarea>
 
       <button id="save-btn" onclick="saveNotes()">💾 Save Notes</button>
-      <span id="save-status"></span>
+      <span id="save-status" class="save-status"></span>
 
     </div>
   </main>
@@ -62,9 +62,7 @@
     let isDirty        = false;
     let autosaveTimer  = null;
 
-    window.addEventListener('beforeunload', function (e) {
-      if (isDirty) { e.preventDefault(); e.returnValue = ''; }
-    });
+    setupDirtyGuard(function () { return isDirty; });
 
     (async function () {
       const user = await requireAuth();

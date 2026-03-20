@@ -27,7 +27,7 @@
 
     <br /><br />
     <button id="save-btn" onclick="saveCharacters()">💾 Save All</button>
-    <span id="save-status"></span>
+    <span id="save-status" class="save-status"></span>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -45,9 +45,7 @@
     let isDirty            = false;
     let autosaveTimer      = null;
 
-    window.addEventListener('beforeunload', function (e) {
-      if (isDirty) { e.preventDefault(); e.returnValue = ''; }
-    });
+    setupDirtyGuard(function () { return isDirty; });
 
     (async function () {
       const user = await requireAuth();

@@ -4,8 +4,9 @@
 
 // ── Save-status indicator ──────────────────────────────────
 
-function showSaved() {
-  const el = document.getElementById('save-status');
+// Generic variants — pass any element id
+function showSavedFor(id) {
+  const el = document.getElementById(id);
   if (!el) return;
   el.classList.remove('unsaved');
   el.textContent = '✓ Saved!';
@@ -13,12 +14,24 @@ function showSaved() {
   setTimeout(function () { el.classList.remove('visible'); }, 2200);
 }
 
-function markUnsaved() {
-  const el = document.getElementById('save-status');
+function markUnsavedFor(id) {
+  const el = document.getElementById(id);
   if (!el) return;
   el.classList.remove('visible');
   el.textContent = '● Unsaved changes';
   el.classList.add('unsaved');
+}
+
+// Shortcut for the standard single-save-status pages
+function showSaved()   { showSavedFor('save-status'); }
+function markUnsaved() { markUnsavedFor('save-status'); }
+
+// ── Dirty-state guard ──────────────────────────────────────
+// Call once during page init: setupDirtyGuard(function() { return isDirty; })
+function setupDirtyGuard(isDirtyFn) {
+  window.addEventListener('beforeunload', function (e) {
+    if (isDirtyFn()) { e.preventDefault(); e.returnValue = ''; }
+  });
 }
 
 // ── HTML escaping ──────────────────────────────────────────

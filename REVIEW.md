@@ -15,7 +15,31 @@ A candid review of the codebase: what's solid, what needs attention, and what to
 
 ---
 
+## Bugs Found
 
+### High Priority
+
+| # | File | Issue |
+|---|------|-------|
+| 1 | `js/pages/reference.js` | **Index drift in `renderRef()`**: `idx` increments globally but categories are rendered in a fixed order. If the user filters to a single category, clicking a card passes the wrong index to `openRefDetail()` because `window._refDisplayList` still holds the full filtered list but the displayed index resets to 0 within each group. Cards in the second+ category will open the wrong detail. **Fix**: use the actual array index of the item in `_refDisplayList` directly, not a counter that resets per group. |
+| 2 | `js/pages/notes.js` | **Auto-save races with campaign switch**: `switchCampaign()` calls `autoSave` but doesn't `await` it before loading the new campaign's notes, so a slow save can overwrite the incoming campaign's data. **Fix**: `await autoSave()` or cancel the timer and skip saving if the campaign changed. |
+| 3 | `css/style.css` | **Duplicate `.ref-card { cursor: pointer; }` rule** — cosmetic, but indicates two edits were applied independently. Harmless but messy. |
+
+### Medium Priority
+
+| # | File | Issue |
+|---|------|-------|
+| 4 | `js/pages/initiative.js` | **Initiative state is ephemeral** — refreshing the page loses all combatants. For a DM mid-combat this is disruptive. Consider persisting to `localStorage`. |
+| 5 | `js/pages/characters.js` | **`saveCharacters()` reloads the entire list after every autosave** — `loadAll()` is called to pick up server-assigned IDs, but this causes a full re-render (including textarea focus loss) every 3 s while typing notes. Better: only reload newly inserted rows to capture their IDs. |
+| 6 | `js/pages/generator.js` | **`renderSessionList()` is never called on page load** — if the user generated NPCs/creatures in a previous session and saved them to the DB, the "Generated This Session" list starts empty. The list is only in-memory; it's not loaded from Supabase. This is by design but not communicated to the user. |
+
+### Low Priority
+
+| # | File | Issue |
+|---|------|-------|
+| 7 | `js/pages/encounter.js` | **`creatures` variable shadows `js/pages/characters.js`** — both declare `let creatures = []` at module scope. These are separate files so there's no actual collision, but it means if these were ever combined or if a shared global leaked, they'd conflict. Non-issue with the current per-page script model. |
+| 8 | `js/pages/dice.js` | **`history` shadows `window.history`** — `let history = []` masks the browser's built-in navigation history object. Rename to `rollHistory` to be safe. |
+| 9 | All pages | **No loading state on initial auth check** — pages briefly show their content (flash) before `requireAuth()` completes and redirects to login. A CSS `visibility:hidden` on `<main>` revealed only after auth resolves would fix this. |
 
 ---
 

@@ -9,6 +9,7 @@ let deletedNpcIds      = [];
 let deletedCreatureIds = [];
 let isDirty            = false;
 let autosaveTimer      = null;
+let activeCampaignFilter = '';   // '' = show all
 
 setupDirtyGuard(function () { return isDirty; });
 
@@ -17,8 +18,76 @@ setupDirtyGuard(function () { return isDirty; });
   if (!user) return;
   currentUserId = user.id;
   renderNav(user);
+  await loadCharCampaigns();
   await loadAll();
 })();
+
+// ── Campaign filter helpers ───────────────────────────────
+
+function getCharCampaignMap() {
+  try {
+    return JSON.parse(localStorage.getItem('char-campaign-map-' + currentUserId)) || {};
+  } catch (e) { return {}; }
+}
+
+function saveCharCampaignMap(map) {
+  localStorage.setItem('char-campaign-map-' + currentUserId, JSON.stringify(map));
+}
+
+function charKey(type, id) {
+  return type + ':' + id;
+}
+
+async function loadCharCampaigns() {
+  const { data } = await db
+    .from('campaigns')
+    .select('id, name')
+    .eq('user_id', currentUserId)
+    .order('created_at');
+
+  const bar = document.getElementById('char-campaign-bar');
+  if (!data || data.length === 0) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  bar.style.display = '';
+  const sel = document.getElementById('char-campaign-select');
+  (data || []).forEach(function (c) {
+    var opt = document.createElement('option');
+    opt.value    = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+
+  // Restore last-used filter
+  var stored = localStorage.getItem('char-campaign-filter-' + currentUserId);
+  if (stored) {
+    var exists = Array.from(sel.options).some(function (o) { return o.value === stored; });
+    if (exists) sel.value = stored;
+  }
+  activeCampaignFilter = sel.value;
+}
+
+function filterByCampaign() {
+  var sel = document.getElementById('char-campaign-select');
+  activeCampaignFilter = sel.value;
+  localStorage.setItem('char-campaign-filter-' + currentUserId, activeCampaignFilter);
+  renderAll();
+}
+
+function filteredList(list, type) {
+  if (!activeCampaignFilter) return list;
+  var map = getCharCampaignMap();
+  return list.filter(function (item) {
+    if (!item._id) return true;               // new unsaved items always visible
+    var key = charKey(type, item._id);
+    var cid = map[key];
+    return cid === activeCampaignFilter || !cid;  // matches campaign OR unassigned
+  });
+}
+
+// ── Data loading ──────────────────────────────────────────
 
 async function loadAll() {
   const [npcRes, creatureRes] = await Promise.all([
@@ -38,9 +107,11 @@ async function loadAll() {
   renderAll();
 }
 
+// ── Rendering ─────────────────────────────────────────────
+
 function renderAll() {
-  renderList('npc-list',      npcs,      'npc');
-  renderList('creature-list', creatures, 'creature');
+  renderList('npc-list',      filteredList(npcs, 'npc'),           'npc');
+  renderList('creature-list', filteredList(creatures, 'creature'), 'creature');
 }
 
 function renderList(containerId, list, type) {
@@ -91,6 +162,8 @@ function buildCard(item, index, type) {
         </div>`;
 }
 
+// ── Editing ───────────────────────────────────────────────
+
 function markDirty() {
   isDirty = true;
   markUnsaved();
@@ -111,23 +184,46 @@ function addCreature() {
 }
 
 function updateField(type, index, field, value) {
-  if (type === 'npc')      npcs[index][field]      = value;
-  if (type === 'creature') creatures[index][field] = value;
+  // index is relative to the filtered list — resolve back to the master array
+  var master = type === 'npc' ? npcs : creatures;
+  var visible = filteredList(master, type);
+  var item = visible[index];
+  if (item) item[field] = value;
   markDirty();
 }
 
 function removeItem(type, index) {
+  // index is relative to the filtered list — resolve back to the master array
+  var master = type === 'npc' ? npcs : creatures;
+  var visible = filteredList(master, type);
+  var item = visible[index];
+  if (!item) return;
+  var masterIndex = master.indexOf(item);
+
   if (type === 'npc') {
-    if (npcs[index]._id) deletedNpcIds.push(npcs[index]._id);
-    npcs.splice(index, 1);
+    if (item._id) {
+      deletedNpcIds.push(item._id);
+      // Clean up campaign map entry
+      var map = getCharCampaignMap();
+      delete map[charKey('npc', item._id)];
+      saveCharCampaignMap(map);
+    }
+    npcs.splice(masterIndex, 1);
   }
   if (type === 'creature') {
-    if (creatures[index]._id) deletedCreatureIds.push(creatures[index]._id);
-    creatures.splice(index, 1);
+    if (item._id) {
+      deletedCreatureIds.push(item._id);
+      var map2 = getCharCampaignMap();
+      delete map2[charKey('creature', item._id)];
+      saveCharCampaignMap(map2);
+    }
+    creatures.splice(masterIndex, 1);
   }
   renderAll();
   markDirty();
 }
+
+// ── Saving ────────────────────────────────────────────────
 
 async function saveCharacters() {
   clearTimeout(autosaveTimer);
@@ -186,6 +282,12 @@ async function saveCharacters() {
         const reversed = npcRows.slice().reverse();
         for (var ni = 0; ni < newNpcsWithoutId.length && ni < reversed.length; ni++) {
           newNpcsWithoutId[ni]._id = reversed[ni].id;
+          // Auto-associate new NPC with active campaign
+          if (activeCampaignFilter) {
+            var map = getCharCampaignMap();
+            map[charKey('npc', reversed[ni].id)] = activeCampaignFilter;
+            saveCharCampaignMap(map);
+          }
         }
       }
     }
@@ -197,6 +299,12 @@ async function saveCharacters() {
         const reversed = creatureRows.slice().reverse();
         for (var ci = 0; ci < newCreaturesWithoutId.length && ci < reversed.length; ci++) {
           newCreaturesWithoutId[ci]._id = reversed[ci].id;
+          // Auto-associate new creature with active campaign
+          if (activeCampaignFilter) {
+            var map2 = getCharCampaignMap();
+            map2[charKey('creature', reversed[ci].id)] = activeCampaignFilter;
+            saveCharCampaignMap(map2);
+          }
         }
       }
     }

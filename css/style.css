@@ -25,6 +25,31 @@
 
   --sidebar-w:     220px;
   --sidebar-w-col: 62px;
+
+  --gold:    #E6C07B;
+  --success: #6D9F71;
+  --info:    #5a8abf;
+}
+
+[data-theme="light"] {
+  --bg:          #f5f0e8;
+  --surface:     #fff;
+  --surface2:    #ede8df;
+  --text:        #2c2416;
+  --text-muted:  #6b5d4d;
+  --text-dim:    #9a8b78;
+  --border:      #d4c9b8;
+  --border-dim:  #d4c9b8;
+  --primary:     #8b6914;
+  --primary-h:   #a07a1a;
+  --accent:      #b8860b;
+  --secondary:   #4a8a4e;
+  --secondary-h: #5a9a5e;
+  --danger:      #a83030;
+  --danger-h:    #c04040;
+  --gold:        #b8860b;
+  --success:     #4a8a4e;
+  --info:        #3a6a9f;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1037,6 +1062,45 @@ input[type="time"] {
   width: auto;
 }
 
+[data-theme="light"] input[type="date"],
+[data-theme="light"] input[type="time"] {
+  color-scheme: light;
+}
+
+[data-theme="light"] body {
+  background-image: none;
+}
+
+[data-theme="light"] #main-nav {
+  background-image: none;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  width: 100%;
+  max-height: 38px;
+  padding: 7px 10px;
+  font-size: 14px;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  overflow: hidden;
+  opacity: 1;
+}
+.theme-toggle:hover { border-color: var(--primary); color: var(--primary); background: transparent; }
+#main-nav.collapsed .theme-toggle {
+  max-height: 0; opacity: 0;
+  padding-top: 0; padding-bottom: 0;
+  border-color: transparent;
+}
+
 /* =============================================
    Responsive grid breakpoints
    ============================================= */
@@ -1213,3 +1277,99 @@ input[type="time"] {
 
 .notes-campaign-bar select  { margin-bottom: 0; }
 .notes-campaign-bar .row-actions { align-self: flex-end; padding-bottom: 0; }
+
+/* =============================================
+   Spell Slots Tracker (Players page)
+   ============================================= */
+
+.spell-slots-section {
+  margin: 12px 0 16px;
+}
+
+.spell-slots-toggle {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: border-color 0.2s, color 0.2s;
+  width: 100%;
+  text-align: left;
+}
+.spell-slots-toggle:hover {
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+.spell-slots-arrow {
+  float: right;
+  font-size: 13px;
+}
+
+.spell-slots-body {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+}
+
+.slot-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.slot-level {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  min-width: 18px;
+  text-align: center;
+}
+
+.slot-max-input {
+  width: 46px !important;
+  min-width: 46px;
+  padding: 4px 6px !important;
+  font-size: 13px !important;
+  text-align: center;
+  margin-bottom: 0 !important;
+  background: var(--bg) !important;
+}
+
+.slot-pips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.slot-pip {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.slot-pip:hover {
+  border-color: var(--primary-h);
+  box-shadow: 0 0 6px rgba(192, 132, 87, 0.4);
+}
+.slot-pip.used {
+  background: var(--primary);
+}
+
+.slot-none {
+  color: var(--text-dim);
+  font-size: 13px;
+}

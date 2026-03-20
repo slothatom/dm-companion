@@ -46,6 +46,7 @@ const CR_TO_XP = {
   currentUserId = user.id;
   renderNav(user);
   recalculate();
+  loadSavedEncounters();
 })();
 
 // Auto-fill XP when CR is typed
@@ -93,6 +94,33 @@ async function importCreatures() {
   recalculate();
 }
 
+function importFromGenerator() {
+  var raw = localStorage.getItem('generator-session-entries');
+  if (!raw) {
+    showToast('No generator session entries found — generate and save creatures first.', 'info');
+    return;
+  }
+  var entries;
+  try { entries = JSON.parse(raw); } catch (e) {
+    showToast('Could not parse generator data.', 'error');
+    return;
+  }
+  var added = 0;
+  entries.forEach(function (entry) {
+    if (entry._type !== 'creature') return;
+    var xp = entry.cr ? (CR_TO_XP[entry.cr] || 0) : 0;
+    creatures.push({ name: entry.name || 'Unknown', cr: entry.cr || '', xp: xp, hp: '', ac: '' });
+    added++;
+  });
+  if (added === 0) {
+    showToast('No creature entries found in generator session.', 'info');
+    return;
+  }
+  showToast('Imported ' + added + ' creature(s) from Generator.', 'success');
+  renderCreatures();
+  recalculate();
+}
+
 function removeCreature(index) {
   creatures.splice(index, 1);
   renderCreatures();
@@ -110,6 +138,7 @@ function renderCreatures() {
     container.innerHTML = '<p class="empty-state">No monsters yet. Add some above!</p>';
     document.getElementById('difficulty-card').style.display = 'none';
     document.getElementById('send-btn').style.display  = 'none';
+    document.getElementById('save-btn').style.display  = 'none';
     document.getElementById('clear-btn').style.display = 'none';
     return;
   }
@@ -131,6 +160,7 @@ function renderCreatures() {
   }).join('');
   document.getElementById('difficulty-card').style.display = '';
   document.getElementById('send-btn').style.display  = '';
+  document.getElementById('save-btn').style.display  = '';
   document.getElementById('clear-btn').style.display = '';
 }
 
@@ -322,4 +352,123 @@ function addMonsterFromBrowser(index) {
   renderCreatures();
   recalculate();
   showToast(m.name + ' added to encounter.', 'success');
+}
+
+// ── Save / Load Encounters (localStorage) ─────────────────
+
+function getSavedEncounters() {
+  try {
+    return JSON.parse(localStorage.getItem('saved-encounters')) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function setSavedEncounters(list) {
+  localStorage.setItem('saved-encounters', JSON.stringify(list));
+}
+
+function saveEncounter() {
+  if (creatures.length === 0) {
+    showToast('Add some monsters before saving.', 'error');
+    return;
+  }
+  var name = prompt('Name this encounter:');
+  if (!name || !name.trim()) return;
+
+  var partySize  = parseInt(document.getElementById('party-size').value) || 4;
+  var partyLevel = parseInt(document.getElementById('party-level').value) || 4;
+
+  var saved = getSavedEncounters();
+  saved.push({
+    name:       name.trim(),
+    creatures:  JSON.parse(JSON.stringify(creatures)),
+    partySize:  partySize,
+    partyLevel: partyLevel,
+    savedAt:    new Date().toISOString(),
+  });
+  setSavedEncounters(saved);
+  loadSavedEncounters();
+  showToast('Encounter "' + name.trim() + '" saved.', 'success');
+}
+
+function computeDifficultyLabel(encounter) {
+  var thresh = XP_THRESHOLDS[encounter.partyLevel] || XP_THRESHOLDS[1];
+  var baseXP = encounter.creatures.reduce(function (s, c) { return s + (c.xp || 0); }, 0);
+  var multi  = getMultiplier(encounter.creatures.length, encounter.partySize);
+  var adjXP  = Math.round(baseXP * multi);
+  var budgets = thresh.map(function (t) { return t * encounter.partySize; });
+
+  if      (adjXP < budgets[0]) return { label: 'Trivial',  cls: 'diff-trivial' };
+  else if (adjXP < budgets[1]) return { label: 'Easy',     cls: 'diff-easy' };
+  else if (adjXP < budgets[2]) return { label: 'Medium',   cls: 'diff-medium' };
+  else if (adjXP < budgets[3]) return { label: 'Hard',     cls: 'diff-hard' };
+  else                         return { label: 'Deadly',   cls: 'diff-deadly' };
+}
+
+function loadSavedEncounters() {
+  var saved = getSavedEncounters();
+  var container = document.getElementById('saved-encounters-list');
+  if (!container) return;
+
+  if (saved.length === 0) {
+    container.innerHTML = '<p class="empty-state">No saved encounters yet.</p>';
+    return;
+  }
+
+  container.innerHTML = saved.map(function (enc, i) {
+    var diff = computeDifficultyLabel(enc);
+    var date = new Date(enc.savedAt);
+    var dateStr = date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    var count = enc.creatures.length;
+    return '<div class="ref-card" style="padding:12px 14px; margin-bottom:8px;">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">' +
+        '<div>' +
+          '<strong style="color:var(--accent);">' + escapeHtml(enc.name) + '</strong>' +
+          ' <span class="difficulty-badge ' + diff.cls + '" style="font-size:11px; padding:2px 8px; vertical-align:middle;">' + diff.label + '</span>' +
+          '<div style="color:var(--text-muted); font-size:13px; margin-top:4px;">' +
+            count + ' monster' + (count !== 1 ? 's' : '') +
+            ' · Party ' + enc.partySize + ' × Lv' + enc.partyLevel +
+            ' · ' + dateStr +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex; gap:6px;">' +
+          '<button style="padding:5px 12px; font-size:13px;" onclick="loadEncounter(' + i + ')">Load</button>' +
+          '<button class="danger" style="padding:5px 12px; font-size:13px;" onclick="deleteSavedEncounter(' + i + ')">Delete</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function loadEncounter(index) {
+  var saved = getSavedEncounters();
+  var enc = saved[index];
+  if (!enc) return;
+
+  creatures = JSON.parse(JSON.stringify(enc.creatures));
+  document.getElementById('party-size').value  = enc.partySize;
+  document.getElementById('party-level').value = enc.partyLevel;
+  renderCreatures();
+  recalculate();
+  showToast('Loaded "' + enc.name + '".', 'success');
+}
+
+function deleteSavedEncounter(index) {
+  var saved = getSavedEncounters();
+  var enc = saved[index];
+  if (!enc) return;
+
+  showConfirm({
+    title:       'Delete Saved Encounter',
+    message:     'Delete "' + enc.name + '"? This cannot be undone.',
+    confirmText: 'Delete',
+    danger:      true,
+    onConfirm:   function () {
+      saved.splice(index, 1);
+      setSavedEncounters(saved);
+      loadSavedEncounters();
+      showToast('Encounter deleted.', 'success');
+    },
+  });
 }

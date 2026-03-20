@@ -189,6 +189,7 @@ async function saveToCharacters() {
   if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
 
   sessionEntries.push(currentEntry);
+  localStorage.setItem('generator-session-entries', JSON.stringify(sessionEntries));
   renderSessionList();
   showToast(currentEntry.name + ' saved to Characters!', 'success');
 }

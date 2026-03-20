@@ -204,6 +204,7 @@ function renderNav(user) {
         <div class="profile-avatar-wrap">${avatarHtml}</div>
         <span class="sidebar-profile-email">${email}</span>
       </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn"></button>
       <button class="sidebar-signout" onclick="confirmSignOut()">🚪 Sign Out</button>`;
   }
 
@@ -228,6 +229,11 @@ function renderNav(user) {
     <div class="sidebar-footer">
       ${footerHtml}
     </div>`;
+
+  // Apply saved theme preference
+  var savedTheme = localStorage.getItem('theme') || '';
+  document.documentElement.dataset.theme = savedTheme;
+  updateThemeButton();
 
   // Apply saved collapse state (desktop only)
   const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
@@ -283,6 +289,22 @@ function openMobileSidebar() {
   const bd = document.getElementById('sidebar-backdrop');
   if (bd) bd.classList.add('visible');
   document.body.style.overflow = 'hidden';
+}
+
+// ── Theme toggle ────────────────────────────────────────
+function toggleTheme() {
+  var current = document.documentElement.dataset.theme;
+  var next = current === 'light' ? '' : 'light';
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem('theme', next);
+  updateThemeButton();
+}
+
+function updateThemeButton() {
+  var btn = document.getElementById('theme-toggle-btn');
+  if (!btn) return;
+  var isLight = document.documentElement.dataset.theme === 'light';
+  btn.textContent = isLight ? '\u2600\uFE0F Light' : '\uD83C\uDF19 Dark';
 }
 
 function closeMobileSidebar() {

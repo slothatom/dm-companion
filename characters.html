@@ -15,6 +15,15 @@
     <h1>🐉 Characters</h1>
     <p class="subtitle">Track your NPCs and creatures. Never forget a stat mid-combat again.</p>
 
+    <div class="notes-campaign-bar" id="char-campaign-bar" style="display:none;">
+      <div class="campaign-select-wrap">
+        <label for="char-campaign-select">Campaign</label>
+        <select id="char-campaign-select" onchange="filterByCampaign()">
+          <option value="">🌐 All Characters</option>
+        </select>
+      </div>
+    </div>
+
     <h2>🗣 NPCs</h2>
     <div id="npc-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
     <button onclick="addNPC()">+ Add NPC</button>

@@ -103,6 +103,7 @@
         <button onclick="addCreature()">+ Add Monster</button>
         <button class="secondary" onclick="showMonsterBrowser()">📖 SRD Bestiary</button>
         <button class="secondary" onclick="importCreatures()">📥 Import from Characters</button>
+        <button class="secondary" onclick="importFromGenerator()">📥 Import from Generator</button>
       </div>
     </div>
 
@@ -137,7 +138,14 @@
 
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; margin-bottom:40px;">
       <button class="gold" onclick="sendToInitiative()" id="send-btn" style="display:none;">▶ Send to Initiative Tracker</button>
+      <button onclick="saveEncounter()" id="save-btn" style="display:none;">💾 Save Encounter</button>
       <button class="danger" onclick="clearAll()" id="clear-btn" style="display:none;">🗑 Clear Encounter</button>
+    </div>
+
+    <!-- Saved Encounters -->
+    <div class="card" id="saved-encounters-card">
+      <h3>📁 Saved Encounters</h3>
+      <div id="saved-encounters-list"></div>
     </div>
 
   </main>

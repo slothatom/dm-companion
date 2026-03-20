@@ -52,6 +52,11 @@ function restoreInitiativeState() {
   }
 }
 
+function rollInitiative() {
+  var result = Math.floor(Math.random() * 20) + 1;
+  document.getElementById('new-init').value = result;
+}
+
 function addCombatant() {
   const name = document.getElementById('new-name').value.trim();
   const init = parseInt(document.getElementById('new-init').value) || 0;

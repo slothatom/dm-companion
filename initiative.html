@@ -54,7 +54,10 @@
         </div>
         <div>
           <label>Initiative</label>
-          <input type="number" id="new-init" placeholder="e.g. 14" />
+          <div style="display:flex; gap:6px; align-items:flex-start;">
+            <input type="number" id="new-init" placeholder="e.g. 14" style="flex:1;" />
+            <button type="button" onclick="rollInitiative()" style="padding:10px 12px; margin-bottom:16px; white-space:nowrap;" title="Roll d20 for initiative">🎲</button>
+          </div>
         </div>
         <div>
           <label>HP (optional)</label>

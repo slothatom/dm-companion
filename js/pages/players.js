@@ -112,6 +112,14 @@ function buildPlayerCard(player, index) {
             placeholder="e.g. Looking for her missing brother. Doesn't trust clerics."
             style="min-height: 80px;"
           >${escapeHtml(player.notes)}</textarea>
+          <div class="spell-slots-section" id="spell-slots-${index}">
+            <button class="spell-slots-toggle" onclick="toggleSlots(${index})">
+              🔮 Spell Slots <span class="spell-slots-arrow" id="slots-arrow-${index}">▾</span>
+            </button>
+            <div class="spell-slots-body" id="slots-body-${index}" style="display:none;">
+              ${renderSlots(player, index)}
+            </div>
+          </div>
           <button class="danger" onclick="removePlayer(${index})">🗑 Remove</button>
         </div>`;
 }
@@ -183,4 +191,89 @@ async function savePlayers() {
   setButtonLoading(btn, false);
   isDirty = false;
   showSaved();
+}
+
+// =============================================
+//   Spell Slots Tracker
+// =============================================
+
+function getSlots(playerId) {
+  if (!playerId) return {};
+  try {
+    return JSON.parse(localStorage.getItem('spell-slots-' + playerId)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveSlots(playerId, slots) {
+  if (!playerId) return;
+  localStorage.setItem('spell-slots-' + playerId, JSON.stringify(slots));
+}
+
+function toggleSlots(index) {
+  var body  = document.getElementById('slots-body-' + index);
+  var arrow = document.getElementById('slots-arrow-' + index);
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    arrow.textContent  = '▴';
+  } else {
+    body.style.display = 'none';
+    arrow.textContent  = '▾';
+  }
+}
+
+function renderSlots(player, index) {
+  var slots = getSlots(player._id);
+  var html  = '';
+  for (var lvl = 1; lvl <= 9; lvl++) {
+    var data = slots[lvl] || { max: 0, used: 0 };
+    var pips = '';
+    for (var p = 0; p < data.max; p++) {
+      var isUsed = p < data.used;
+      pips += '<span class="slot-pip' + (isUsed ? ' used' : '') + '" onclick="toggleSlot(' + index + ',' + lvl + ',' + p + ')"></span>';
+    }
+    html += '<div class="slot-row">'
+          + '<span class="slot-level">' + lvl + '</span>'
+          + '<input type="number" class="slot-max-input" value="' + data.max + '" min="0" max="9" '
+          + 'onchange="updateSlotMax(' + index + ',' + lvl + ',this.value)" title="Max slots" />'
+          + '<span class="slot-pips">' + (pips || '<span class="slot-none">—</span>') + '</span>'
+          + '</div>';
+  }
+  return html;
+}
+
+function refreshSlotsUI(index) {
+  var body = document.getElementById('slots-body-' + index);
+  if (body) {
+    body.innerHTML = renderSlots(players[index], index);
+  }
+}
+
+function updateSlotMax(index, level, max) {
+  var player = players[index];
+  if (!player._id) return;
+  var slots = getSlots(player._id);
+  max = Math.max(0, Math.min(9, parseInt(max, 10) || 0));
+  var prev  = slots[level] || { max: 0, used: 0 };
+  slots[level] = { max: max, used: Math.min(prev.used, max) };
+  saveSlots(player._id, slots);
+  refreshSlotsUI(index);
+}
+
+function toggleSlot(index, level, pipIndex) {
+  var player = players[index];
+  if (!player._id) return;
+  var slots = getSlots(player._id);
+  var data  = slots[level] || { max: 0, used: 0 };
+  // Clicking pip at pipIndex: if it's within 'used' range, reduce used to that pip.
+  // Otherwise, increase used to include that pip.
+  if (pipIndex < data.used) {
+    data.used = pipIndex;
+  } else {
+    data.used = pipIndex + 1;
+  }
+  slots[level] = data;
+  saveSlots(player._id, slots);
+  refreshSlotsUI(index);
 }

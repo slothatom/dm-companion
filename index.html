@@ -9,75 +9,87 @@
 </head>
 <body>
 
-  <!-- ===== Navigation ===== -->
   <nav id="main-nav"></nav>
 
-  <!-- ===== Main Content ===== -->
   <main>
     <h1>📜 Session Notes</h1>
     <p class="subtitle">Plan your one-shot. Write everything you need to run a great game.</p>
 
-    <!-- Session title -->
     <label for="session-title">Session Title</label>
-    <input
-      type="text"
-      id="session-title"
-      placeholder="e.g. The Curse of Strahd – One Shot"
-    />
+    <input type="text" id="session-title" placeholder="e.g. The Curse of Strahd – One Shot" />
 
-    <!-- Story / Overview -->
     <h2>The Story</h2>
     <label for="story">Overview & plot hooks</label>
-    <textarea
-      id="story"
+    <textarea id="story"
       placeholder="What's the main story? What are the key plot points? What do the players need to find out or do?"
     ></textarea>
 
-    <!-- Locations -->
     <h2>Key Locations</h2>
     <label for="locations">Places the players will visit</label>
-    <textarea
-      id="locations"
+    <textarea id="locations"
       placeholder="Describe each location briefly. What's there? Any secrets? Any traps?"
       style="min-height: 140px;"
     ></textarea>
 
-    <!-- DM Notes -->
     <h2>DM Notes</h2>
     <label for="dm-notes">Your private notes, reminders, and ideas</label>
-    <textarea
-      id="dm-notes"
+    <textarea id="dm-notes"
       placeholder="Anything you want to remember: pacing tips, improvised NPC names, contingencies if players go off-script..."
       style="min-height: 160px;"
     ></textarea>
 
-    <!-- Save button -->
     <button onclick="saveNotes()">💾 Save Notes</button>
     <span id="save-status">Saved!</span>
-
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.ACTIVE_PAGE = 'index.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script>
-    renderNav();
-    // ---- Load saved notes when the page opens ----
-    window.addEventListener('load', function () {
-      document.getElementById('session-title').value = load('session-title') || '';
-      document.getElementById('story').value         = load('story')         || '';
-      document.getElementById('locations').value     = load('locations')     || '';
-      document.getElementById('dm-notes').value      = load('dm-notes')      || '';
-    });
 
-    // ---- Save all fields ----
-    function saveNotes() {
-      save('session-title', document.getElementById('session-title').value);
-      save('story',         document.getElementById('story').value);
-      save('locations',     document.getElementById('locations').value);
-      save('dm-notes',      document.getElementById('dm-notes').value);
-      showSaved();
+    let currentUserId = null;
+
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      currentUserId = user.id;
+      renderNav(user);
+      await loadNotes();
+    })();
+
+    async function loadNotes() {
+      const { data } = await db
+        .from('session_notes')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .maybeSingle();
+
+      if (data) {
+        document.getElementById('session-title').value = data.title     || '';
+        document.getElementById('story').value         = data.story     || '';
+        document.getElementById('locations').value     = data.locations || '';
+        document.getElementById('dm-notes').value      = data.dm_notes  || '';
+      }
     }
-  </script>
 
+    async function saveNotes() {
+      const { error } = await db
+        .from('session_notes')
+        .upsert({
+          user_id:   currentUserId,
+          title:     document.getElementById('session-title').value,
+          story:     document.getElementById('story').value,
+          locations: document.getElementById('locations').value,
+          dm_notes:  document.getElementById('dm-notes').value,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+
+      if (!error) showSaved();
+      else alert('Save failed: ' + error.message);
+    }
+
+  </script>
 </body>
 </html>

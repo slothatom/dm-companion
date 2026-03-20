@@ -461,3 +461,126 @@ hr {
   text-align: center;
   padding: 20px 0;
 }
+
+/* ---- Nav User (auth) ---- */
+.nav-user {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #5a3e1b;
+}
+
+.nav-email {
+  font-size: 14px;
+  color: #a89060;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-logout {
+  background: transparent;
+  border: 1px solid #5a3e1b;
+  color: #a89060;
+  font-size: 13px;
+  padding: 4px 10px;
+}
+.nav-logout:hover {
+  background: #3a2510;
+  color: #e8d5a3;
+}
+
+/* ---- Login / Auth Page ---- */
+.auth-container {
+  max-width: 440px;
+  margin: 80px auto 40px;
+  padding: 40px 36px;
+  background: #2c1a0e;
+  border: 1px solid #5a3e1b;
+  border-radius: 12px;
+}
+
+.auth-logo {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 28px;
+  color: #c9a84c;
+  margin-bottom: 4px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #a89060;
+  font-style: italic;
+  margin-bottom: 28px;
+}
+
+.auth-social {
+  width: 100%;
+  background: #1a1009;
+  border: 1px solid #5a3e1b;
+  color: #e8d5a3;
+  font-size: 16px;
+  padding: 11px 16px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.auth-social:hover {
+  background: #2c1a0e;
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: #5a4a30;
+  font-size: 14px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid #3a2510;
+}
+
+.auth-error {
+  font-size: 14px;
+  color: #c05050;
+  min-height: 20px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.auth-toggle {
+  text-align: center;
+  color: #a89060;
+  font-size: 15px;
+  margin-top: 16px;
+}
+.auth-toggle a {
+  color: #c9a84c;
+  text-decoration: none;
+}
+.auth-toggle a:hover { text-decoration: underline; }

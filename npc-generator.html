@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DM Companion – NPC Generator</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
 
@@ -14,12 +15,10 @@
     <h1>🎭 NPC Generator</h1>
     <p class="subtitle">Need an NPC on the fly? Roll one up in a second.</p>
 
-    <!-- Output card -->
     <div class="npc-output" id="npc-output">
       <p class="empty-state">Hit "Generate NPC" to bring someone to life.</p>
     </div>
 
-    <!-- Buttons -->
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px;">
       <button onclick="generateNPC()">🎲 Generate NPC</button>
       <button class="secondary" onclick="saveToCharacters()">💾 Save to Characters</button>
@@ -27,28 +26,35 @@
 
     <hr />
 
-    <!-- Saved NPCs from this session -->
     <h2>Generated This Session</h2>
     <div id="generated-list">
       <p class="empty-state">Nothing generated yet.</p>
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.ACTIVE_PAGE = 'npc-generator.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script src="js/npc-data.js"></script>
   <script>
-    renderNav();
 
     let currentNPC    = null;
     let sessionNPCs   = [];
+    let currentUserId = null;
 
-    // ---- Pick a random element from an array ----
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      currentUserId = user.id;
+      renderNav(user);
+    })();
+
     function pick(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    // ---- Generate a full NPC ----
     function generateNPC() {
       const npc = {
         name:        pick(FIRST_NAMES) + ' ' + pick(LAST_NAMES),
@@ -58,12 +64,10 @@
         quirk:       pick(QUIRKS),
         motivation:  pick(MOTIVATIONS),
       };
-
       currentNPC = npc;
       renderNPC(npc);
     }
 
-    // ---- Render the NPC in the output card ----
     function renderNPC(npc) {
       const output = document.getElementById('npc-output');
       output.classList.add('has-npc');
@@ -72,7 +76,6 @@
         <span class="npc-tag">${npc.race}</span>
         <span class="npc-tag">${npc.occupation}</span>
         <br style="margin-bottom:14px;" />
-
         <div class="npc-trait-row">
           <span class="npc-trait-label">Personality</span>
           ${npc.personality}
@@ -84,42 +87,34 @@
         <div class="npc-trait-row">
           <span class="npc-trait-label">Motivation</span>
           ${npc.motivation}
-        </div>
-      `;
+        </div>`;
     }
 
-    // ---- Save current NPC to the Characters page list ----
-    function saveToCharacters() {
-      if (!currentNPC) {
-        alert('Generate an NPC first!');
-        return;
-      }
+    async function saveToCharacters() {
+      if (!currentNPC) { alert('Generate an NPC first!'); return; }
 
-      // Add to this session's list
+      const { error } = await db.from('npcs').insert({
+        user_id: currentUserId,
+        name:    currentNPC.name,
+        hp:      '',
+        ac:      '',
+        notes:   `${currentNPC.race} ${currentNPC.occupation}. ${currentNPC.personality}. ${currentNPC.quirk}. Motivation: ${currentNPC.motivation}`
+      });
+
+      if (error) { alert('Save failed: ' + error.message); return; }
+
       sessionNPCs.push(currentNPC);
       renderSessionList();
-
-      // Also save to the NPCs in localStorage (used by characters.html)
-      const existingNPCs = loadJSON('npcs') || [];
-      existingNPCs.push({
-        name:  currentNPC.name,
-        hp:    '',
-        ac:    '',
-        notes: `${currentNPC.race} ${currentNPC.occupation}. ${currentNPC.personality}. ${currentNPC.quirk}. Motivation: ${currentNPC.motivation}`
-      });
-      saveJSON('npcs', existingNPCs);
-
       alert(`${currentNPC.name} saved to Characters! 🐉`);
     }
 
-    // ---- Render the session list ----
     function renderSessionList() {
       const container = document.getElementById('generated-list');
       if (sessionNPCs.length === 0) {
         container.innerHTML = '<p class="empty-state">Nothing generated yet.</p>';
         return;
       }
-      container.innerHTML = sessionNPCs.map(function (npc, i) {
+      container.innerHTML = sessionNPCs.map(function (npc) {
         return `
           <div class="card" style="padding:14px 18px;">
             <strong style="color:#c9a84c;">${npc.name}</strong>

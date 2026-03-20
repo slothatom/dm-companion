@@ -9,49 +9,67 @@
 </head>
 <body>
 
-  <!-- ===== Navigation ===== -->
   <nav id="main-nav"></nav>
 
-  <!-- ===== Main Content ===== -->
   <main>
     <h1>🧙 Players</h1>
     <p class="subtitle">Keep track of your adventuring party.</p>
 
-    <div id="player-list">
-      <!-- Player cards are added here by JavaScript -->
-    </div>
+    <div id="player-list"></div>
 
     <button onclick="addPlayer()">+ Add Player</button>
 
     <br /><br />
     <button onclick="savePlayers()">💾 Save All</button>
     <span id="save-status">Saved!</span>
-
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.ACTIVE_PAGE = 'players.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script>
-    renderNav();
 
     let players = [];
+    let currentUserId = null;
 
-    // ---- Load data when page opens ----
-    window.addEventListener('load', function () {
-      players = loadJSON('players') || [];
-      renderPlayers();
-    });
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      currentUserId = user.id;
+      renderNav(user);
+      await loadPlayers();
+    })();
 
-    // ---- Render all player cards ----
-    function renderPlayers() {
-      const container = document.getElementById('player-list');
-      container.innerHTML = '';
-      players.forEach(function (player, index) {
-        container.innerHTML += buildPlayerCard(player, index);
+    async function loadPlayers() {
+      const { data } = await db
+        .from('players')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('created_at');
+
+      players = (data || []).map(function (r) {
+        return {
+          playerName: r.player_name,
+          charName:   r.char_name,
+          charClass:  r.char_class,
+          race:       r.race,
+          level:      r.level,
+          hp:         r.hp,
+          notes:      r.notes
+        };
       });
+      renderPlayers();
     }
 
-    // ---- Build HTML for one player card ----
+    function renderPlayers() {
+      const container = document.getElementById('player-list');
+      container.innerHTML = players.length === 0
+        ? '<p class="empty-state">No players yet. Add your party!</p>'
+        : players.map(function (p, i) { return buildPlayerCard(p, i); }).join('');
+    }
+
     function buildPlayerCard(player, index) {
       return `
         <div class="card">
@@ -75,7 +93,6 @@
                 placeholder="e.g. Rogue" />
             </div>
           </div>
-
           <div class="stat-grid">
             <div>
               <label>Race</label>
@@ -96,43 +113,59 @@
                 placeholder="e.g. 38" />
             </div>
           </div>
-
           <label>Notes (backstory hooks, personality, things to keep in mind)</label>
           <textarea
             onchange="updatePlayer(${index}, 'notes', this.value)"
-            placeholder="e.g. Looking for her missing brother. Doesn't trust clerics. Has a soft spot for animals."
+            placeholder="e.g. Looking for her missing brother. Doesn't trust clerics."
             style="min-height: 80px;"
           >${player.notes || ''}</textarea>
-
           <button class="danger" onclick="removePlayer(${index})">🗑 Remove</button>
-        </div>
-      `;
+        </div>`;
     }
 
-    // ---- Add a blank player ----
     function addPlayer() {
       players.push({ playerName: '', charName: '', charClass: '', race: '', level: '', hp: '', notes: '' });
       renderPlayers();
     }
 
-    // ---- Update a field ----
     function updatePlayer(index, field, value) {
       players[index][field] = value;
     }
 
-    // ---- Remove a player ----
     function removePlayer(index) {
       players.splice(index, 1);
       renderPlayers();
     }
 
-    // ---- Save ----
-    function savePlayers() {
-      saveJSON('players', players);
+    async function savePlayers() {
+      const { error: delError } = await db
+        .from('players')
+        .delete()
+        .eq('user_id', currentUserId);
+
+      if (delError) { alert('Save failed: ' + delError.message); return; }
+
+      if (players.length > 0) {
+        const { error: insError } = await db.from('players').insert(
+          players.map(function (p) {
+            return {
+              user_id:     currentUserId,
+              player_name: p.playerName,
+              char_name:   p.charName,
+              char_class:  p.charClass,
+              race:        p.race,
+              level:       p.level,
+              hp:          p.hp,
+              notes:       p.notes
+            };
+          })
+        );
+        if (insError) { alert('Save failed: ' + insError.message); return; }
+      }
+
       showSaved();
     }
 
   </script>
-
 </body>
 </html>

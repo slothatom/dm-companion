@@ -47,13 +47,11 @@
       </div>
     </div>
 
-    <!-- Import from Players / Characters -->
     <div style="margin-bottom: 20px; display:flex; gap:10px; flex-wrap:wrap;">
       <button class="secondary" onclick="importPlayers()">📥 Import Players</button>
       <button class="secondary" onclick="importCreatures()">📥 Import Creatures</button>
     </div>
 
-    <!-- Combat controls -->
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
       <button onclick="sortByInitiative()">⬆️ Sort by Initiative</button>
       <button class="gold" onclick="nextTurn()">▶ Next Turn</button>
@@ -61,29 +59,37 @@
       <button class="danger" onclick="clearAll()">🗑 Clear All</button>
     </div>
 
-    <!-- Round counter -->
     <div style="font-size:18px; color:#a89060; margin-bottom:16px;">
       Round: <strong id="round-counter" style="color:#c9a84c;">1</strong>
       &nbsp;|&nbsp;
       Turn: <strong id="turn-counter" style="color:#c9a84c;">—</strong>
     </div>
 
-    <!-- Combatant list -->
     <div class="initiative-list" id="init-list">
       <p class="empty-state">No combatants yet. Add some above or import your players!</p>
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.ACTIVE_PAGE = 'initiative.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script>
-    renderNav();
 
-    let combatants  = [];
-    let currentTurn = 0;
-    let round       = 1;
+    let combatants    = [];
+    let currentTurn   = 0;
+    let round         = 1;
+    let currentUserId = null;
 
-    // ---- Add a combatant manually ----
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      currentUserId = user.id;
+      renderNav(user);
+      renderList();
+    })();
+
     function addCombatant() {
       const name = document.getElementById('new-name').value.trim();
       const init = parseInt(document.getElementById('new-init').value) || 0;
@@ -91,27 +97,28 @@
       const type = document.getElementById('new-type').value;
 
       if (!name) { alert('Please enter a name.'); return; }
-
       combatants.push({ name, init, hp: hp || '—', type, maxHp: hp || '—' });
 
-      // Clear inputs
       document.getElementById('new-name').value = '';
       document.getElementById('new-init').value = '';
       document.getElementById('new-hp').value   = '';
-
       renderList();
     }
 
-    // ---- Import players saved in the Players page ----
-    function importPlayers() {
-      const players = loadJSON('players') || [];
-      if (players.length === 0) {
+    async function importPlayers() {
+      const { data, error } = await db
+        .from('players')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('created_at');
+
+      if (error || !data || data.length === 0) {
         alert('No players found. Go to the Players page and add your party first!');
         return;
       }
-      players.forEach(function (p) {
+      data.forEach(function (p) {
         combatants.push({
-          name:  p.charName || p.playerName || 'Unknown',
+          name:  p.char_name || p.player_name || 'Unknown',
           init:  0,
           hp:    p.hp || '—',
           maxHp: p.hp || '—',
@@ -121,14 +128,18 @@
       renderList();
     }
 
-    // ---- Import creatures from Characters page ----
-    function importCreatures() {
-      const creatures = loadJSON('creatures') || [];
-      if (creatures.length === 0) {
+    async function importCreatures() {
+      const { data, error } = await db
+        .from('creatures')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .order('created_at');
+
+      if (error || !data || data.length === 0) {
         alert('No creatures found. Go to the Characters page and add some first!');
         return;
       }
-      creatures.forEach(function (c) {
+      data.forEach(function (c) {
         combatants.push({
           name:  c.name || 'Unknown Creature',
           init:  0,
@@ -140,14 +151,12 @@
       renderList();
     }
 
-    // ---- Sort descending by initiative ----
     function sortByInitiative() {
       combatants.sort((a, b) => b.init - a.init);
       currentTurn = 0;
       renderList();
     }
 
-    // ---- Advance to next turn ----
     function nextTurn() {
       if (combatants.length === 0) return;
       currentTurn++;
@@ -159,7 +168,6 @@
       renderList();
     }
 
-    // ---- Reset to start of round 1 ----
     function resetTurn() {
       currentTurn = 0;
       round = 1;
@@ -167,7 +175,6 @@
       renderList();
     }
 
-    // ---- Remove all combatants ----
     function clearAll() {
       if (!confirm('Clear all combatants?')) return;
       combatants  = [];
@@ -177,20 +184,16 @@
       renderList();
     }
 
-    // ---- Remove one combatant ----
     function removeCombatant(index) {
       combatants.splice(index, 1);
       if (currentTurn >= combatants.length) currentTurn = 0;
       renderList();
     }
 
-    // ---- Update HP live ----
     function updateHp(index, value) {
       combatants[index].hp = value;
-      renderList();
     }
 
-    // ---- Render the list ----
     function renderList() {
       const container = document.getElementById('init-list');
       if (combatants.length === 0) {
@@ -225,8 +228,6 @@
       }).join('');
     }
 
-    // Initial render
-    renderList();
   </script>
 </body>
 </html>

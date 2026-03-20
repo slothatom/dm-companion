@@ -15,39 +15,16 @@
     <h1>🎲 Dice Roller</h1>
     <p class="subtitle">May your rolls be ever in your favour.</p>
 
-    <!-- Dice buttons -->
     <div class="dice-grid">
-      <button class="die-btn" onclick="roll(4)">
-        <span class="die-icon">🔺</span>
-        <span>d4</span>
-      </button>
-      <button class="die-btn" onclick="roll(6)">
-        <span class="die-icon">🎲</span>
-        <span>d6</span>
-      </button>
-      <button class="die-btn" onclick="roll(8)">
-        <span class="die-icon">💎</span>
-        <span>d8</span>
-      </button>
-      <button class="die-btn" onclick="roll(10)">
-        <span class="die-icon">🔷</span>
-        <span>d10</span>
-      </button>
-      <button class="die-btn" onclick="roll(12)">
-        <span class="die-icon">⬡</span>
-        <span>d12</span>
-      </button>
-      <button class="die-btn" onclick="roll(20)">
-        <span class="die-icon">⭐</span>
-        <span>d20</span>
-      </button>
-      <button class="die-btn" onclick="roll(100)">
-        <span class="die-icon">💯</span>
-        <span>d100</span>
-      </button>
+      <button class="die-btn" onclick="roll(4)"><span class="die-icon">🔺</span><span>d4</span></button>
+      <button class="die-btn" onclick="roll(6)"><span class="die-icon">🎲</span><span>d6</span></button>
+      <button class="die-btn" onclick="roll(8)"><span class="die-icon">💎</span><span>d8</span></button>
+      <button class="die-btn" onclick="roll(10)"><span class="die-icon">🔷</span><span>d10</span></button>
+      <button class="die-btn" onclick="roll(12)"><span class="die-icon">⬡</span><span>d12</span></button>
+      <button class="die-btn" onclick="roll(20)"><span class="die-icon">⭐</span><span>d20</span></button>
+      <button class="die-btn" onclick="roll(100)"><span class="die-icon">💯</span><span>d100</span></button>
     </div>
 
-    <!-- Multiple dice + modifier -->
     <div class="card">
       <h3>Custom Roll</h3>
       <div class="stat-grid">
@@ -75,13 +52,11 @@
       <button onclick="rollCustom()">🎲 Roll</button>
     </div>
 
-    <!-- Result display -->
     <div style="text-align:center; margin: 28px 0 8px;">
       <div class="roll-result" id="roll-result">—</div>
       <div class="roll-label" id="roll-label">Click a die to roll</div>
     </div>
 
-    <!-- Roll history -->
     <h2>Roll History</h2>
     <div class="roll-history" id="roll-history">
       <span style="color:#5a4a30; font-style:italic;">No rolls yet.</span>
@@ -90,25 +65,31 @@
     <button class="secondary" onclick="clearHistory()">Clear History</button>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.ACTIVE_PAGE = 'dice.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script>
-    renderNav();
 
     let history = [];
 
-    // ---- Roll a single die ----
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      renderNav(user);
+    })();
+
     function roll(sides) {
       const result = Math.floor(Math.random() * sides) + 1;
       displayResult(result, `d${sides}`, [result], 0);
       addToHistory(`d${sides}`, result, [result], 0);
     }
 
-    // ---- Roll multiple dice with modifier ----
     function rollCustom() {
-      const num      = parseInt(document.getElementById('num-dice').value)   || 1;
-      const sides    = parseInt(document.getElementById('die-type').value)   || 20;
-      const modifier = parseInt(document.getElementById('modifier').value)   || 0;
+      const num      = parseInt(document.getElementById('num-dice').value)  || 1;
+      const sides    = parseInt(document.getElementById('die-type').value)  || 20;
+      const modifier = parseInt(document.getElementById('modifier').value)  || 0;
 
       const rolls = [];
       for (let i = 0; i < num; i++) {
@@ -121,35 +102,30 @@
       addToHistory(label, total, rolls, modifier);
     }
 
-    // ---- Update the big result display ----
     function displayResult(total, label, rolls, modifier) {
       const resultEl = document.getElementById('roll-result');
       const labelEl  = document.getElementById('roll-label');
 
-      // Animate
       resultEl.style.opacity = '0';
       setTimeout(function () {
         resultEl.textContent = total;
         resultEl.style.opacity = '1';
       }, 100);
 
-      // Build label text
       let detail = `${label}`;
       if (rolls.length > 1) detail += ` → [${rolls.join(', ')}]`;
       if (modifier !== 0)   detail += ` ${modifier >= 0 ? '+' : ''}${modifier}`;
       labelEl.textContent = detail;
 
-      // Color for d20 special results
       if (label === 'd20') {
-        if (total === 20) resultEl.style.color = '#6aaa6a';      // Natural 20 — green
-        else if (total === 1) resultEl.style.color = '#aa4040';  // Nat 1 — red
-        else resultEl.style.color = '#c9a84c';
+        if (total === 20)     resultEl.style.color = '#6aaa6a';
+        else if (total === 1) resultEl.style.color = '#aa4040';
+        else                  resultEl.style.color = '#c9a84c';
       } else {
         resultEl.style.color = '#c9a84c';
       }
     }
 
-    // ---- Keep a history of rolls ----
     function addToHistory(label, total, rolls, modifier) {
       history.unshift({ label, total, rolls, modifier });
       if (history.length > 20) history.pop();
@@ -173,6 +149,7 @@
       document.getElementById('roll-result').textContent = '—';
       document.getElementById('roll-label').textContent  = 'Click a die to roll';
     }
+
   </script>
 </body>
 </html>

@@ -2,24 +2,6 @@
 //   app.js — Shared utilities for DM Companion
 // =============================================
 
-function save(key, value) {
-  localStorage.setItem(key, value);
-}
-
-function load(key) {
-  return localStorage.getItem(key);
-}
-
-function saveJSON(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
-
-function loadJSON(key) {
-  const raw = localStorage.getItem(key);
-  if (!raw) return null;
-  return JSON.parse(raw);
-}
-
 function showSaved() {
   const el = document.getElementById('save-status');
   if (!el) return;
@@ -30,17 +12,16 @@ function showSaved() {
 }
 
 // ---- Shared nav HTML (used by all pages) ----
-// Each page sets window.ACTIVE_PAGE before including this file,
-// then calls renderNav() to inject the nav.
-function renderNav() {
+// Call renderNav(user) after requireAuth() resolves.
+function renderNav(user) {
   const pages = [
-    { href: 'index.html',         label: '📜 Notes'       },
-    { href: 'characters.html',    label: '🐉 Characters'  },
-    { href: 'players.html',       label: '🧙 Players'     },
-    { href: 'initiative.html',    label: '⚔️ Initiative'  },
-    { href: 'dice.html',          label: '🎲 Dice'        },
-    { href: 'spells.html',        label: '📖 Spells'      },
-    { href: 'npc-generator.html', label: '🎭 NPC Gen'     },
+    { href: 'index.html',         label: '📜 Notes'      },
+    { href: 'characters.html',    label: '🐉 Characters' },
+    { href: 'players.html',       label: '🧙 Players'    },
+    { href: 'initiative.html',    label: '⚔️ Initiative' },
+    { href: 'dice.html',          label: '🎲 Dice'       },
+    { href: 'spells.html',        label: '📖 Spells'     },
+    { href: 'npc-generator.html', label: '🎭 NPC Gen'    },
   ];
 
   const links = pages.map(function (p) {
@@ -48,6 +29,21 @@ function renderNav() {
     return `<a href="${p.href}" ${isActive}>${p.label}</a>`;
   }).join('');
 
+  let userHtml = '';
+  if (user) {
+    const displayName = user.user_metadata?.full_name
+                     || user.user_metadata?.name
+                     || user.email
+                     || 'Adventurer';
+    const avatar = user.user_metadata?.avatar_url;
+    userHtml = `
+      <div class="nav-user">
+        ${avatar ? `<img src="${avatar}" class="nav-avatar" alt="" />` : ''}
+        <span class="nav-email">${displayName}</span>
+        <button class="nav-logout" onclick="signOut()">Sign Out</button>
+      </div>`;
+  }
+
   document.getElementById('main-nav').innerHTML =
-    `<a href="index.html" class="logo">⚔️ DM Companion</a>` + links;
+    `<a href="index.html" class="logo">⚔️ DM Companion</a>` + links + userHtml;
 }

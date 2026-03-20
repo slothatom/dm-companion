@@ -9,53 +9,56 @@
 </head>
 <body>
 
-  <!-- ===== Navigation ===== -->
   <nav id="main-nav"></nav>
 
-  <!-- ===== Main Content ===== -->
   <main>
     <h1>🐉 Characters</h1>
     <p class="subtitle">Track your NPCs and creatures. Never forget a stat mid-combat again.</p>
 
-    <!-- ===== NPCs Section ===== -->
     <h2>NPCs</h2>
-    <div id="npc-list">
-      <!-- NPC cards are added here by JavaScript -->
-    </div>
+    <div id="npc-list"></div>
     <button onclick="addNPC()">+ Add NPC</button>
 
     <hr />
 
-    <!-- ===== Creatures Section ===== -->
     <h2>Creatures & Monsters</h2>
-    <div id="creature-list">
-      <!-- Creature cards are added here by JavaScript -->
-    </div>
+    <div id="creature-list"></div>
     <button onclick="addCreature()">+ Add Creature</button>
 
     <br /><br />
     <button onclick="saveCharacters()">💾 Save All</button>
     <span id="save-status">Saved!</span>
-
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.ACTIVE_PAGE = 'characters.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script>
-    renderNav();
 
-    // ---- Each NPC/Creature is stored as an object in an array ----
     let npcs      = [];
     let creatures = [];
+    let currentUserId = null;
 
-    // ---- Load data when page opens ----
-    window.addEventListener('load', function () {
-      npcs      = loadJSON('npcs')      || [];
-      creatures = loadJSON('creatures') || [];
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      currentUserId = user.id;
+      renderNav(user);
+      await loadAll();
+    })();
+
+    async function loadAll() {
+      const [npcRes, creatureRes] = await Promise.all([
+        db.from('npcs').select('*').eq('user_id', currentUserId).order('created_at'),
+        db.from('creatures').select('*').eq('user_id', currentUserId).order('created_at')
+      ]);
+      npcs      = (npcRes.data      || []).map(function (r) { return { name: r.name, hp: r.hp, ac: r.ac, notes: r.notes }; });
+      creatures = (creatureRes.data || []).map(function (r) { return { name: r.name, hp: r.hp, ac: r.ac, notes: r.notes }; });
       renderAll();
-    });
+    }
 
-    // ---- Render all NPCs and Creatures ----
     function renderAll() {
       renderList('npc-list',      npcs,      'npc');
       renderList('creature-list', creatures, 'creature');
@@ -63,13 +66,11 @@
 
     function renderList(containerId, list, type) {
       const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      list.forEach(function (item, index) {
-        container.innerHTML += buildCard(item, index, type);
-      });
+      container.innerHTML = list.length === 0
+        ? '<p class="empty-state">None yet.</p>'
+        : list.map(function (item, i) { return buildCard(item, i, type); }).join('');
     }
 
-    // ---- Build a card's HTML for one NPC or Creature ----
     function buildCard(item, index, type) {
       return `
         <div class="card">
@@ -93,20 +94,16 @@
                 placeholder="e.g. 13" />
             </div>
           </div>
-
           <label>Notes (personality, role, special abilities)</label>
           <textarea
             onchange="updateField('${type}', ${index}, 'notes', this.value)"
-            placeholder="e.g. Friendly innkeeper. Secretly a spy. Has a dagger hidden under the bar."
+            placeholder="e.g. Friendly innkeeper. Secretly a spy."
             style="min-height: 80px;"
           >${item.notes || ''}</textarea>
-
           <button class="danger" onclick="removeItem('${type}', ${index})">🗑 Remove</button>
-        </div>
-      `;
+        </div>`;
     }
 
-    // ---- Add a blank NPC or Creature ----
     function addNPC() {
       npcs.push({ name: '', hp: '', ac: '', notes: '' });
       renderAll();
@@ -117,27 +114,46 @@
       renderAll();
     }
 
-    // ---- Update a single field in the array ----
     function updateField(type, index, field, value) {
       if (type === 'npc')      npcs[index][field]      = value;
       if (type === 'creature') creatures[index][field] = value;
     }
 
-    // ---- Remove an entry ----
     function removeItem(type, index) {
       if (type === 'npc')      npcs.splice(index, 1);
       if (type === 'creature') creatures.splice(index, 1);
       renderAll();
     }
 
-    // ---- Save everything ----
-    function saveCharacters() {
-      saveJSON('npcs',      npcs);
-      saveJSON('creatures', creatures);
+    async function saveCharacters() {
+      // Delete existing rows and reinsert all current data
+      const [delNpcs, delCreatures] = await Promise.all([
+        db.from('npcs').delete().eq('user_id', currentUserId),
+        db.from('creatures').delete().eq('user_id', currentUserId)
+      ]);
+
+      const errors = [delNpcs.error, delCreatures.error].filter(Boolean);
+      if (errors.length) { alert('Save failed: ' + errors[0].message); return; }
+
+      const inserts = [];
+      if (npcs.length > 0) {
+        inserts.push(db.from('npcs').insert(
+          npcs.map(function (n) { return { user_id: currentUserId, name: n.name, hp: n.hp, ac: n.ac, notes: n.notes }; })
+        ));
+      }
+      if (creatures.length > 0) {
+        inserts.push(db.from('creatures').insert(
+          creatures.map(function (c) { return { user_id: currentUserId, name: c.name, hp: c.hp, ac: c.ac, notes: c.notes }; })
+        ));
+      }
+
+      const results = await Promise.all(inserts);
+      const insertErrors = results.map(function (r) { return r.error; }).filter(Boolean);
+      if (insertErrors.length) { alert('Save failed: ' + insertErrors[0].message); return; }
+
       showSaved();
     }
 
   </script>
-
 </body>
 </html>

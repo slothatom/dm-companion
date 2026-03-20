@@ -238,6 +238,10 @@ function renderNav(user) {
 
   document.body.classList.add('has-sidebar');
 
+  // Reveal main content now that auth is complete and nav is rendered
+  var mainEl = document.querySelector('main');
+  if (mainEl) mainEl.style.visibility = 'visible';
+
   // ── Mobile backdrop (injected once) ──────────────────────
   if (!document.getElementById('sidebar-backdrop')) {
     const backdrop = document.createElement('div');

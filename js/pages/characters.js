@@ -174,8 +174,36 @@ async function saveCharacters() {
     }
   }
 
-  // Reload to get server-assigned IDs for newly inserted rows
-  await loadAll();
+  // Fetch server-assigned IDs for newly inserted rows (without full reload)
+  if (npcNew.length > 0 || creatureNew.length > 0) {
+    const newNpcsWithoutId = npcs.filter(function (n) { return !n._id; });
+    const newCreaturesWithoutId = creatures.filter(function (c) { return !c._id; });
+
+    if (newNpcsWithoutId.length > 0) {
+      const { data: npcRows } = await db.from('npcs').select('id, name, hp, ac, notes')
+        .eq('user_id', currentUserId).order('created_at', { ascending: false }).limit(newNpcsWithoutId.length);
+      if (npcRows) {
+        const reversed = npcRows.slice().reverse();
+        for (var ni = 0; ni < newNpcsWithoutId.length && ni < reversed.length; ni++) {
+          newNpcsWithoutId[ni]._id = reversed[ni].id;
+        }
+      }
+    }
+
+    if (newCreaturesWithoutId.length > 0) {
+      const { data: creatureRows } = await db.from('creatures').select('id, name, hp, ac, cr, notes')
+        .eq('user_id', currentUserId).order('created_at', { ascending: false }).limit(newCreaturesWithoutId.length);
+      if (creatureRows) {
+        const reversed = creatureRows.slice().reverse();
+        for (var ci = 0; ci < newCreaturesWithoutId.length && ci < reversed.length; ci++) {
+          newCreaturesWithoutId[ci]._id = reversed[ci].id;
+        }
+      }
+    }
+  }
+
+  deletedNpcIds      = [];
+  deletedCreatureIds = [];
   setButtonLoading(btn, false);
   isDirty = false;
   showSaved();

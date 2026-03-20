@@ -50,18 +50,15 @@ function switchCampaign() {
   const val   = document.getElementById('notes-campaign').value;
   const newId = val === '' ? null : val;
 
-  function doSwitch() {
-    activeCampaignId = newId;
-    currentNoteId    = null;
-    localStorage.setItem('notes-campaign-' + currentUserId, val);
-    loadNotesForCampaign();
-  }
+  // Cancel any pending autosave and clear dirty flag before switching
+  clearTimeout(autosaveTimer);
+  autosaveTimer = null;
+  isDirty = false;
 
-  if (isDirty) {
-    saveNotes().then(doSwitch);
-  } else {
-    doSwitch();
-  }
+  activeCampaignId = newId;
+  currentNoteId    = null;
+  localStorage.setItem('notes-campaign-' + currentUserId, val);
+  loadNotesForCampaign();
 }
 
 // ── Load / Save ───────────────────────────────────────────

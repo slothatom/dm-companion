@@ -24,10 +24,33 @@ let currentUserId = null;
       localStorage.removeItem('encounter-import');
       showToast('Imported ' + combatants.length + ' creature(s) from Encounter Builder.', 'success');
     } catch (e) { localStorage.removeItem('encounter-import'); }
+  } else {
+    // Restore persisted initiative state if available
+    restoreInitiativeState();
   }
 
   renderList();
 })();
+
+function saveInitiativeState() {
+  localStorage.setItem('initiative-state', JSON.stringify({
+    combatants: combatants,
+    currentTurn: currentTurn,
+    round: round
+  }));
+}
+
+function restoreInitiativeState() {
+  const saved = localStorage.getItem('initiative-state');
+  if (saved) {
+    try {
+      const state = JSON.parse(saved);
+      combatants  = state.combatants || [];
+      currentTurn = state.currentTurn || 0;
+      round       = state.round || 1;
+    } catch (e) { /* ignore corrupt data */ }
+  }
+}
 
 function addCombatant() {
   const name = document.getElementById('new-name').value.trim();
@@ -103,6 +126,7 @@ function clearAll() {
     onConfirm:   function () {
       combatants = []; currentTurn = 0; round = 1;
       document.getElementById('round-counter').textContent = 1;
+      localStorage.removeItem('initiative-state');
       renderList();
     },
   });
@@ -116,6 +140,7 @@ function removeCombatant(index) {
 
 function updateHp(index, value) {
   combatants[index].hp = value;
+  saveInitiativeState();
 }
 
 function applyDamage(index) {
@@ -155,6 +180,8 @@ function toggleCondition(index, condition) {
 function renderList() {
   const container = document.getElementById('init-list');
   document.getElementById('round-counter').textContent = round;
+
+  saveInitiativeState();
 
   if (combatants.length === 0) {
     container.innerHTML = '<p class="empty-state">No combatants yet — add them below or import your party.</p>';

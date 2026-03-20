@@ -2,7 +2,7 @@
 //   dice.js — Dice Roller page
 // =============================================
 
-let history = [];
+let rollHistory = [];
 
 (async function () {
   const user = await requireAuth();
@@ -94,24 +94,24 @@ function displayResult(total, label, rolls, modifier) {
 }
 
 function addToHistory(label, total, rolls, modifier) {
-  history.unshift({ label, total, rolls, modifier });
-  if (history.length > 20) history.pop();
+  rollHistory.unshift({ label, total, rolls, modifier });
+  if (rollHistory.length > 20) rollHistory.pop();
   renderHistory();
 }
 
 function renderHistory() {
   const container = document.getElementById('roll-history');
-  if (history.length === 0) {
+  if (rollHistory.length === 0) {
     container.innerHTML = '<span style="color:#5a4a30; font-style:italic;">No rolls yet.</span>';
     return;
   }
-  container.innerHTML = history.map(function (h) {
+  container.innerHTML = rollHistory.map(function (h) {
     return `<span class="history-chip">${h.label}: <strong>${h.total}</strong></span>`;
   }).join('');
 }
 
 function clearHistory() {
-  history = [];
+  rollHistory = [];
   renderHistory();
   document.getElementById('roll-result').textContent = '—';
   document.getElementById('roll-label').textContent  = 'Click a die to roll';

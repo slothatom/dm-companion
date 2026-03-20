@@ -764,3 +764,144 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 }
 .badge-conc   { background: #1a2a40; color: #7aaad4; border: 1px solid #3a5a80; }
 .badge-ritual { background: #2a1a3a; color: #b07ad4; border: 1px solid #5a3a80; }
+
+/* =============================================
+   Quick Reference
+   ============================================= */
+
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ref-card {
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--primary);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: border-color 0.15s;
+}
+.ref-card:hover { border-color: var(--primary); }
+
+.ref-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.ref-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* =============================================
+   Encounter Builder
+   ============================================= */
+
+.xp-budget-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.xp-budget-cell {
+  background: var(--surface2);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.xp-budget-label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.xp-budget-val {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.encounter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--primary);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.encounter-name {
+  flex: 1;
+  font-size: 15px;
+  min-width: 100px;
+}
+
+.encounter-cr {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border-dim);
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.encounter-xp-wrap { display: flex; align-items: center; gap: 4px; }
+
+.difficulty-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.diff-trivial { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border-dim); }
+.diff-easy    { background: #1e3020; color: #7ac87a; border: 1px solid #3a6040; }
+.diff-medium  { background: #2a2a10; color: #c8c870; border: 1px solid #6a6030; }
+.diff-hard    { background: #2e1e10; color: #c8902a; border: 1px solid #6a4010; }
+.diff-deadly  { background: #3a1010; color: #c84040; border: 1px solid #7a2020; }
+
+/* =============================================
+   Campaign Manager
+   ============================================= */
+
+.session-card {
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--secondary);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+
+.session-header {
+  margin-bottom: 4px;
+}
+
+@media (max-width: 640px) {
+  .xp-budget-row { grid-template-columns: repeat(2, 1fr); }
+  .ref-grid       { grid-template-columns: 1fr; }
+}

@@ -89,6 +89,18 @@
       if (!user) return;
       currentUserId = user.id;
       renderNav(user);
+
+      // Check for encounter-builder import
+      const imported = localStorage.getItem('encounter-import');
+      if (imported) {
+        try {
+          const toImport = JSON.parse(imported);
+          combatants = toImport;
+          localStorage.removeItem('encounter-import');
+          showToast('Imported ' + combatants.length + ' creature(s) from Encounter Builder.', 'success');
+        } catch (e) { localStorage.removeItem('encounter-import'); }
+      }
+
       renderList();
     })();
 

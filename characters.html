@@ -24,17 +24,22 @@
       </div>
     </div>
 
-    <h2>🗣 NPCs</h2>
-    <div id="npc-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
-    <button onclick="addNPC()">+ Add NPC</button>
+    <div class="gen-type-tabs" style="margin-bottom:20px;">
+      <button class="gen-tab active-gen-tab" id="tab-npc" onclick="setCharTab('npc', this)">🗣 NPCs</button>
+      <button class="gen-tab" id="tab-creature" onclick="setCharTab('creature', this)">🐉 Creatures</button>
+    </div>
 
-    <hr />
+    <div id="panel-npc">
+      <div id="npc-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
+      <button onclick="addNPC()">+ Add NPC</button>
+    </div>
 
-    <h2>🐉 Creatures & Monsters</h2>
-    <div id="creature-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
-    <button onclick="addCreature()">+ Add Creature</button>
+    <div id="panel-creature" style="display:none;">
+      <div id="creature-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
+      <button onclick="addCreature()">+ Add Creature</button>
+    </div>
 
-    <br /><br />
+    <br />
     <button id="save-btn" onclick="saveCharacters()">💾 Save All</button>
     <span id="save-status" class="save-status"></span>
   </main>

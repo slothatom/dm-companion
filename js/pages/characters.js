@@ -10,8 +10,17 @@ let deletedCreatureIds = [];
 let isDirty            = false;
 let autosaveTimer      = null;
 let activeCampaignFilter = '';   // '' = show all
+let activeCharTab = 'npc';     // 'npc' | 'creature'
 
 setupDirtyGuard(function () { return isDirty; });
+
+function setCharTab(tab, btn) {
+  activeCharTab = tab;
+  document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });
+  btn.classList.add('active-gen-tab');
+  document.getElementById('panel-npc').style.display      = tab === 'npc' ? '' : 'none';
+  document.getElementById('panel-creature').style.display  = tab === 'creature' ? '' : 'none';
+}
 
 (async function () {
   try {

@@ -33,8 +33,8 @@ function renderNav(user) {
       </a>`;
   }).join('');
 
-  // Profile footer
-  let profileHtml = '';
+  // Profile + sign out — separate elements, no dropdown
+  let footerHtml = '';
   if (user) {
     const email    = user.email || 'Adventurer';
     const avatar   = user.user_metadata?.avatar_url;
@@ -43,18 +43,12 @@ function renderNav(user) {
       ? `<img src="${avatar}" class="profile-avatar" alt="" />`
       : `<div class="profile-initials">${initials}</div>`;
 
-    profileHtml = `
-      <div class="sidebar-profile" id="nav-profile">
-        <button class="profile-btn" onclick="toggleProfileMenu(event)" aria-label="Profile">
-          ${avatarHtml}
-        </button>
+    footerHtml = `
+      <div class="sidebar-profile">
+        <div class="profile-avatar-wrap">${avatarHtml}</div>
         <span class="sidebar-profile-email">${email}</span>
-        <div class="profile-dropdown" id="profile-dropdown">
-          <div class="profile-dropdown-email">👤 ${email}</div>
-          <hr class="profile-dropdown-divider" />
-          <button class="profile-signout" onclick="signOut()">🚪 Sign Out</button>
-        </div>
-      </div>`;
+      </div>
+      <button class="sidebar-signout" onclick="signOut()">🚪 Sign Out</button>`;
   }
 
   const nav = document.getElementById('main-nav');
@@ -64,7 +58,10 @@ function renderNav(user) {
         <span class="sidebar-logo-icon">⚔️</span>
         <span class="sidebar-logo-text">DM Companion</span>
       </a>
-      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar">
+    </div>
+
+    <div class="sidebar-toggle-row">
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
         <span class="sidebar-toggle-arrow">◀</span>
       </button>
     </div>
@@ -76,7 +73,7 @@ function renderNav(user) {
     </div>
 
     <div class="sidebar-footer">
-      ${profileHtml}
+      ${footerHtml}
     </div>`;
 
   // Apply saved collapse state
@@ -86,17 +83,8 @@ function renderNav(user) {
     document.body.classList.add('sidebar-collapsed');
   }
 
-  // Mark body as having a sidebar (so login page is unaffected)
+  // Mark body as having a sidebar (login page unaffected)
   document.body.classList.add('has-sidebar');
-
-  // Close dropdown on outside click
-  document.addEventListener('click', function (e) {
-    const profile = document.getElementById('nav-profile');
-    if (profile && !profile.contains(e.target)) {
-      const dd = document.getElementById('profile-dropdown');
-      if (dd) dd.classList.remove('open');
-    }
-  });
 }
 
 function toggleSidebar() {
@@ -104,10 +92,4 @@ function toggleSidebar() {
   const isCollapsed = nav.classList.toggle('collapsed');
   document.body.classList.toggle('sidebar-collapsed', isCollapsed);
   localStorage.setItem('sidebar-collapsed', isCollapsed);
-}
-
-function toggleProfileMenu(e) {
-  e.stopPropagation();
-  const dd = document.getElementById('profile-dropdown');
-  if (dd) dd.classList.toggle('open');
 }

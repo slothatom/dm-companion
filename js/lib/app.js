@@ -212,7 +212,7 @@ function renderNav(user) {
   nav.innerHTML = `
     <div class="sidebar-header">
       <a href="home.html" class="sidebar-logo">
-        <span class="sidebar-logo-icon">⚔️</span>
+        <img src="favicon.png" alt="" class="sidebar-logo-icon" style="width:24px;height:24px;" />
         <span class="sidebar-logo-text">DM Companion</span>
       </a>
       <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar" title="Toggle sidebar">

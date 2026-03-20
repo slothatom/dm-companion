@@ -16,18 +16,18 @@
     <p class="subtitle">Track your NPCs and creatures. Never forget a stat mid-combat again.</p>
 
     <h2>NPCs</h2>
-    <div id="npc-list"></div>
+    <div id="npc-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
     <button onclick="addNPC()">+ Add NPC</button>
 
     <hr />
 
     <h2>Creatures & Monsters</h2>
-    <div id="creature-list"></div>
+    <div id="creature-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
     <button onclick="addCreature()">+ Add Creature</button>
 
     <br /><br />
-    <button onclick="saveCharacters()">💾 Save All</button>
-    <span id="save-status">Saved!</span>
+    <button id="save-btn" onclick="saveCharacters()">💾 Save All</button>
+    <span id="save-status"></span>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -39,9 +39,15 @@
 
     let npcs      = [];
     let creatures = [];
-    let currentUserId = null;
+    let currentUserId      = null;
     let deletedNpcIds      = [];
     let deletedCreatureIds = [];
+    let isDirty            = false;
+    let autosaveTimer      = null;
+
+    window.addEventListener('beforeunload', function (e) {
+      if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+    });
 
     (async function () {
       const user = await requireAuth();
@@ -56,10 +62,16 @@
         db.from('npcs').select('*').eq('user_id', currentUserId).order('created_at'),
         db.from('creatures').select('*').eq('user_id', currentUserId).order('created_at')
       ]);
+      if (npcRes.error || creatureRes.error) {
+        const msg = (npcRes.error || creatureRes.error).message;
+        showToast('Could not load data: ' + msg, 'error');
+        return;
+      }
       npcs      = (npcRes.data      || []).map(function (r) { return { _id: r.id, name: r.name, hp: r.hp, ac: r.ac, notes: r.notes }; });
       creatures = (creatureRes.data || []).map(function (r) { return { _id: r.id, name: r.name, hp: r.hp, ac: r.ac, notes: r.notes }; });
       deletedNpcIds      = [];
       deletedCreatureIds = [];
+      isDirty            = false;
       renderAll();
     }
 
@@ -108,19 +120,29 @@
         </div>`;
     }
 
+    function markDirty() {
+      isDirty = true;
+      markUnsaved();
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(saveCharacters, 3000);
+    }
+
     function addNPC() {
       npcs.push({ name: '', hp: '', ac: '', notes: '' });
       renderAll();
+      markDirty();
     }
 
     function addCreature() {
       creatures.push({ name: '', hp: '', ac: '', notes: '' });
       renderAll();
+      markDirty();
     }
 
     function updateField(type, index, field, value) {
       if (type === 'npc')      npcs[index][field]      = value;
       if (type === 'creature') creatures[index][field] = value;
+      markDirty();
     }
 
     function removeItem(type, index) {
@@ -133,9 +155,14 @@
         creatures.splice(index, 1);
       }
       renderAll();
+      markDirty();
     }
 
     async function saveCharacters() {
+      clearTimeout(autosaveTimer);
+      const btn = document.getElementById('save-btn');
+      setButtonLoading(btn, true);
+
       // Step 1: delete only rows the user explicitly removed
       const deleteOps = [];
       if (deletedNpcIds.length > 0) {
@@ -147,7 +174,11 @@
       if (deleteOps.length > 0) {
         const deleteResults = await Promise.all(deleteOps);
         const deleteErrors  = deleteResults.map(function (r) { return r.error; }).filter(Boolean);
-        if (deleteErrors.length) { alert('Save failed: ' + deleteErrors[0].message); return; }
+        if (deleteErrors.length) {
+          setButtonLoading(btn, false);
+          showToast('Save failed: ' + deleteErrors[0].message, 'error');
+          return;
+        }
       }
 
       // Step 2: upsert existing rows (have _id) and insert new rows (no _id)
@@ -165,11 +196,17 @@
       if (saveOps.length > 0) {
         const saveResults = await Promise.all(saveOps);
         const saveErrors  = saveResults.map(function (r) { return r.error; }).filter(Boolean);
-        if (saveErrors.length) { alert('Save failed: ' + saveErrors[0].message); return; }
+        if (saveErrors.length) {
+          setButtonLoading(btn, false);
+          showToast('Save failed: ' + saveErrors[0].message, 'error');
+          return;
+        }
       }
 
       // Reload to get server-assigned IDs for newly inserted rows
       await loadAll();
+      setButtonLoading(btn, false);
+      isDirty = false;
       showSaved();
     }
 

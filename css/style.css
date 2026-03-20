@@ -617,3 +617,84 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   body.has-sidebar { padding-left: var(--sidebar-w-col) !important; }
   .sidebar-toggle { display: none; }
 }
+
+/* =============================================
+   Toast Notifications
+   ============================================= */
+
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  pointer-events: auto;
+  max-width: 320px;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  animation: toast-in 0.25s ease;
+}
+
+.toast-success { background: #1c3320; color: #8fc98f; border: 1px solid #3a6040; }
+.toast-error   { background: #3a1c1c; color: #c48080; border: 1px solid #6a2e2e; }
+.toast-info    { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+
+.toast-out { animation: toast-out 0.25s ease forwards; }
+
+@keyframes toast-in  { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-out { from { opacity: 1; transform: translateY(0);     } to { opacity: 0; transform: translateY(10px); } }
+
+/* =============================================
+   Spinner (page loader + button loader)
+   ============================================= */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.btn-spinner {
+  width: 13px;
+  height: 13px;
+  margin-right: 6px;
+  border-width: 2px;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 20px 0;
+  font-size: 15px;
+}
+
+/* =============================================
+   Save-status — Unsaved indicator
+   ============================================= */
+
+#save-status.unsaved {
+  opacity: 1 !important;
+  color: var(--accent) !important;
+  font-size: 13px;
+}

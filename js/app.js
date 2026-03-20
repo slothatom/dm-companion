@@ -2,12 +2,26 @@
 //   app.js — Shared utilities for DM Companion
 // =============================================
 
+// ── Save-status indicator ──────────────────────────────────
+
 function showSaved() {
   const el = document.getElementById('save-status');
   if (!el) return;
+  el.classList.remove('unsaved');
+  el.textContent = '✓ Saved!';
   el.classList.add('visible');
-  setTimeout(function () { el.classList.remove('visible'); }, 2000);
+  setTimeout(function () { el.classList.remove('visible'); }, 2200);
 }
+
+function markUnsaved() {
+  const el = document.getElementById('save-status');
+  if (!el) return;
+  el.classList.remove('visible');
+  el.textContent = '● Unsaved changes';
+  el.classList.add('unsaved');
+}
+
+// ── HTML escaping ──────────────────────────────────────────
 
 function escapeHtml(str) {
   if (str == null) return '';
@@ -17,6 +31,42 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// ── Toast notifications ────────────────────────────────────
+
+function showToast(message, type) {
+  // type: 'success' | 'error' | 'info'
+  var container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  var toast = document.createElement('div');
+  toast.className = 'toast toast-' + (type || 'info');
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(function () {
+    toast.classList.add('toast-out');
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 3500);
+}
+
+// ── Button loading state ───────────────────────────────────
+
+function setButtonLoading(btn, loading) {
+  if (!btn) return;
+  if (loading) {
+    btn.dataset.originalText = btn.textContent;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner btn-spinner"></span> Saving…';
+  } else {
+    btn.disabled = false;
+    btn.textContent = btn.dataset.originalText || 'Save';
+  }
 }
 
 // =============================================

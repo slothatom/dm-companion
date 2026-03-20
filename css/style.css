@@ -1,8 +1,27 @@
-/* =====================
-   DM Companion Styles
-   ===================== */
+/* =============================================
+   DM Companion — Tavern / Adventure Log Theme
+   ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* ---- Tokens ---- */
+:root {
+  --bg:        #2B1E1A;
+  --surface:   #3A2A24;
+  --surface2:  #2F2019;
+  --border:    #6B4535;
+  --border-dim:#4A3028;
+  --primary:   #C08457;
+  --primary-h: #D4935F;
+  --secondary: #6D9F71;
+  --secondary-h:#85B889;
+  --accent:    #E6C07B;
+  --danger:    #8B3A3A;
+  --danger-h:  #A84848;
+  --text:      #F5E6D3;
+  --text-muted:#B89070;
+  --text-dim:  #7A5A48;
+}
 
 * {
   box-sizing: border-box;
@@ -11,51 +30,63 @@
 }
 
 body {
-  background-color: #1a1009;
+  background-color: var(--bg);
   background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
-  color: #e8d5a3;
+  color: var(--text);
   font-family: 'Crimson Text', Georgia, serif;
   font-size: 18px;
   min-height: 100vh;
 }
 
-/* ---- Navigation ---- */
+/* =====================
+   Navigation
+   ===================== */
 nav {
-  background-color: #2c1a0e;
-  border-bottom: 3px solid #8b0000;
+  background-color: var(--surface2);
+  border-bottom: 3px solid var(--primary);
   padding: 10px 24px;
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 6px;
+  gap: 4px;
   overflow-x: auto;
 }
 
 nav .logo {
-  font-size: 20px;
-  font-weight: 600;
-  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
   text-decoration: none;
-  margin-right: 12px;
+  margin-right: 14px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
 nav a {
-  color: #e8d5a3;
+  color: var(--text-muted);
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   padding: 5px 11px;
   border-radius: 4px;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
   white-space: nowrap;
+  font-family: 'Crimson Text', serif;
 }
 
-nav a:hover,
+nav a:hover {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
 nav a.active {
-  background-color: #8b0000;
+  background-color: var(--primary);
   color: #fff;
 }
 
-/* ---- Main content ---- */
+/* =====================
+   Main content
+   ===================== */
 main {
   max-width: 900px;
   margin: 40px auto;
@@ -63,112 +94,145 @@ main {
 }
 
 h1 {
-  font-size: 32px;
-  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent);
   margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 h2 {
-  font-size: 24px;
-  color: #c9a84c;
-  margin: 24px 0 12px;
-  border-bottom: 1px solid #5a3e1b;
-  padding-bottom: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 28px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-dim);
+  letter-spacing: 0.3px;
 }
 
 h3 {
-  color: #c9a84c;
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  color: var(--primary);
+  margin-bottom: 12px;
 }
 
 p.subtitle {
-  color: #a89060;
+  color: var(--text-muted);
   margin-bottom: 28px;
   font-style: italic;
+  font-size: 17px;
 }
 
-/* ---- Cards ---- */
+/* =====================
+   Cards
+   ===================== */
 .card {
-  background-color: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  background-color: var(--surface);
+  background-image: url("https://www.transparenttextures.com/patterns/worn-dots.png");
+  border: 1px solid var(--border-dim);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 16px;
 }
 
-/* ---- Forms ---- */
+/* =====================
+   Forms
+   ===================== */
 label {
   display: block;
   margin-bottom: 4px;
-  color: #a89060;
-  font-size: 15px;
+  color: var(--text-muted);
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  font-family: 'Cinzel', serif;
 }
 
 input[type="text"],
 input[type="number"],
+input[type="email"],
+input[type="password"],
 textarea,
 select {
   width: 100%;
-  background-color: #1a1009;
-  border: 1px solid #5a3e1b;
+  background-color: var(--surface2);
+  border: 1px solid var(--border-dim);
   border-radius: 4px;
-  color: #e8d5a3;
+  color: var(--text);
   font-family: 'Crimson Text', Georgia, serif;
   font-size: 17px;
   padding: 10px 12px;
   margin-bottom: 16px;
   resize: vertical;
+  transition: border-color 0.2s;
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
-textarea:focus {
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
   outline: none;
-  border-color: #c9a84c;
+  border-color: var(--primary);
 }
 
-textarea {
-  min-height: 200px;
-}
+textarea { min-height: 200px; }
 
-/* ---- Buttons ---- */
+/* =====================
+   Buttons
+   ===================== */
 button {
-  background-color: #8b0000;
+  background-color: var(--primary);
   color: #fff;
   border: none;
   border-radius: 4px;
   padding: 10px 22px;
-  font-family: 'Crimson Text', Georgia, serif;
-  font-size: 17px;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
   cursor: pointer;
   transition: background 0.2s;
+  letter-spacing: 0.3px;
 }
-
-button:hover { background-color: #a00000; }
+button:hover { background-color: var(--primary-h); }
 
 button.secondary {
-  background-color: #3a2510;
-  border: 1px solid #5a3e1b;
+  background-color: transparent;
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
 }
-button.secondary:hover { background-color: #4a3520; }
-
-button.danger { background-color: #4a1010; }
-button.danger:hover { background-color: #6a1010; }
-
-button.gold {
-  background-color: #7a6020;
+button.secondary:hover {
+  background-color: var(--secondary);
   color: #fff;
 }
-button.gold:hover { background-color: #9a7a28; }
 
-/* ---- Save status ---- */
+button.danger {
+  background-color: var(--danger);
+  color: #fff;
+}
+button.danger:hover { background-color: var(--danger-h); }
+
+button.gold {
+  background-color: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+button.gold:hover {
+  background-color: var(--accent);
+  color: var(--bg);
+}
+
+/* =====================
+   Save status
+   ===================== */
 #save-status {
   display: inline-block;
   margin-left: 14px;
-  color: #6aaa6a;
+  color: var(--secondary);
   font-style: italic;
   font-size: 15px;
   opacity: 0;
@@ -176,27 +240,32 @@ button.gold:hover { background-color: #9a7a28; }
 }
 #save-status.visible { opacity: 1; }
 
-/* ---- Stat grid ---- */
+/* =====================
+   Stat grids
+   ===================== */
 .stat-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
 }
-
 .stat-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* ---- Divider ---- */
+/* =====================
+   Divider
+   ===================== */
 hr {
   border: none;
-  border-top: 1px solid #3a2510;
-  margin: 24px 0;
+  border-top: 1px solid var(--border-dim);
+  margin: 28px 0;
 }
 
-/* ---- Dice Roller ---- */
+/* =====================
+   Dice Roller
+   ===================== */
 .dice-grid {
   display: flex;
   flex-wrap: wrap;
@@ -215,32 +284,35 @@ hr {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  background-color: #2c1a0e;
-  border: 2px solid #5a3e1b;
+  background-color: var(--surface);
+  border: 2px solid var(--border-dim);
   cursor: pointer;
   transition: all 0.15s;
+  font-family: 'Cinzel', serif;
+  color: var(--text-muted);
 }
-
 .die-btn:hover {
-  border-color: #c9a84c;
-  background-color: #3a2510;
+  border-color: var(--primary);
+  background-color: var(--surface2);
+  color: var(--text);
   transform: translateY(-2px);
 }
-
 .die-btn .die-icon { font-size: 28px; }
 
 .roll-result {
-  font-size: 64px;
-  color: #c9a84c;
+  font-size: 72px;
+  color: var(--accent);
   text-align: center;
   min-height: 90px;
   line-height: 1;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
   transition: all 0.2s;
 }
 
 .roll-label {
   text-align: center;
-  color: #a89060;
+  color: var(--text-muted);
   font-style: italic;
   margin-bottom: 16px;
   font-size: 16px;
@@ -254,36 +326,37 @@ hr {
 }
 
 .history-chip {
-  background: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 4px 14px;
   font-size: 15px;
-  color: #a89060;
+  color: var(--text-muted);
 }
 
-/* ---- Initiative Tracker ---- */
+/* =====================
+   Initiative Tracker
+   ===================== */
 .initiative-list { margin-bottom: 20px; }
 
 .init-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  background-color: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  background-color: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--border-dim);
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 10px;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
-
 .init-row.active-turn {
-  border-color: #c9a84c;
-  background-color: #3a2510;
+  border-left-color: var(--accent);
+  background-color: var(--surface2);
 }
-
 .init-row.active-turn .init-name {
-  color: #c9a84c;
+  color: var(--accent);
   font-weight: 600;
 }
 
@@ -292,68 +365,71 @@ hr {
   width: 24px;
   text-align: center;
   visibility: hidden;
+  color: var(--accent);
 }
-
 .init-row.active-turn .turn-arrow { visibility: visible; }
 
 .init-score {
-  font-size: 24px;
-  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  color: var(--primary);
   min-width: 40px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .init-name { flex: 1; font-size: 18px; }
 
 .init-hp {
-  color: #a89060;
+  color: var(--text-muted);
   font-size: 15px;
   min-width: 60px;
   text-align: center;
 }
 
 .init-type {
-  font-size: 13px;
+  font-size: 12px;
   padding: 2px 8px;
   border-radius: 10px;
-  background: #3a2510;
-  color: #a89060;
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border-dim);
 }
 
-/* ---- Spell Reference ---- */
-.spell-search {
-  margin-bottom: 20px;
-}
+/* =====================
+   Spell Reference
+   ===================== */
+.spell-search { margin-bottom: 20px; }
 
 .spell-filters {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
 .filter-btn {
-  padding: 6px 14px;
-  font-size: 14px;
-  background: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  padding: 5px 14px;
+  font-size: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
   border-radius: 20px;
   cursor: pointer;
-  color: #a89060;
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
   transition: all 0.15s;
 }
-
 .filter-btn:hover,
 .filter-btn.active-filter {
-  background-color: #8b0000;
-  border-color: #8b0000;
+  background-color: var(--primary);
+  border-color: var(--primary);
   color: #fff;
 }
 
 .spell-card {
-  background-color: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  background-color: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--primary);
   border-radius: 8px;
   padding: 16px 20px;
   margin-bottom: 12px;
@@ -366,25 +442,28 @@ hr {
   align-items: baseline;
   gap: 12px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .spell-name {
-  font-size: 20px;
-  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  color: var(--accent);
   font-weight: 600;
 }
 
 .spell-level {
-  font-size: 13px;
-  color: #a89060;
-  background: #3a2510;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface2);
   padding: 2px 8px;
   border-radius: 10px;
+  border: 1px solid var(--border-dim);
 }
 
 .spell-school {
   font-size: 13px;
-  color: #8b7050;
+  color: var(--secondary);
   font-style: italic;
 }
 
@@ -397,73 +476,77 @@ hr {
 
 .spell-stat {
   font-size: 14px;
-  color: #a89060;
+  color: var(--text-muted);
 }
-
-.spell-stat span {
-  color: #e8d5a3;
-}
+.spell-stat span { color: var(--text); }
 
 .spell-desc {
   font-size: 16px;
-  line-height: 1.5;
-  color: #c8b890;
+  line-height: 1.6;
+  color: var(--text);
 }
 
-/* ---- NPC Generator ---- */
+/* =====================
+   NPC Generator
+   ===================== */
 .npc-output {
-  background-color: #2c1a0e;
-  border: 2px solid #5a3e1b;
+  background-color: var(--surface);
+  background-image: url("https://www.transparenttextures.com/patterns/worn-dots.png");
+  border: 2px solid var(--border-dim);
   border-radius: 10px;
   padding: 28px;
   margin-bottom: 24px;
   min-height: 160px;
 }
-
-.npc-output.has-npc { border-color: #c9a84c; }
+.npc-output.has-npc { border-color: var(--primary); }
 
 .npc-name-display {
-  font-size: 28px;
-  color: #c9a84c;
-  margin-bottom: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
 }
 
 .npc-tag {
   display: inline-block;
-  background: #3a2510;
-  border: 1px solid #5a3e1b;
+  background: var(--surface2);
+  border: 1px solid var(--border-dim);
   border-radius: 4px;
   padding: 2px 10px;
-  font-size: 14px;
-  color: #a89060;
+  font-size: 13px;
+  color: var(--secondary);
   margin-right: 6px;
   margin-bottom: 14px;
 }
 
 .npc-trait-row {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-size: 17px;
   line-height: 1.5;
 }
 
 .npc-trait-label {
-  color: #a89060;
-  font-size: 14px;
+  font-family: 'Cinzel', serif;
+  color: var(--text-muted);
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   display: block;
   margin-bottom: 2px;
 }
 
 .empty-state {
-  color: #5a4a30;
+  color: var(--text-dim);
   font-style: italic;
   font-size: 17px;
   text-align: center;
   padding: 20px 0;
 }
 
-/* ---- Nav Profile Dropdown ---- */
+/* =====================
+   Nav Profile Dropdown
+   ===================== */
 .nav-profile {
   margin-left: auto;
   position: relative;
@@ -472,7 +555,7 @@ hr {
 
 .profile-btn {
   background: transparent;
-  border: 2px solid #5a3e1b;
+  border: 2px solid var(--border-dim);
   border-radius: 50%;
   width: 34px;
   height: 34px;
@@ -485,7 +568,7 @@ hr {
   overflow: hidden;
 }
 .profile-btn:hover {
-  border-color: #c9a84c;
+  border-color: var(--primary);
   background: transparent;
 }
 
@@ -497,9 +580,10 @@ hr {
 }
 
 .profile-initials {
-  font-size: 15px;
-  font-weight: 600;
-  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
   line-height: 1;
 }
 
@@ -508,54 +592,60 @@ hr {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  background: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   min-width: 220px;
-  padding: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
   z-index: 999;
 }
 .profile-dropdown.open { display: block; }
 
 .profile-dropdown-email {
   font-size: 14px;
-  color: #a89060;
+  color: var(--text-muted);
   padding: 4px 2px 8px;
   word-break: break-all;
 }
 
 .profile-dropdown-divider {
   border: none;
-  border-top: 1px solid #3a2510;
+  border-top: 1px solid var(--border-dim);
   margin: 8px 0;
 }
 
 .profile-signout {
   width: 100%;
-  background: #3a1010;
-  border: 1px solid #8b0000;
-  color: #e8d5a3;
-  font-size: 15px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
   padding: 8px 12px;
   border-radius: 4px;
   text-align: left;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
+  letter-spacing: 0.3px;
 }
 .profile-signout:hover {
-  background: #8b0000;
+  background: var(--danger);
   color: #fff;
 }
 
-/* ---- Login / Auth Page ---- */
+/* =====================
+   Login / Auth Page
+   ===================== */
 .auth-container {
   max-width: 440px;
   margin: 80px auto 40px;
   padding: 40px 36px;
-  background: #2c1a0e;
-  border: 1px solid #5a3e1b;
+  background: var(--surface);
+  background-image: url("https://www.transparenttextures.com/patterns/worn-dots.png");
+  border: 1px solid var(--border);
   border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
 }
 
 .auth-logo {
@@ -565,24 +655,28 @@ hr {
 }
 
 .auth-title {
+  font-family: 'Cinzel', serif;
   text-align: center;
-  font-size: 28px;
-  color: #c9a84c;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
   margin-bottom: 4px;
+  letter-spacing: 1px;
 }
 
 .auth-subtitle {
   text-align: center;
-  color: #a89060;
+  color: var(--text-muted);
   font-style: italic;
   margin-bottom: 28px;
 }
 
 .auth-social {
   width: 100%;
-  background: #1a1009;
-  border: 1px solid #5a3e1b;
-  color: #e8d5a3;
+  background: var(--surface2);
+  border: 1px solid var(--border-dim);
+  color: var(--text);
+  font-family: 'Crimson Text', serif;
   font-size: 16px;
   padding: 11px 16px;
   border-radius: 6px;
@@ -591,12 +685,12 @@ hr {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
 .auth-social:hover {
-  background: #2c1a0e;
-  border-color: #c9a84c;
-  color: #c9a84c;
+  border-color: var(--primary);
+  background: var(--bg);
+  color: var(--primary);
 }
 
 .auth-divider {
@@ -604,19 +698,19 @@ hr {
   align-items: center;
   gap: 12px;
   margin: 20px 0;
-  color: #5a4a30;
+  color: var(--text-dim);
   font-size: 14px;
 }
 .auth-divider::before,
 .auth-divider::after {
   content: '';
   flex: 1;
-  border-top: 1px solid #3a2510;
+  border-top: 1px solid var(--border-dim);
 }
 
 .auth-error {
   font-size: 14px;
-  color: #c05050;
+  color: #C06060;
   min-height: 20px;
   margin-top: 10px;
   text-align: center;
@@ -624,12 +718,12 @@ hr {
 
 .auth-toggle {
   text-align: center;
-  color: #a89060;
+  color: var(--text-muted);
   font-size: 15px;
   margin-top: 16px;
 }
 .auth-toggle a {
-  color: #c9a84c;
+  color: var(--primary);
   text-decoration: none;
 }
 .auth-toggle a:hover { text-decoration: underline; }

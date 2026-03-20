@@ -15,10 +15,39 @@
     <h1>⚔️ Initiative Tracker</h1>
     <p class="subtitle">Track combat turn order. Never lose your place mid-battle again.</p>
 
-    <!-- Add combatant form -->
-    <div class="card">
-      <h3>Add Combatant</h3>
-      <div class="stat-grid">
+    <!-- ── Combat Controls (primary) ─────────────────────── -->
+    <div class="card init-controls-card">
+      <div class="init-status-bar">
+        <span class="init-status-label">Round</span>
+        <strong id="round-counter" class="init-status-val">1</strong>
+        <span class="init-status-sep">|</span>
+        <span class="init-status-label">Active</span>
+        <strong id="turn-counter" class="init-status-val">—</strong>
+      </div>
+      <div class="row-actions">
+        <button class="gold" onclick="nextTurn()">▶ Next Turn</button>
+        <button onclick="sortByInitiative()">⬆ Sort</button>
+        <button class="secondary" onclick="resetTurn()">↩ Reset Round</button>
+        <button class="danger" onclick="clearAll()">🗑 Clear</button>
+      </div>
+    </div>
+
+    <!-- ── Initiative List (main content) ─────────────────── -->
+    <div class="initiative-list" id="init-list">
+      <p class="empty-state">No combatants yet — add them below or import your party.</p>
+    </div>
+
+    <!-- ── Add Combatant (secondary) ──────────────────────── -->
+    <div class="card init-add-card">
+      <div class="init-add-header">
+        <h3 style="margin:0; font-size:14px;">➕ Add Combatant</h3>
+        <div class="row-actions">
+          <button class="secondary" style="padding:5px 14px; font-size:12px;" onclick="importPlayers()">📥 Import Players</button>
+          <button class="secondary" style="padding:5px 14px; font-size:12px;" onclick="importCreatures()">📥 Import Creatures</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" style="margin-top:14px;">
         <div>
           <label>Name</label>
           <input type="text" id="new-name" placeholder="e.g. Goblin Chief" />
@@ -32,7 +61,7 @@
           <input type="number" id="new-hp" placeholder="e.g. 30" />
         </div>
       </div>
-      <div class="stat-grid-2" style="margin-bottom:16px;">
+      <div class="stat-grid-2">
         <div>
           <label>Type</label>
           <select id="new-type">
@@ -47,27 +76,6 @@
       </div>
     </div>
 
-    <div style="margin-bottom: 20px; display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="secondary" onclick="importPlayers()">📥 Import Players</button>
-      <button class="secondary" onclick="importCreatures()">📥 Import Creatures</button>
-    </div>
-
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
-      <button onclick="sortByInitiative()">⬆️ Sort by Initiative</button>
-      <button class="gold" onclick="nextTurn()">▶ Next Turn</button>
-      <button class="secondary" onclick="resetTurn()">↩ Reset Round</button>
-      <button class="danger" onclick="clearAll()">🗑 Clear All</button>
-    </div>
-
-    <div style="font-size:18px; color:#a89060; margin-bottom:16px;">
-      Round: <strong id="round-counter" style="color:#c9a84c;">1</strong>
-      &nbsp;|&nbsp;
-      Turn: <strong id="turn-counter" style="color:#c9a84c;">—</strong>
-    </div>
-
-    <div class="initiative-list" id="init-list">
-      <p class="empty-state">No combatants yet. Add some above or import your players!</p>
-    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -229,8 +237,10 @@
 
     function renderList() {
       const container = document.getElementById('init-list');
+      document.getElementById('round-counter').textContent = round;
+
       if (combatants.length === 0) {
-        container.innerHTML = '<p class="empty-state">No combatants yet. Add some above or import your players!</p>';
+        container.innerHTML = '<p class="empty-state">No combatants yet — add them below or import your party.</p>';
         document.getElementById('turn-counter').textContent = '—';
         return;
       }

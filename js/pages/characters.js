@@ -11,6 +11,7 @@ let isDirty            = false;
 let autosaveTimer      = null;
 let activeCampaignFilter = '';   // '' = show all
 let activeCharTab = 'npc';     // 'npc' | 'creature'
+let campaignsList = [];        // [{id, name}, ...] for per-card dropdowns
 
 setupDirtyGuard(function () { return isDirty; });
 
@@ -64,6 +65,7 @@ async function loadCharCampaigns() {
     return;
   }
 
+  campaignsList = data;
   bar.style.display = '';
   const sel = document.getElementById('char-campaign-select');
   (data || []).forEach(function (c) {
@@ -171,8 +173,34 @@ function buildCard(item, index, type) {
             placeholder="e.g. Friendly innkeeper. Secretly a spy."
             style="min-height: 80px;"
           >${escapeHtml(item.notes)}</textarea>
-          <button class="danger" onclick="removeItem('${type}', ${index})">🗑 Remove</button>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            ${buildCampaignDropdown(item, type)}
+            <button class="danger" onclick="removeItem('${type}', ${index})">🗑 Remove</button>
+          </div>
         </div>`;
+}
+
+function buildCampaignDropdown(item, type) {
+  if (campaignsList.length === 0 || !item._id) return '';
+  const map = getCharCampaignMap();
+  const current = map[charKey(type, item._id)] || '';
+  const options = '<option value="">🌐 No Campaign</option>' +
+    campaignsList.map(function (c) {
+      const sel = c.id === current ? ' selected' : '';
+      return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + escapeHtml(c.name) + '</option>';
+    }).join('');
+  return '<select onchange="setCharCampaign(\'' + type + '\', \'' + item._id + '\', this.value)" style="margin:0; min-width:140px; flex:1;">' + options + '</select>';
+}
+
+function setCharCampaign(type, id, campaignId) {
+  const map = getCharCampaignMap();
+  if (campaignId) {
+    map[charKey(type, id)] = campaignId;
+  } else {
+    delete map[charKey(type, id)];
+  }
+  saveCharCampaignMap(map);
+  showToast('Campaign updated.', 'success');
 }
 
 // ── Editing ───────────────────────────────────────────────

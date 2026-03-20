@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DM Companion – NPC Generator</title>
+  <title>DM Companion – NPC &amp; Creature Generator</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
@@ -12,17 +12,24 @@
   <nav id="main-nav"></nav>
 
   <main>
-    <h1>🎭 NPC Generator</h1>
-    <p class="subtitle">Need an NPC on the fly? Roll one up in a second.</p>
+    <h1>🎭 NPC &amp; Creature Generator</h1>
+    <p class="subtitle">Instant characters and monsters, ready to drop into any scene.</p>
 
-    <div class="npc-output" id="npc-output">
-      <p class="empty-state">Hit "Generate NPC" to bring someone to life.</p>
+    <!-- Mode tabs -->
+    <div class="gen-type-tabs">
+      <button class="gen-tab active-gen-tab" onclick="setGenMode('npc', this)">🎭 NPC</button>
+      <button class="gen-tab" onclick="setGenMode('creature', this)">🐉 Creature</button>
+    </div>
+
+    <!-- Output panel -->
+    <div class="npc-output" id="gen-output">
+      <p class="empty-state" id="gen-placeholder">Hit "Generate NPC" to bring someone to life.</p>
     </div>
 
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px;">
-      <button onclick="generateNPC()">🎲 Generate NPC</button>
-      <button class="secondary" onclick="copyNPC()">📋 Copy</button>
-      <button class="secondary" onclick="saveToCharacters()">💾 Save to Characters</button>
+      <button id="gen-btn" onclick="generate()">🎲 Generate NPC</button>
+      <button class="secondary" onclick="copyEntry()">📋 Copy</button>
+      <button class="secondary" id="save-chars-btn" onclick="saveToCharacters()">💾 Save to Characters</button>
     </div>
 
     <hr />
@@ -41,8 +48,9 @@
   <script src="js/npc-data.js"></script>
   <script>
 
-    let currentNPC    = null;
-    let sessionNPCs   = [];
+    let generatorMode = 'npc';   // 'npc' | 'creature'
+    let currentEntry  = null;
+    let sessionEntries = [];
     let currentUserId = null;
 
     (async function () {
@@ -56,8 +64,39 @@
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
+    function setGenMode(mode, btn) {
+      generatorMode = mode;
+      document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });
+      btn.classList.add('active-gen-tab');
+
+      const genBtn  = document.getElementById('gen-btn');
+      const savBtn  = document.getElementById('save-chars-btn');
+      const placeholder = document.getElementById('gen-placeholder');
+
+      if (mode === 'npc') {
+        genBtn.textContent = '🎲 Generate NPC';
+        savBtn.textContent = '💾 Save to Characters';
+        if (placeholder) placeholder.textContent = 'Hit "Generate NPC" to bring someone to life.';
+      } else {
+        genBtn.textContent = '🎲 Generate Creature';
+        savBtn.textContent = '💾 Save to Characters';
+        if (placeholder) placeholder.textContent = 'Hit "Generate Creature" to roll up a monster.';
+      }
+
+      // Clear output when switching modes
+      currentEntry = null;
+      const output = document.getElementById('gen-output');
+      output.classList.remove('has-npc');
+      output.innerHTML = '<p class="empty-state" id="gen-placeholder">' +
+        (mode === 'npc' ? 'Hit "Generate NPC" to bring someone to life.'
+                        : 'Hit "Generate Creature" to roll up a monster.') + '</p>';
+    }
+
+    // ── NPC ────────────────────────────────────────────────────
+
     function generateNPC() {
       const npc = {
+        _type:       'npc',
         name:        pick(FIRST_NAMES) + ' ' + pick(LAST_NAMES),
         race:        pick(RACES),
         occupation:  pick(OCCUPATIONS),
@@ -65,78 +104,166 @@
         quirk:       pick(QUIRKS),
         motivation:  pick(MOTIVATIONS),
       };
-      currentNPC = npc;
+      currentEntry = npc;
       renderNPC(npc);
     }
 
     function renderNPC(npc) {
-      const output = document.getElementById('npc-output');
+      const output = document.getElementById('gen-output');
       output.classList.add('has-npc');
       output.innerHTML = `
-        <div class="npc-name-display">${npc.name}</div>
-        <span class="npc-tag">${npc.race}</span>
-        <span class="npc-tag">${npc.occupation}</span>
+        <div class="npc-name-display">${escapeHtml(npc.name)}</div>
+        <span class="npc-tag">${escapeHtml(npc.race)}</span>
+        <span class="npc-tag">${escapeHtml(npc.occupation)}</span>
         <br style="margin-bottom:14px;" />
         <div class="npc-trait-row">
           <span class="npc-trait-label">Personality</span>
-          ${npc.personality}
+          ${escapeHtml(npc.personality)}
         </div>
         <div class="npc-trait-row">
           <span class="npc-trait-label">Quirk</span>
-          ${npc.quirk}
+          ${escapeHtml(npc.quirk)}
         </div>
         <div class="npc-trait-row">
           <span class="npc-trait-label">Motivation</span>
-          ${npc.motivation}
+          ${escapeHtml(npc.motivation)}
         </div>`;
     }
 
-    function copyNPC() {
-      if (!currentNPC) { showToast('Generate an NPC first!', 'info'); return; }
-      var text = [
-        currentNPC.name,
-        currentNPC.race + ' ' + currentNPC.occupation,
-        'Personality: ' + currentNPC.personality,
-        'Quirk: '       + currentNPC.quirk,
-        'Motivation: '  + currentNPC.motivation
-      ].join('\n');
+    // ── Creature ───────────────────────────────────────────────
+
+    function generateCreature() {
+      const creature = {
+        _type:   'creature',
+        name:    pick(CREATURE_ADJECTIVES) + ' ' + pick(CREATURE_BASE_NAMES),
+        type:    pick(CREATURE_TYPES),
+        size:    pick(CREATURE_SIZES),
+        cr:      pick(CREATURE_CRS),
+        trait:   pick(CREATURE_TRAITS),
+        attack:  pick(CREATURE_ATTACKS),
+        habitat: pick(CREATURE_HABITATS),
+      };
+      currentEntry = creature;
+      renderCreature(creature);
+    }
+
+    function renderCreature(c) {
+      const output = document.getElementById('gen-output');
+      output.classList.add('has-npc');
+      output.innerHTML = `
+        <div class="npc-name-display">${escapeHtml(c.name)}</div>
+        <span class="npc-tag">${escapeHtml(c.type)}</span>
+        <span class="npc-tag">${escapeHtml(c.size)}</span>
+        <span class="npc-tag">CR ${escapeHtml(c.cr)}</span>
+        <br style="margin-bottom:14px;" />
+        <div class="npc-trait-row">
+          <span class="npc-trait-label">Trait</span>
+          ${escapeHtml(c.trait)}
+        </div>
+        <div class="npc-trait-row">
+          <span class="npc-trait-label">Attack</span>
+          ${escapeHtml(c.attack)}
+        </div>
+        <div class="npc-trait-row">
+          <span class="npc-trait-label">Habitat</span>
+          ${escapeHtml(c.habitat)}
+        </div>`;
+    }
+
+    // ── Shared ─────────────────────────────────────────────────
+
+    function generate() {
+      if (generatorMode === 'npc') generateNPC();
+      else                          generateCreature();
+    }
+
+    function copyEntry() {
+      if (!currentEntry) { showToast('Generate something first!', 'info'); return; }
+      var text;
+      if (currentEntry._type === 'npc') {
+        text = [
+          currentEntry.name,
+          currentEntry.race + ' ' + currentEntry.occupation,
+          'Personality: ' + currentEntry.personality,
+          'Quirk: '       + currentEntry.quirk,
+          'Motivation: '  + currentEntry.motivation
+        ].join('\n');
+      } else {
+        text = [
+          currentEntry.name,
+          currentEntry.type + ' · ' + currentEntry.size + ' · CR ' + currentEntry.cr,
+          'Trait: '   + currentEntry.trait,
+          'Attack: '  + currentEntry.attack,
+          'Habitat: ' + currentEntry.habitat
+        ].join('\n');
+      }
       navigator.clipboard.writeText(text)
-        .then(function ()  { showToast('NPC copied to clipboard!', 'success'); })
+        .then(function ()  { showToast('Copied to clipboard!', 'success'); })
         .catch(function () { showToast('Copy failed — try manually.', 'error'); });
     }
 
     async function saveToCharacters() {
-      if (!currentNPC) { showToast('Generate an NPC first!', 'info'); return; }
+      if (!currentEntry) { showToast('Generate something first!', 'info'); return; }
 
-      const { error } = await db.from('npcs').insert({
-        user_id: currentUserId,
-        name:    currentNPC.name,
-        hp:      '',
-        ac:      '',
-        notes:   `${currentNPC.race} ${currentNPC.occupation}. ${currentNPC.personality}. ${currentNPC.quirk}. Motivation: ${currentNPC.motivation}`
-      });
+      let error;
+      if (currentEntry._type === 'npc') {
+        const result = await db.from('npcs').insert({
+          user_id: currentUserId,
+          name:    currentEntry.name,
+          hp:      '',
+          ac:      '',
+          notes:   currentEntry.race + ' ' + currentEntry.occupation + '. ' +
+                   currentEntry.personality + '. ' + currentEntry.quirk +
+                   '. Motivation: ' + currentEntry.motivation
+        });
+        error = result.error;
+      } else {
+        const result = await db.from('creatures').insert({
+          user_id: currentUserId,
+          name:    currentEntry.name,
+          hp:      '',
+          ac:      '',
+          cr:      currentEntry.cr,
+          notes:   currentEntry.type + ' · ' + currentEntry.size + ' · CR ' + currentEntry.cr +
+                   '\nTrait: ' + currentEntry.trait +
+                   '\nAttack: ' + currentEntry.attack +
+                   '\nHabitat: ' + currentEntry.habitat
+        });
+        error = result.error;
+      }
 
       if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
 
-      sessionNPCs.push(currentNPC);
+      sessionEntries.push(currentEntry);
       renderSessionList();
-      showToast(currentNPC.name + ' saved to Characters! 🐉', 'success');
+      showToast(currentEntry.name + ' saved to Characters!', 'success');
     }
 
     function renderSessionList() {
       const container = document.getElementById('generated-list');
-      if (sessionNPCs.length === 0) {
+      if (sessionEntries.length === 0) {
         container.innerHTML = '<p class="empty-state">Nothing generated yet.</p>';
         return;
       }
-      container.innerHTML = sessionNPCs.map(function (npc) {
-        return `
-          <div class="card" style="padding:14px 18px;">
-            <strong style="color:#c9a84c;">${npc.name}</strong>
-            <span class="npc-tag" style="margin-left:8px;">${npc.race}</span>
-            <span class="npc-tag">${npc.occupation}</span>
-            <div style="color:#a89060; font-size:15px; margin-top:6px; font-style:italic;">${npc.personality}</div>
-          </div>`;
+      container.innerHTML = sessionEntries.map(function (entry) {
+        if (entry._type === 'npc') {
+          return `
+            <div class="card" style="padding:14px 18px;">
+              <strong style="color:var(--accent);">${escapeHtml(entry.name)}</strong>
+              <span class="npc-tag" style="margin-left:8px;">${escapeHtml(entry.race)}</span>
+              <span class="npc-tag">${escapeHtml(entry.occupation)}</span>
+              <div style="color:var(--text-muted); font-size:15px; margin-top:6px; font-style:italic;">${escapeHtml(entry.personality)}</div>
+            </div>`;
+        } else {
+          return `
+            <div class="card" style="padding:14px 18px;">
+              <strong style="color:var(--accent);">${escapeHtml(entry.name)}</strong>
+              <span class="npc-tag" style="margin-left:8px;">${escapeHtml(entry.type)}</span>
+              <span class="npc-tag">${escapeHtml(entry.size)}</span>
+              <span class="npc-tag">CR ${escapeHtml(entry.cr)}</span>
+              <div style="color:var(--text-muted); font-size:13px; margin-top:6px; font-style:italic;">${escapeHtml(entry.trait.split(':')[0])}</div>
+            </div>`;
+        }
       }).join('');
     }
 

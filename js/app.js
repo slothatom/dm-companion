@@ -119,6 +119,38 @@ function closeModal() {
   if (modal) modal.style.display = 'none';
 }
 
+// =============================================
+//   Info / Detail Modal (read-only, single Close button)
+// =============================================
+
+// opts: { title, body }
+function showInfoModal(opts) {
+  var modal = document.getElementById('dm-info-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'dm-info-modal';
+    modal.className = 'dm-modal-overlay';
+    modal.innerHTML =
+      '<div class="dm-modal dm-info-modal-inner" role="dialog" aria-modal="true">' +
+        '<h3 class="dm-modal-title" id="dm-info-title"></h3>' +
+        '<p class="dm-info-body" id="dm-info-body"></p>' +
+        '<div class="dm-modal-actions" style="justify-content:center;">' +
+          '<button onclick="closeInfoModal()">Close</button>' +
+        '</div>' +
+      '</div>';
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeInfoModal(); });
+    document.body.appendChild(modal);
+  }
+  document.getElementById('dm-info-title').textContent = opts.title || '';
+  document.getElementById('dm-info-body').textContent  = opts.body  || '';
+  modal.style.display = 'flex';
+}
+
+function closeInfoModal() {
+  var modal = document.getElementById('dm-info-modal');
+  if (modal) modal.style.display = 'none';
+}
+
 function confirmSignOut() {
   showConfirm({
     title:       'Sign Out',
@@ -144,7 +176,7 @@ function renderNav(user) {
     { href: 'encounter.html',     icon: '🐉', label: 'Encounters' },
     { href: 'dice.html',          icon: '🎲', label: 'Dice'       },
     { href: 'spells.html',        icon: '🔮', label: 'Spells'     },
-    { href: 'npc-generator.html', icon: '🎭', label: 'NPC Gen'    },
+    { href: 'npc-generator.html', icon: '🎭', label: 'Generator'  },
     { href: 'quick-ref.html',     icon: '📋', label: 'Reference'  },
   ];
 

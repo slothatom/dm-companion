@@ -190,6 +190,9 @@
         return;
       }
 
+      // Store items for modal lookup by index
+      window._refDisplayList = list;
+
       // Group by category
       const groups = {};
       list.forEach(function (r) {
@@ -199,6 +202,7 @@
 
       const order = ['condition', 'action', 'cover', 'skill'];
       let html = '';
+      let idx   = 0;
 
       order.forEach(function (cat) {
         if (!groups[cat]) return;
@@ -206,15 +210,22 @@
         html += '<div class="ref-grid">';
         groups[cat].forEach(function (r) {
           html += `
-            <div class="ref-card">
+            <div class="ref-card" onclick="openRefDetail(${idx})" title="Click to expand">
               <div class="ref-name">${escapeHtml(r.name)}</div>
               <div class="ref-desc">${escapeHtml(r.desc)}</div>
             </div>`;
+          idx++;
         });
         html += '</div>';
       });
 
       container.innerHTML = html;
+    }
+
+    function openRefDetail(index) {
+      const item = window._refDisplayList && window._refDisplayList[index];
+      if (!item) return;
+      showInfoModal({ title: item.name, body: item.desc });
     }
 
   </script>

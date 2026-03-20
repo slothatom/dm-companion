@@ -89,3 +89,80 @@ const MOTIVATIONS = [
   'Collecting information to sell to the highest bidder',
   'Hoping to gain enough status to move up in society'
 ];
+
+// =============================================
+//   Creature / Monster Generator Data
+// =============================================
+
+const CREATURE_ADJECTIVES = [
+  'Ancient','Corrupted','Feral','Void-touched','Cursed','Spectral','Shadow','Blazing',
+  'Frost-born','Vile','Ravenous','Twisted','Forsaken','Hollow','Raging','Plague-ridden',
+  'Stone','Iron-bound','Blood-soaked','Fungal','Withered','Starving','Deathless','Monstrous'
+];
+
+const CREATURE_BASE_NAMES = [
+  'Drake','Troll','Basilisk','Owlbear','Wyvern','Golem','Wraith','Revenant',
+  'Hydra','Chimera','Manticore','Naga','Lamia','Cyclops','Roc',
+  'Treant','Shambler','Horror','Stalker','Lurker','Hulk','Serpent','Beetle',
+  'Predator','Crawler','Abomination','Specter','Colossus','Devourer','Haunt'
+];
+
+const CREATURE_TYPES = [
+  'Beast','Beast','Undead','Undead','Dragon','Giant','Construct',
+  'Monstrosity','Monstrosity','Fiend','Humanoid (monstrous)','Plant',
+  'Elemental','Ooze','Fey','Aberration','Celestial (fallen)'
+];
+
+const CREATURE_SIZES = [
+  'Tiny','Small','Small','Medium','Medium','Medium','Large','Large','Large','Huge','Gargantuan'
+];
+
+const CREATURE_CRS = [
+  '1/8','1/4','1/2','1','1','2','2','3','4','5','6','7','8','9','10','12','15','17','20','24'
+];
+
+const CREATURE_TRAITS = [
+  'Pack Tactics: advantage on attack rolls when an ally is adjacent to the target',
+  'Keen Senses: advantage on Perception checks that rely on smell or hearing',
+  'Magic Resistance: advantage on saving throws against spells and magical effects',
+  'Undead Fortitude: on dropping to 0 HP, make a CON save (DC 5 + damage taken) or fall; on success, drop to 1 HP instead',
+  'Amphibious: can breathe both air and water',
+  'Frightful Presence: creatures within 120 ft must succeed on a WIS save or become Frightened for 1 minute',
+  'Spider Climb: can climb difficult surfaces including ceilings with no ability check',
+  'Damage Immunities: immune to non-magical bludgeoning, piercing, and slashing damage',
+  'Regeneration: regains HP at the start of each turn unless it took fire or radiant damage last round',
+  'Flyby: doesn\'t provoke opportunity attacks when it flies out of a creature\'s reach',
+  'Legendary Resistance (3/Day): if it fails a saving throw, it can choose to succeed instead',
+  'Charge: if it moves 20+ ft toward a target, it can knock the target prone on a successful hit (STR save)',
+  'Spellcasting: innate spellcasting using its mental ability score (DC 14)',
+  'Shapechanger: can use its action to polymorph into an alternate form or back to its true form',
+  'Aura of Fear: hostile creatures within 10 ft have disadvantage on attack rolls against the creature',
+  'Siege Monster: deals double damage to objects and structures',
+  'Sunlight Sensitivity: disadvantage on attack rolls and Perception in direct sunlight',
+  'False Appearance: while motionless it is indistinguishable from a natural object or part of the environment'
+];
+
+const CREATURE_ATTACKS = [
+  'Multiattack (two attacks per action)',
+  'Bite — reach 5 ft, piercing damage + grapple attempt on hit',
+  'Claws — reach 5 ft, slashing; makes two claw attacks per Multiattack',
+  'Tail Slam — reach 10 ft, bludgeoning; target knocked prone on failed STR save',
+  'Slam — reach 5 ft, bludgeoning damage',
+  'Tentacles — reach 15 ft, bludgeoning; grapples and restrains on hit',
+  'Gore — reach 5 ft, piercing; +2d6 damage if it charged this turn',
+  'Poisonous Sting — reach 5 ft, piercing + poison damage; CON save or poisoned for 1 hour',
+  'Breath Weapon — 30 ft cone or 60 ft line; DEX or CON save for half damage',
+  'Arcane Bolt — ranged spell attack (60/120 ft), force or necrotic damage',
+  'Necrotic Touch — reach 5 ft, necrotic; reduces target\'s HP maximum by the same amount until long rest',
+  'Life Drain — reach 5 ft, necrotic; target makes CON save or its HP maximum is reduced by the damage dealt',
+  'Swallow — must already be grappling target; on hit, target is restrained inside and takes acid damage each round',
+  'Petrifying Gaze — 30 ft, CON save; fail = restrained. Fail again next round = petrified'
+];
+
+const CREATURE_HABITATS = [
+  'Dense ancient forest','Crumbling dungeon complex','Mountain cave network',
+  'Coastal sea-cliffs','Fetid swamp','Volcanic caldera','Frozen tundra wastes',
+  'Haunted ruins','Underdark tunnels','Desert wastes','Feywild glade',
+  'Nine Hells outpost','Open ocean depths','City sewers','Cursed graveyard',
+  'Abandoned mine','Sunken temple','Storm-wracked highland moors'
+];

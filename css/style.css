@@ -176,6 +176,18 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
 }
 .sidebar-links::-webkit-scrollbar { display: none; }
 
+.sidebar-section-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 12px 12px 4px;
+  margin-top: 4px;
+}
+#main-nav.collapsed .sidebar-section-heading { display: none; }
+
 .sidebar-link {
   display: flex;
   align-items: center;

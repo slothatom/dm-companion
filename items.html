@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Items &amp; Equipment</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-backpack"></i> Items &amp; Equipment</h1>
+    <p class="subtitle">SRD items — weapons, armor, adventuring gear, tools, mounts, and magic items.</p>
+
+    <div class="spell-search">
+      <input type="text" id="item-search" placeholder="Search items..."
+        oninput="filterItems()" style="margin-bottom:10px;" />
+    </div>
+
+    <div class="spell-filters" id="item-cat-filters">
+      <button class="filter-btn active-filter" onclick="setItemCat('all', this)">All</button>
+      <button class="filter-btn" onclick="setItemCat('Weapons', this)">Weapons</button>
+      <button class="filter-btn" onclick="setItemCat('Armor', this)">Armor</button>
+      <button class="filter-btn" onclick="setItemCat('Gear', this)">Gear</button>
+      <button class="filter-btn" onclick="setItemCat('Tools', this)">Tools</button>
+      <button class="filter-btn" onclick="setItemCat('Mounts', this)">Mounts</button>
+      <button class="filter-btn" onclick="setItemCat('Magic', this)">Magic</button>
+    </div>
+
+    <div id="item-list"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'items.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/data/items-data.js"></script>
+  <script src="js/pages/items.js"></script>
+</body>
+</html>

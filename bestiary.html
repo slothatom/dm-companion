@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Bestiary</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-dragon"></i> Bestiary</h1>
+    <p class="subtitle">Monster stat blocks from the SRD — search by name, filter by type and challenge rating.</p>
+
+    <div class="spell-search">
+      <input type="text" id="bestiary-search" placeholder="Search monsters..."
+        oninput="filterBestiary()" style="margin-bottom:10px;" />
+    </div>
+
+    <div class="spell-filters" id="type-filters">
+      <button class="filter-btn active-filter" onclick="setMonType('all', this)">All</button>
+      <button class="filter-btn" onclick="setMonType('Beast', this)">Beast</button>
+      <button class="filter-btn" onclick="setMonType('Dragon', this)">Dragon</button>
+      <button class="filter-btn" onclick="setMonType('Fiend', this)">Fiend</button>
+      <button class="filter-btn" onclick="setMonType('Undead', this)">Undead</button>
+      <button class="filter-btn" onclick="setMonType('Humanoid', this)">Humanoid</button>
+      <button class="filter-btn" onclick="setMonType('Construct', this)">Construct</button>
+      <button class="filter-btn" onclick="setMonType('Elemental', this)">Elemental</button>
+      <button class="filter-btn" onclick="setMonType('Aberration', this)">Aberration</button>
+      <button class="filter-btn" onclick="setMonType('Celestial', this)">Celestial</button>
+      <button class="filter-btn" onclick="setMonType('Fey', this)">Fey</button>
+      <button class="filter-btn" onclick="setMonType('Giant', this)">Giant</button>
+      <button class="filter-btn" onclick="setMonType('Monstrosity', this)">Monstrosity</button>
+      <button class="filter-btn" onclick="setMonType('Ooze', this)">Ooze</button>
+      <button class="filter-btn" onclick="setMonType('Plant', this)">Plant</button>
+      <button class="filter-btn" onclick="setMonType('Swarm', this)">Swarm</button>
+    </div>
+
+    <div class="spell-filters" id="cr-filters" style="margin-top:8px;">
+      <button class="filter-btn active-filter" onclick="setCrRange('all', this)">All CR</button>
+      <button class="filter-btn" onclick="setCrRange('0', this)">0</button>
+      <button class="filter-btn" onclick="setCrRange('low', this)">1/8–1</button>
+      <button class="filter-btn" onclick="setCrRange('mid', this)">2–5</button>
+      <button class="filter-btn" onclick="setCrRange('high', this)">6–10</button>
+      <button class="filter-btn" onclick="setCrRange('epic', this)">11+</button>
+    </div>
+
+    <div id="bestiary-list"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'bestiary.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/data/monsters-data.js"></script>
+  <script src="js/pages/bestiary.js"></script>
+</body>
+</html>

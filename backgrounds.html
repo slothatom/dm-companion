@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Backgrounds</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-scroll"></i> Backgrounds</h1>
+    <p class="subtitle">Character backgrounds — proficiencies, equipment, and feature details.</p>
+
+    <div class="spell-search">
+      <input type="text" id="bg-search" placeholder="Search backgrounds..."
+        oninput="filterBackgrounds()" style="margin-bottom:10px;" />
+    </div>
+
+    <div id="bg-list"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'backgrounds.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/data/backgrounds-data.js"></script>
+  <script src="js/pages/backgrounds.js"></script>
+</body>
+</html>

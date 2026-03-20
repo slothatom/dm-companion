@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Glossary</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-book"></i> Glossary</h1>
+    <p class="subtitle">D&amp;D terms and definitions — combat, magic, abilities, conditions, and more.</p>
+
+    <div class="spell-search">
+      <input type="text" id="glossary-search" placeholder="Search terms..."
+        oninput="filterGlossary()" style="margin-bottom:10px;" />
+    </div>
+
+    <div class="spell-filters" id="gloss-cat-filters">
+      <button class="filter-btn active-filter" onclick="setGlossCat('all', this)">All</button>
+      <button class="filter-btn" onclick="setGlossCat('Combat', this)">Combat</button>
+      <button class="filter-btn" onclick="setGlossCat('Magic', this)">Magic</button>
+      <button class="filter-btn" onclick="setGlossCat('Ability', this)">Ability</button>
+      <button class="filter-btn" onclick="setGlossCat('General', this)">General</button>
+      <button class="filter-btn" onclick="setGlossCat('Condition', this)">Condition</button>
+    </div>
+
+    <div id="glossary-list"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'glossary.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/data/glossary-data.js"></script>
+  <script src="js/pages/glossary-ref.js"></script>
+</body>
+</html>

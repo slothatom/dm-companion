@@ -166,27 +166,62 @@ function confirmSignOut() {
 // =============================================
 
 function renderNav(user) {
-  const pages = [
-    { href: 'home.html',          icon: '<i class="fi fi-rr-home"></i>',           label: 'Home'       },
-    { href: 'index.html',         icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Notes'      },
-    { href: 'campaigns.html',     icon: '<i class="fi fi-rr-map"></i>',            label: 'Campaigns'  },
-    { href: 'characters.html',    icon: '<i class="fi fi-rr-skull"></i>',          label: 'Characters' },
-    { href: 'players.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Players'    },
-    { href: 'initiative.html',    icon: '<i class="fi fi-rr-sword"></i>',          label: 'Initiative' },
-    { href: 'encounter.html',     icon: '<i class="fi fi-rr-dragon"></i>',         label: 'Encounters' },
-    { href: 'dice.html',          icon: '<i class="fi fi-rr-dice-d20"></i>',       label: 'Dice'       },
-    { href: 'spells.html',        icon: '<i class="fi fi-rr-book-spells"></i>',    label: 'Spells'     },
-    { href: 'npc-generator.html', icon: '<i class="fi fi-rr-magic-wand"></i>',     label: 'Generator'  },
-    { href: 'quick-ref.html',     icon: '<i class="fi fi-rr-clipboard-list"></i>', label: 'Reference'  },
+  const navSections = [
+    { heading: '', pages: [
+      { href: 'home.html',          icon: '<i class="fi fi-rr-home"></i>',           label: 'Home'       },
+    ]},
+    { heading: 'Campaign', pages: [
+      { href: 'campaigns.html',     icon: '<i class="fi fi-rr-map"></i>',            label: 'Campaigns'  },
+      { href: 'index.html',         icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Notes'      },
+      { href: 'players.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Players'    },
+      { href: 'characters.html',    icon: '<i class="fi fi-rr-skull"></i>',          label: 'NPCs'       },
+    ]},
+    { heading: 'Play', pages: [
+      { href: 'initiative.html',    icon: '<i class="fi fi-rr-sword"></i>',          label: 'Initiative'     },
+      { href: 'encounter.html',     icon: '<i class="fi fi-rr-dragon"></i>',         label: 'Encounters'     },
+      { href: 'dice.html',          icon: '<i class="fi fi-rr-dice-d20"></i>',       label: 'Dice'           },
+      { href: 'dm-screen.html',     icon: '<i class="fi fi-rr-clipboard-list"></i>', label: 'DM Screen'      },
+    ]},
+    { heading: 'Generators', pages: [
+      { href: 'npc-generator.html',  icon: '<i class="fi fi-rr-magic-wand"></i>',     label: 'NPC Generator'  },
+      { href: 'stats-generator.html',icon: '<i class="fi fi-rr-dice-d20"></i>',       label: 'Stats'          },
+      { href: 'loot-generator.html', icon: '<i class="fi fi-rr-box-open"></i>',       label: 'Loot'           },
+      { href: 'market-generator.html',icon: '<i class="fi fi-rr-shop"></i>',          label: 'Market'         },
+      { href: 'treasure.html',       icon: '<i class="fi fi-rr-coins"></i>',          label: 'Treasure'       },
+      { href: 'trap-generator.html', icon: '<i class="fi fi-rr-triangle-warning"></i>',label: 'Traps'         },
+    ]},
+    { heading: 'Reference', pages: [
+      { href: 'spells.html',        icon: '<i class="fi fi-rr-book-spells"></i>',    label: 'Spells'         },
+      { href: 'bestiary.html',      icon: '<i class="fi fi-rr-dragon"></i>',         label: 'Bestiary'       },
+      { href: 'species.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Species'        },
+      { href: 'classes.html',       icon: '<i class="fi fi-rr-shield"></i>',         label: 'Classes'        },
+      { href: 'feats.html',         icon: '<i class="fi fi-rr-star"></i>',           label: 'Feats'          },
+      { href: 'items.html',         icon: '<i class="fi fi-rr-backpack"></i>',       label: 'Items'          },
+      { href: 'backgrounds.html',   icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Backgrounds'    },
+      { href: 'languages.html',     icon: '<i class="fi fi-rr-comment"></i>',        label: 'Languages'      },
+      { href: 'rules.html',         icon: '<i class="fi fi-rr-book"></i>',           label: 'Rules'          },
+      { href: 'quick-ref.html',     icon: '<i class="fi fi-rr-clipboard-list"></i>', label: 'Quick Ref'      },
+      { href: 'glossary.html',      icon: '<i class="fi fi-rr-book"></i>',           label: 'Glossary'       },
+      { href: 'hazards.html',       icon: '<i class="fi fi-rr-flame"></i>',          label: 'Hazards'        },
+      { href: 'objects.html',       icon: '<i class="fi fi-rr-box"></i>',            label: 'Objects'        },
+    ]},
+    { heading: 'World', pages: [
+      { href: 'maps.html',          icon: '<i class="fi fi-rr-map"></i>',            label: 'Maps'           },
+    ]},
   ];
 
-  const links = pages.map(function (p) {
-    const active = window.ACTIVE_PAGE === p.href ? ' active' : '';
-    return `
-      <a href="${p.href}" class="sidebar-link${active}" data-label="${p.label}">
-        <span class="sidebar-icon">${p.icon}</span>
-        <span class="sidebar-label">${p.label}</span>
-      </a>`;
+  const links = navSections.map(function (section) {
+    var headingHtml = section.heading
+      ? '<div class="sidebar-section-heading">' + section.heading + '</div>'
+      : '';
+    var pageLinks = section.pages.map(function (p) {
+      var active = window.ACTIVE_PAGE === p.href ? ' active' : '';
+      return '<a href="' + p.href + '" class="sidebar-link' + active + '" data-label="' + p.label + '">' +
+        '<span class="sidebar-icon">' + p.icon + '</span>' +
+        '<span class="sidebar-label">' + p.label + '</span>' +
+      '</a>';
+    }).join('');
+    return headingHtml + pageLinks;
   }).join('');
 
   // Profile + sign out

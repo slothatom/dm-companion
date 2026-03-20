@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Treasure &amp; Currency</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-coins"></i> Treasure &amp; Currency</h1>
+    <p class="subtitle">Currency converter and random treasure generation by wealth level.</p>
+
+    <div class="card" style="margin-bottom:20px;">
+      <h3>Currency Converter</h3>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <label for="convert-amount">Amount</label>
+        <input type="number" id="convert-amount" value="0" min="0" style="width:100px;" />
+        <label for="convert-denom">Denomination</label>
+        <select id="convert-denom">
+          <option value="pp">PP</option>
+          <option value="gp" selected>GP</option>
+          <option value="ep">EP</option>
+          <option value="sp">SP</option>
+          <option value="cp">CP</option>
+        </select>
+        <button onclick="convertCurrency()"><i class="fi fi-rr-refresh"></i> Convert</button>
+      </div>
+    </div>
+
+    <div id="convert-output"></div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <h3>Random Purse Generator</h3>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <label for="wealth-level">Wealth Level</label>
+        <select id="wealth-level">
+          <option value="poor">Poor</option>
+          <option value="modest" selected>Modest</option>
+          <option value="comfortable">Comfortable</option>
+          <option value="wealthy">Wealthy</option>
+          <option value="aristocratic">Aristocratic</option>
+        </select>
+        <button onclick="generatePurse()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+      </div>
+    </div>
+
+    <div id="purse-output"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'treasure.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/pages/treasure.js"></script>
+</body>
+</html>

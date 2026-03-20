@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Market Generator</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-shop"></i> Market Generator</h1>
+    <p class="subtitle">Generate random shop inventories — stock a store in seconds.</p>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
+      <label for="shop-type">Shop Type</label>
+      <select id="shop-type">
+        <option value="General Store">General Store</option>
+        <option value="Blacksmith">Blacksmith</option>
+        <option value="Alchemist">Alchemist</option>
+        <option value="Magic Shop">Magic Shop</option>
+        <option value="Tavern">Tavern</option>
+        <option value="Jeweler">Jeweler</option>
+        <option value="Exotic Goods">Exotic Goods</option>
+      </select>
+      <button onclick="generateShop()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+    </div>
+
+    <div id="shop-output"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'market-generator.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/pages/market-generator.js"></script>
+</body>
+</html>

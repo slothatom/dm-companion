@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion – Loot Generator</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-box-open"></i> Loot Generator</h1>
+    <p class="subtitle">Generate random loot drops by challenge rating tier.</p>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
+      <label for="cr-tier">CR Tier</label>
+      <select id="cr-tier">
+        <option value="0-4">CR 0–4</option>
+        <option value="5-10">CR 5–10</option>
+        <option value="11-16">CR 11–16</option>
+        <option value="17+">CR 17+</option>
+      </select>
+      <button onclick="generateLoot()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+    </div>
+
+    <div id="loot-output"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'loot-generator.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/pages/loot-generator.js"></script>
+</body>
+</html>

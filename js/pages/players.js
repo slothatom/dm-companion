@@ -49,11 +49,13 @@ async function loadPlayerCampaigns() {
 
   campaignsList = data;
   bar.style.display = '';
+  var typeMap = {};
+  try { typeMap = JSON.parse(localStorage.getItem('campaign-type-map-' + currentUserId)) || {}; } catch (e) {}
   const sel = document.getElementById('player-campaign-select');
   data.forEach(function (c) {
     const opt = document.createElement('option');
     opt.value       = c.id;
-    opt.textContent = c.name;
+    opt.textContent = c.name + (typeMap[c.id] === 'oneshot' ? ' (one-shot)' : '');
     sel.appendChild(opt);
   });
 
@@ -93,10 +95,13 @@ function buildPlayerCampaignDropdown(player) {
   if (campaignsList.length === 0 || !player._id) return '';
   var map = getPlayerCampaignMap();
   var current = map[player._id] || '';
+  var typeMap = {};
+  try { typeMap = JSON.parse(localStorage.getItem('campaign-type-map-' + currentUserId)) || {}; } catch (e) {}
   var options = '<option value="">No Campaign</option>' +
     campaignsList.map(function (c) {
       var sel = c.id === current ? ' selected' : '';
-      return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + escapeHtml(c.name) + '</option>';
+      var label = escapeHtml(c.name) + (typeMap[c.id] === 'oneshot' ? ' (one-shot)' : '');
+      return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + label + '</option>';
     }).join('');
   return '<select onchange="setPlayerCampaign(\'' + player._id + '\', this.value)" style="margin:0; min-width:140px; flex:1;">' + options + '</select>';
 }

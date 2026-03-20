@@ -14,11 +14,16 @@
 
   <main>
     <h1><i class="fi fi-rr-map"></i> Campaigns</h1>
-    <p class="subtitle">Manage your campaigns. Log sessions, keep world notes, and never lose the thread.</p>
+    <p class="subtitle">Manage your campaigns and one-shots. Log sessions, keep world notes, and never lose the thread.</p>
+
+    <div class="gen-type-tabs" style="margin-bottom:20px;">
+      <button class="gen-tab active-gen-tab" id="tab-campaign" onclick="setCampaignTab('campaign', this)"><i class="fi fi-rr-map"></i> Campaigns</button>
+      <button class="gen-tab" id="tab-oneshot" onclick="setCampaignTab('oneshot', this)"><i class="fi fi-rr-star"></i> One-Shots</button>
+    </div>
 
     <!-- Campaign selector -->
     <div class="card" id="campaign-selector-card">
-      <h3>Your Campaigns</h3>
+      <h3 id="selector-heading">Your Campaigns</h3>
       <div id="campaign-selector-loading"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
       <div id="campaign-selector" style="display:none;">
 
@@ -27,7 +32,7 @@
           <select id="campaign-select" onchange="switchCampaign()" style="flex:1; min-width:180px; margin:0;">
             <option value="">— Select a campaign —</option>
           </select>
-          <button onclick="showCreateCampaign()" style="white-space:nowrap;">+ New Campaign</button>
+          <button id="new-campaign-btn" onclick="showCreateCampaign()" style="white-space:nowrap;">+ New Campaign</button>
           <button class="danger" onclick="deleteCampaign()"
             id="delete-campaign-btn" style="white-space:nowrap; display:none;"><i class="fi fi-rr-trash"></i> Delete</button>
         </div>

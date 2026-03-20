@@ -11,8 +11,44 @@ let worldDirty         = false;
 let sessionsDirty      = false;
 let worldAutosave      = null;
 let sessionsAutosave   = null;
+let activeCampaignTab  = 'campaign';  // 'campaign' | 'oneshot'
 
 setupDirtyGuard(function () { return worldDirty || sessionsDirty; });
+
+// ── Campaign type helpers ─────────────────────────────────
+
+function getCampaignTypeMap() {
+  try {
+    return JSON.parse(localStorage.getItem('campaign-type-map-' + currentUserId)) || {};
+  } catch (e) { return {}; }
+}
+
+function saveCampaignTypeMap(map) {
+  localStorage.setItem('campaign-type-map-' + currentUserId, JSON.stringify(map));
+}
+
+function getCampaignType(id) {
+  return getCampaignTypeMap()[id] || 'campaign';
+}
+
+function setCampaignTab(tab, btn) {
+  activeCampaignTab = tab;
+  document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });
+  btn.classList.add('active-gen-tab');
+
+  var isOneshot = tab === 'oneshot';
+  document.getElementById('selector-heading').textContent = isOneshot ? 'Your One-Shots' : 'Your Campaigns';
+  document.getElementById('new-campaign-btn').textContent = isOneshot ? '+ New One-Shot' : '+ New Campaign';
+
+  // Reset selection
+  document.getElementById('campaign-select').value = '';
+  document.getElementById('campaign-detail').style.display       = 'none';
+  document.getElementById('campaign-rename-row').style.display   = 'none';
+  document.getElementById('delete-campaign-btn').style.display   = 'none';
+  activeCampaignId = null;
+
+  renderCampaignSelect();
+}
 
 (async function () {
   try {
@@ -41,6 +77,17 @@ async function loadCampaigns() {
 
   const saved = localStorage.getItem('active-campaign-' + currentUserId);
   if (saved && campaigns.find(function (c) { return c.id === saved; })) {
+    // Switch to correct tab for the saved campaign
+    var savedType = getCampaignType(saved);
+    if (savedType !== activeCampaignTab) {
+      activeCampaignTab = savedType;
+      document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });
+      document.getElementById('tab-' + savedType).classList.add('active-gen-tab');
+      var isOneshot = savedType === 'oneshot';
+      document.getElementById('selector-heading').textContent = isOneshot ? 'Your One-Shots' : 'Your Campaigns';
+      document.getElementById('new-campaign-btn').textContent = isOneshot ? '+ New One-Shot' : '+ New Campaign';
+      renderCampaignSelect();
+    }
     document.getElementById('campaign-select').value = saved;
     await loadCampaignDetail(saved);
   }
@@ -49,8 +96,15 @@ async function loadCampaigns() {
 function renderCampaignSelect() {
   const sel = document.getElementById('campaign-select');
   const cur = sel.value;
-  sel.innerHTML = '<option value="">— Select a campaign —</option>' +
-    campaigns.map(function (c) {
+  const typeMap = getCampaignTypeMap();
+  const filtered = campaigns.filter(function (c) {
+    return (typeMap[c.id] || 'campaign') === activeCampaignTab;
+  });
+  const placeholder = activeCampaignTab === 'oneshot'
+    ? '— Select a one-shot —'
+    : '— Select a campaign —';
+  sel.innerHTML = '<option value="">' + placeholder + '</option>' +
+    filtered.map(function (c) {
       return '<option value="' + escapeHtml(c.id) + '">' + escapeHtml(c.name) + '</option>';
     }).join('');
   if (cur) sel.value = cur;
@@ -177,19 +231,26 @@ function cancelCreateCampaign() {
 
 async function confirmCreateCampaign() {
   const name = document.getElementById('new-campaign-name').value.trim();
-  if (!name) { showToast('Enter a campaign name.', 'error'); return; }
+  if (!name) { showToast('Enter a name.', 'error'); return; }
   cancelCreateCampaign();
   const { data, error } = await db
     .from('campaigns')
     .insert({ user_id: currentUserId, name, world_notes: '' })
     .select()
     .single();
-  if (error) { showToast('Could not create campaign: ' + error.message, 'error'); return; }
+  if (error) { showToast('Could not create: ' + error.message, 'error'); return; }
+
+  // Save type
+  var typeMap = getCampaignTypeMap();
+  typeMap[data.id] = activeCampaignTab;
+  saveCampaignTypeMap(typeMap);
+
   campaigns.push(data);
   renderCampaignSelect();
   document.getElementById('campaign-select').value = data.id;
   await loadCampaignDetail(data.id);
-  showToast('Campaign "' + data.name + '" created!', 'success');
+  var label = activeCampaignTab === 'oneshot' ? 'One-shot' : 'Campaign';
+  showToast(label + ' "' + data.name + '" created!', 'success');
 }
 
 async function renameCampaign() {
@@ -218,6 +279,9 @@ async function deleteCampaign() {
       const { error } = await db
         .from('campaigns').delete().eq('id', activeCampaignId).eq('user_id', currentUserId);
       if (error) { showToast('Could not delete: ' + error.message, 'error'); return; }
+      var tMap = getCampaignTypeMap();
+      delete tMap[activeCampaignId];
+      saveCampaignTypeMap(tMap);
       campaigns = campaigns.filter(function (c) { return c.id !== activeCampaignId; });
       activeCampaignId = null;
       localStorage.removeItem('active-campaign-' + currentUserId);

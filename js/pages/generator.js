@@ -33,10 +33,12 @@ async function loadGenCampaigns() {
     sel.style.display = 'none';
     return;
   }
+  var typeMap = {};
+  try { typeMap = JSON.parse(localStorage.getItem('campaign-type-map-' + currentUserId)) || {}; } catch (e) {}
   data.forEach(function (c) {
     const opt = document.createElement('option');
     opt.value = c.id;
-    opt.textContent = c.name;
+    opt.textContent = c.name + (typeMap[c.id] === 'oneshot' ? ' (one-shot)' : '');
     sel.appendChild(opt);
   });
 }

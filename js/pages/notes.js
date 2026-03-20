@@ -33,10 +33,12 @@ async function loadCampaigns() {
     .order('created_at');
 
   const sel = document.getElementById('notes-campaign');
+  var typeMap = {};
+  try { typeMap = JSON.parse(localStorage.getItem('campaign-type-map-' + currentUserId)) || {}; } catch (e) {}
   (data || []).forEach(function (c) {
     const opt = document.createElement('option');
     opt.value       = c.id;
-    opt.textContent = c.name;
+    opt.textContent = c.name + (typeMap[c.id] === 'oneshot' ? ' (one-shot)' : '');
     sel.appendChild(opt);
   });
 

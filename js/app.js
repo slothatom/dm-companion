@@ -83,11 +83,59 @@ function setButtonLoading(btn, loading) {
 }
 
 // =============================================
+//   Confirmation Modal
+// =============================================
+
+// opts: { title, message, confirmText, onConfirm, danger }
+function showConfirm(opts) {
+  let modal = document.getElementById('dm-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'dm-modal';
+    modal.className = 'dm-modal-overlay';
+    modal.innerHTML = `
+      <div class="dm-modal" role="dialog" aria-modal="true">
+        <h3 class="dm-modal-title"  id="dm-modal-title"></h3>
+        <p  class="dm-modal-message" id="dm-modal-message"></p>
+        <div class="dm-modal-actions">
+          <button class="secondary" onclick="closeModal()">Cancel</button>
+          <button id="dm-modal-confirm"></button>
+        </div>
+      </div>`;
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.body.appendChild(modal);
+  }
+  document.getElementById('dm-modal-title').textContent   = opts.title   || 'Confirm';
+  document.getElementById('dm-modal-message').textContent = opts.message || '';
+  const btn = document.getElementById('dm-modal-confirm');
+  btn.textContent = opts.confirmText || 'Confirm';
+  btn.className   = opts.danger ? 'danger' : '';
+  btn.onclick     = function () { closeModal(); opts.onConfirm(); };
+  modal.style.display = 'flex';
+}
+
+function closeModal() {
+  const modal = document.getElementById('dm-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function confirmSignOut() {
+  showConfirm({
+    title:       'Sign Out',
+    message:     'Are you sure you want to sign out?',
+    confirmText: 'Sign Out',
+    danger:      true,
+    onConfirm:   signOut,
+  });
+}
+
+// =============================================
 //   Sidebar Navigation
 // =============================================
 
 function renderNav(user) {
   const pages = [
+    { href: 'home.html',          icon: '🏠', label: 'Home'       },
     { href: 'index.html',         icon: '🪶', label: 'Notes'      },
     { href: 'campaigns.html',     icon: '🗺', label: 'Campaigns'  },
     { href: 'characters.html',    icon: '💀', label: 'Characters' },
@@ -124,22 +172,18 @@ function renderNav(user) {
         <div class="profile-avatar-wrap">${avatarHtml}</div>
         <span class="sidebar-profile-email">${email}</span>
       </div>
-      <button class="sidebar-signout" onclick="signOut()">🚪 Sign Out</button>`;
+      <button class="sidebar-signout" onclick="confirmSignOut()">🚪 Sign Out</button>`;
   }
 
   const nav = document.getElementById('main-nav');
   nav.innerHTML = `
     <div class="sidebar-header">
-      <a href="index.html" class="sidebar-logo">
+      <a href="home.html" class="sidebar-logo">
         <span class="sidebar-logo-icon">⚔️</span>
         <span class="sidebar-logo-text">DM Companion</span>
       </a>
-    </div>
-
-    <div class="sidebar-toggle-row">
-      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
-        <span class="sidebar-toggle-arrow">◀</span>
-        <span class="sidebar-toggle-pin">📌</span>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar" title="Toggle sidebar">
+        ☰
       </button>
     </div>
 
@@ -153,44 +197,61 @@ function renderNav(user) {
       ${footerHtml}
     </div>`;
 
-  // Apply saved collapse state
+  // Apply saved collapse state (desktop only)
   const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
   if (isCollapsed) {
     nav.classList.add('collapsed');
     document.body.classList.add('sidebar-collapsed');
   }
 
-  // Mark body as having a sidebar (login page unaffected)
   document.body.classList.add('has-sidebar');
 
-  // ── Hover-to-peek behaviour ──────────────────────────────
-  // Only active when sidebar is locked closed (collapsed)
-  nav.addEventListener('mouseenter', function () {
-    if (nav.classList.contains('collapsed')) {
-      nav.classList.add('peeking');
-    }
-  });
+  // ── Mobile backdrop (injected once) ──────────────────────
+  if (!document.getElementById('sidebar-backdrop')) {
+    const backdrop = document.createElement('div');
+    backdrop.id        = 'sidebar-backdrop';
+    backdrop.className = 'sidebar-backdrop';
+    backdrop.onclick   = closeMobileSidebar;
+    document.body.appendChild(backdrop);
+  }
 
-  nav.addEventListener('mouseleave', function () {
-    nav.classList.remove('peeking');
-  });
+  // ── Mobile hamburger button (injected once) ───────────────
+  if (!document.getElementById('mobile-menu-btn')) {
+    const btn = document.createElement('button');
+    btn.id        = 'mobile-menu-btn';
+    btn.className = 'mobile-menu-btn';
+    btn.setAttribute('aria-label', 'Open menu');
+    btn.textContent = '☰';
+    btn.onclick = openMobileSidebar;
+    document.body.appendChild(btn);
+  }
 }
 
-// ── Toggle: click while peeking = lock open
-//           click while open    = lock closed
+// ── Desktop toggle: expand ↔ icon-only ────────────────────
 function toggleSidebar() {
   const nav = document.getElementById('main-nav');
-
   if (nav.classList.contains('collapsed')) {
-    // Locked closed → lock open
     nav.classList.remove('collapsed');
-    nav.classList.remove('peeking');
     document.body.classList.remove('sidebar-collapsed');
     localStorage.setItem('sidebar-collapsed', 'false');
   } else {
-    // Locked open → lock closed
     nav.classList.add('collapsed');
     document.body.classList.add('sidebar-collapsed');
     localStorage.setItem('sidebar-collapsed', 'true');
   }
+}
+
+// ── Mobile sidebar: slide-in overlay ─────────────────────
+function openMobileSidebar() {
+  document.getElementById('main-nav').classList.add('mobile-open');
+  const bd = document.getElementById('sidebar-backdrop');
+  if (bd) bd.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileSidebar() {
+  document.getElementById('main-nav').classList.remove('mobile-open');
+  const bd = document.getElementById('sidebar-backdrop');
+  if (bd) bd.classList.remove('visible');
+  document.body.style.overflow = '';
 }

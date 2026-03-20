@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1>⚔️ DM Companion</h1>
+    <p id="welcome-msg" class="home-welcome">Loading…</p>
+
+    <!-- Quick Start -->
+    <div class="card home-cta-card">
+      <h3>⚡ Quick Start</h3>
+      <div class="home-quick-actions">
+        <a href="initiative.html" class="home-quick-btn">⚔️ Initiative</a>
+        <a href="dice.html"       class="home-quick-btn">🎲 Dice</a>
+        <a href="npc-generator.html" class="home-quick-btn">🎭 NPC Gen</a>
+        <a href="spells.html"    class="home-quick-btn">🔮 Spells</a>
+        <a href="quick-ref.html" class="home-quick-btn">📋 Reference</a>
+        <a href="encounter.html" class="home-quick-btn">🐉 Encounter</a>
+      </div>
+    </div>
+
+    <!-- All tools -->
+    <h2>All Tools</h2>
+    <div class="home-grid">
+
+      <a href="index.html" class="home-card">
+        <span class="home-card-icon">🪶</span>
+        <div>
+          <div class="home-card-title">Session Notes</div>
+          <div class="home-card-desc">Plan your session and keep DM notes</div>
+        </div>
+      </a>
+
+      <a href="campaigns.html" class="home-card">
+        <span class="home-card-icon">🗺</span>
+        <div>
+          <div class="home-card-title">Campaigns</div>
+          <div class="home-card-desc">Session logs and world notes per campaign</div>
+        </div>
+      </a>
+
+      <a href="characters.html" class="home-card">
+        <span class="home-card-icon">💀</span>
+        <div>
+          <div class="home-card-title">Characters</div>
+          <div class="home-card-desc">NPCs and creatures with stats</div>
+        </div>
+      </a>
+
+      <a href="players.html" class="home-card">
+        <span class="home-card-icon">🍺</span>
+        <div>
+          <div class="home-card-title">Players</div>
+          <div class="home-card-desc">Track your party's stats and notes</div>
+        </div>
+      </a>
+
+      <a href="initiative.html" class="home-card">
+        <span class="home-card-icon">⚔️</span>
+        <div>
+          <div class="home-card-title">Initiative Tracker</div>
+          <div class="home-card-desc">Combat turn order, HP, and conditions</div>
+        </div>
+      </a>
+
+      <a href="encounter.html" class="home-card">
+        <span class="home-card-icon">🐉</span>
+        <div>
+          <div class="home-card-title">Encounter Builder</div>
+          <div class="home-card-desc">XP budget and difficulty calculator</div>
+        </div>
+      </a>
+
+      <a href="dice.html" class="home-card">
+        <span class="home-card-icon">🎲</span>
+        <div>
+          <div class="home-card-title">Dice Roller</div>
+          <div class="home-card-desc">Roll any die, expression, or advantage</div>
+        </div>
+      </a>
+
+      <a href="spells.html" class="home-card">
+        <span class="home-card-icon">🔮</span>
+        <div>
+          <div class="home-card-title">Spell Reference</div>
+          <div class="home-card-desc">Searchable D&amp;D 5e spell lookup</div>
+        </div>
+      </a>
+
+      <a href="npc-generator.html" class="home-card">
+        <span class="home-card-icon">🎭</span>
+        <div>
+          <div class="home-card-title">NPC Generator</div>
+          <div class="home-card-desc">Instant NPCs with personality and backstory</div>
+        </div>
+      </a>
+
+      <a href="quick-ref.html" class="home-card">
+        <span class="home-card-icon">📋</span>
+        <div>
+          <div class="home-card-title">Quick Reference</div>
+          <div class="home-card-desc">Conditions, actions, cover, and skills</div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'home.html';</script>
+  <script src="js/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (async function () {
+      const user = await requireAuth();
+      if (!user) return;
+      renderNav(user);
+      const name = user.user_metadata?.full_name || user.email || 'Adventurer';
+      const greeting = getGreeting();
+      document.getElementById('welcome-msg').textContent =
+        greeting + ', ' + name.split(' ')[0] + '. Ready to run a great game?';
+    })();
+
+    function getGreeting() {
+      const h = new Date().getHours();
+      if (h < 12) return 'Good morning';
+      if (h < 17) return 'Good afternoon';
+      return 'Good evening';
+    }
+  </script>
+</body>
+</html>

@@ -170,10 +170,17 @@
     }
 
     function clearAll() {
-      if (!confirm('Clear all combatants?')) return;
-      combatants = []; currentTurn = 0; round = 1;
-      document.getElementById('round-counter').textContent = 1;
-      renderList();
+      showConfirm({
+        title:       'Clear All',
+        message:     'Remove all combatants from the tracker?',
+        confirmText: 'Clear',
+        danger:      true,
+        onConfirm:   function () {
+          combatants = []; currentTurn = 0; round = 1;
+          document.getElementById('round-counter').textContent = 1;
+          renderList();
+        },
+      });
     }
 
     function removeCombatant(index) {

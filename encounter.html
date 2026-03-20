@@ -347,10 +347,17 @@
     }
 
     function clearAll() {
-      if (!confirm('Clear all monsters from this encounter?')) return;
-      creatures = [];
-      renderCreatures();
-      recalculate();
+      showConfirm({
+        title:       'Clear Encounter',
+        message:     'Remove all monsters from this encounter?',
+        confirmText: 'Clear',
+        danger:      true,
+        onConfirm:   function () {
+          creatures = [];
+          renderCreatures();
+          recalculate();
+        },
+      });
     }
 
   </script>

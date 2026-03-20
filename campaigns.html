@@ -300,19 +300,26 @@
     async function deleteCampaign() {
       const campaign = campaigns.find(function (c) { return c.id === activeCampaignId; });
       if (!campaign) return;
-      if (!confirm('Delete "' + campaign.name + '" and all its sessions? This cannot be undone.')) return;
-      const { error } = await db
-        .from('campaigns').delete().eq('id', activeCampaignId).eq('user_id', currentUserId);
-      if (error) { showToast('Could not delete: ' + error.message, 'error'); return; }
-      campaigns = campaigns.filter(function (c) { return c.id !== activeCampaignId; });
-      activeCampaignId = null;
-      localStorage.removeItem('active-campaign-' + currentUserId);
-      renderCampaignSelect();
-      document.getElementById('campaign-select').value = '';
-      document.getElementById('campaign-detail').style.display       = 'none';
-      document.getElementById('campaign-rename-row').style.display   = 'none';
-      document.getElementById('delete-campaign-btn').style.display   = 'none';
-      showToast('Campaign deleted.', 'info');
+      showConfirm({
+        title:       'Delete Campaign',
+        message:     'Delete "' + campaign.name + '" and all its sessions? This cannot be undone.',
+        confirmText: 'Delete',
+        danger:      true,
+        onConfirm:   async function () {
+          const { error } = await db
+            .from('campaigns').delete().eq('id', activeCampaignId).eq('user_id', currentUserId);
+          if (error) { showToast('Could not delete: ' + error.message, 'error'); return; }
+          campaigns = campaigns.filter(function (c) { return c.id !== activeCampaignId; });
+          activeCampaignId = null;
+          localStorage.removeItem('active-campaign-' + currentUserId);
+          renderCampaignSelect();
+          document.getElementById('campaign-select').value = '';
+          document.getElementById('campaign-detail').style.display       = 'none';
+          document.getElementById('campaign-rename-row').style.display   = 'none';
+          document.getElementById('delete-campaign-btn').style.display   = 'none';
+          showToast('Campaign deleted.', 'info');
+        },
+      });
     }
 
     // ── World Notes ────────────────────────────────────────────────

@@ -753,7 +753,8 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 }
 .filter-btn:hover, .filter-btn.active-filter { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-.spell-card { background: var(--surface); border: 1px solid var(--border-dim); border-left: 3px solid var(--primary); border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; }
+.spell-card { background: var(--surface); border: 1px solid var(--border-dim); border-left: 3px solid var(--primary); border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s; }
+.spell-card:hover { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
 .spell-card.hidden { display: none; }
 .spell-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
 .spell-name   { font-family: 'Cinzel', serif; font-size: 16px; font-weight: 600; color: var(--accent); }

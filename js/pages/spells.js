@@ -19,12 +19,16 @@ function renderSpells(list) {
     container.innerHTML = '<p class="empty-state">No spells match your search.</p>';
     return;
   }
-  container.innerHTML = list.map(function (s) {
+
+  // Store for modal lookup
+  window._spellDisplayList = list;
+
+  container.innerHTML = list.map(function (s, idx) {
     const levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
     const concBadge  = s.conc   ? '<span class="spell-badge badge-conc">Concentration</span>'  : '';
     const ritualBadge= s.ritual ? '<span class="spell-badge badge-ritual">Ritual</span>' : '';
     return `
-          <div class="spell-card">
+          <div class="spell-card" onclick="openSpellDetail(${idx})" title="Click to expand">
             <div class="spell-header">
               <span class="spell-name">${s.name}</span>
               <span class="spell-level">${levelLabel}</span>
@@ -40,6 +44,26 @@ function renderSpells(list) {
             <div class="spell-desc">${s.desc}</div>
           </div>`;
   }).join('');
+}
+
+function openSpellDetail(index) {
+  const s = window._spellDisplayList && window._spellDisplayList[index];
+  if (!s) return;
+
+  const levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
+  const tags = [levelLabel, s.school];
+  if (s.conc)   tags.push('Concentration');
+  if (s.ritual) tags.push('Ritual');
+
+  const body =
+    tags.join(' · ') + '\n\n' +
+    'Cast: ' + s.cast + '\n' +
+    'Range: ' + s.range + '\n' +
+    'Duration: ' + s.duration +
+    (s.components ? '\nComponents: ' + s.components : '') +
+    '\n\n' + s.desc;
+
+  showInfoModal({ title: s.name, body: body });
 }
 
 function setLevel(level, btn) {

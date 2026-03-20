@@ -33,7 +33,7 @@ function renderNav(user) {
       </a>`;
   }).join('');
 
-  // Profile + sign out — separate elements, no dropdown
+  // Profile + sign out
   let footerHtml = '';
   if (user) {
     const email    = user.email || 'Adventurer';
@@ -63,6 +63,7 @@ function renderNav(user) {
     <div class="sidebar-toggle-row">
       <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
         <span class="sidebar-toggle-arrow">◀</span>
+        <span class="sidebar-toggle-pin">📌</span>
       </button>
     </div>
 
@@ -85,11 +86,35 @@ function renderNav(user) {
 
   // Mark body as having a sidebar (login page unaffected)
   document.body.classList.add('has-sidebar');
+
+  // ── Hover-to-peek behaviour ──────────────────────────────
+  // Only active when sidebar is locked closed (collapsed)
+  nav.addEventListener('mouseenter', function () {
+    if (nav.classList.contains('collapsed')) {
+      nav.classList.add('peeking');
+    }
+  });
+
+  nav.addEventListener('mouseleave', function () {
+    nav.classList.remove('peeking');
+  });
 }
 
+// ── Toggle: click while peeking = lock open
+//           click while open    = lock closed
 function toggleSidebar() {
   const nav = document.getElementById('main-nav');
-  const isCollapsed = nav.classList.toggle('collapsed');
-  document.body.classList.toggle('sidebar-collapsed', isCollapsed);
-  localStorage.setItem('sidebar-collapsed', isCollapsed);
+
+  if (nav.classList.contains('collapsed')) {
+    // Locked closed → lock open
+    nav.classList.remove('collapsed');
+    nav.classList.remove('peeking');
+    document.body.classList.remove('sidebar-collapsed');
+    localStorage.setItem('sidebar-collapsed', 'false');
+  } else {
+    // Locked open → lock closed
+    nav.classList.add('collapsed');
+    document.body.classList.add('sidebar-collapsed');
+    localStorage.setItem('sidebar-collapsed', 'true');
+  }
 }

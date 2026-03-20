@@ -61,6 +61,34 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
 }
 #main-nav.collapsed { width: var(--sidebar-w-col); }
 
+/* Peek: hover while collapsed — slides open over content */
+#main-nav.collapsed.peeking {
+  width: var(--sidebar-w);
+  box-shadow: 4px 0 32px rgba(0,0,0,0.65);
+}
+#main-nav.collapsed.peeking .sidebar-logo-text,
+#main-nav.collapsed.peeking .sidebar-label,
+#main-nav.collapsed.peeking .sidebar-profile-email,
+#main-nav.collapsed.peeking .sidebar-signout {
+  max-width: 160px;
+  opacity: 1;
+  max-height: 38px;
+  padding: 7px 10px;
+  border-color: var(--border-dim);
+}
+#main-nav.collapsed.peeking .sidebar-toggle-row  { justify-content: flex-end; }
+#main-nav.collapsed.peeking .sidebar-toggle-arrow { display: none; }
+#main-nav.collapsed.peeking .sidebar-toggle-pin   { display: inline; }
+#main-nav.collapsed.peeking .sidebar-toggle {
+  width: auto;
+  padding: 0 8px;
+  border-color: var(--primary);
+  color: var(--primary);
+  font-size: 11px;
+  gap: 4px;
+}
+#main-nav.collapsed.peeking .sidebar-divider::after { display: block; }
+
 /* ---- Logo header ---- */
 .sidebar-header {
   padding: 20px 16px 12px;
@@ -116,6 +144,7 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 2px;
   transition: border-color 0.2s, color 0.2s;
 }
 .sidebar-toggle:hover { border-color: var(--primary); color: var(--primary); background: transparent; }
@@ -125,6 +154,12 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   transition: transform 0.25s ease;
 }
 #main-nav.collapsed .sidebar-toggle-arrow { transform: rotate(180deg); }
+
+/* Pin icon — only visible while peeking */
+.sidebar-toggle-pin {
+  display: none;
+  font-size: 11px;
+}
 
 /* ---- Arcane divider ---- */
 .sidebar-divider {

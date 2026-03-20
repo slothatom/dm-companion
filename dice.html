@@ -71,9 +71,15 @@
       <button onclick="rollCustom()"><i class="fi fi-rr-dice-d20"></i> Roll</button>
     </div>
 
-    <div style="text-align:center; margin: 28px 0 8px;">
-      <div class="roll-result" id="roll-result">—</div>
-      <div class="roll-label" id="roll-label">Click a die to roll</div>
+    <!-- Visual Dice Result -->
+    <div class="dice-result-area">
+      <div class="dice-visual" id="dice-visual">
+        <div class="dice-visual-shape">
+          <i class="fi fi-rr-dice-d20" id="dice-idle-icon"></i>
+          <span class="dice-number" id="dice-number" style="display:none;"></span>
+        </div>
+      </div>
+      <div class="roll-result-text" id="roll-label">Click a die to roll</div>
     </div>
 
     <h2><i class="fi fi-rr-dice-d20"></i> Roll History</h2>

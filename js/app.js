@@ -15,12 +15,12 @@ function showSaved() {
 
 function renderNav(user) {
   const pages = [
-    { href: 'index.html',         icon: '📜', label: 'Notes'      },
-    { href: 'characters.html',    icon: '🐉', label: 'Characters' },
-    { href: 'players.html',       icon: '🧙', label: 'Players'    },
+    { href: 'index.html',         icon: '🪶', label: 'Notes'      },
+    { href: 'characters.html',    icon: '💀', label: 'Characters' },
+    { href: 'players.html',       icon: '🍺', label: 'Players'    },
     { href: 'initiative.html',    icon: '⚔️', label: 'Initiative' },
     { href: 'dice.html',          icon: '🎲', label: 'Dice'       },
-    { href: 'spells.html',        icon: '📖', label: 'Spells'     },
+    { href: 'spells.html',        icon: '🔮', label: 'Spells'     },
     { href: 'npc-generator.html', icon: '🎭', label: 'NPC Gen'    },
   ];
 

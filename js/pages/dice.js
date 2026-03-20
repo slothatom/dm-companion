@@ -22,7 +22,7 @@ function rollCustom() {
   const modifier = parseInt(document.getElementById('modifier').value)  || 0;
 
   const rolls = [];
-  for (var i = 0; i < num; i++) {
+  for (let i = 0; i < num; i++) {
     rolls.push(Math.floor(Math.random() * sides) + 1);
   }
 
@@ -44,7 +44,7 @@ function rollExpression() {
   if (num < 1 || num > 20)       { showToast('Use between 1 and 20 dice.', 'error'); return; }
   if (sides < 2 || sides > 1000) { showToast('Die size must be 2–1000.', 'error'); return; }
   const rolls = [];
-  for (var i = 0; i < num; i++) rolls.push(Math.floor(Math.random() * sides) + 1);
+  for (let i = 0; i < num; i++) rolls.push(Math.floor(Math.random() * sides) + 1);
   const total = rolls.reduce(function (a, b) { return a + b; }, 0) + modifier;
   const label = num + 'd' + sides + (modifier !== 0 ? (modifier > 0 ? '+' : '') + modifier : '');
   displayResult(total, label, rolls, modifier);
@@ -77,7 +77,7 @@ function displayResult(total, label, rolls, modifier) {
     resultEl.style.opacity = '1';
   }, 100);
 
-  var detail = label;
+  let detail = label;
   if (rolls.length > 1) detail += ' → [' + rolls.join(', ') + ']';
   if (modifier !== 0)   detail += ' ' + (modifier >= 0 ? '+' : '') + modifier;
   labelEl.textContent = detail;

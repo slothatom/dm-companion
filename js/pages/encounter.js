@@ -63,9 +63,9 @@ function addCreature() {
   const xp   = parseInt(document.getElementById('new-xp').value) || 0;
   if (!name) { showToast('Please enter a monster name.', 'error'); return; }
   // Try to pull HP/AC from SRD bestiary
-  var hp = '', ac = '';
+  let hp = '', ac = '';
   if (typeof MONSTERS !== 'undefined') {
-    var match = MONSTERS.find(function (m) { return m.name.toLowerCase() === name.toLowerCase(); });
+    const match = MONSTERS.find(function (m) { return m.name.toLowerCase() === name.toLowerCase(); });
     if (match) { hp = String(match.hp || ''); ac = String(match.ac || ''); }
   }
   creatures.push({ name, cr, xp, hp: hp, ac: ac });
@@ -95,20 +95,20 @@ async function importCreatures() {
 }
 
 function importFromGenerator() {
-  var raw = localStorage.getItem('generator-session-entries');
+  const raw = localStorage.getItem('generator-session-entries');
   if (!raw) {
     showToast('No generator session entries found — generate and save creatures first.', 'info');
     return;
   }
-  var entries;
+  let entries;
   try { entries = JSON.parse(raw); } catch (e) {
     showToast('Could not parse generator data.', 'error');
     return;
   }
-  var added = 0;
+  let added = 0;
   entries.forEach(function (entry) {
     if (entry._type !== 'creature') return;
-    var xp = entry.cr ? (CR_TO_XP[entry.cr] || 0) : 0;
+    const xp = entry.cr ? (CR_TO_XP[entry.cr] || 0) : 0;
     creatures.push({ name: entry.name || 'Unknown', cr: entry.cr || '', xp: xp, hp: '', ac: '' });
     added++;
   });
@@ -258,7 +258,7 @@ function showMonsterBrowser() {
     return;
   }
 
-  var modal = document.getElementById('monster-browser-modal');
+  let modal = document.getElementById('monster-browser-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'monster-browser-modal';
@@ -293,7 +293,7 @@ function showMonsterBrowser() {
 }
 
 function closeMonsterBrowser() {
-  var modal = document.getElementById('monster-browser-modal');
+  const modal = document.getElementById('monster-browser-modal');
   if (modal) modal.style.display = 'none';
 }
 
@@ -305,27 +305,27 @@ function parseCR(cr) {
 }
 
 function filterMonsterBrowser() {
-  var q      = (document.getElementById('monster-search').value || '').toLowerCase();
-  var crFilter = document.getElementById('monster-cr-filter').value;
+  const q      = (document.getElementById('monster-search').value || '').toLowerCase();
+  const crFilter = document.getElementById('monster-cr-filter').value;
 
-  var filtered = MONSTERS.filter(function (m) {
-    var matchesSearch = !q || m.name.toLowerCase().includes(q) || (m.type || '').toLowerCase().includes(q);
+  const filtered = MONSTERS.filter(function (m) {
+    const matchesSearch = !q || m.name.toLowerCase().includes(q) || (m.type || '').toLowerCase().includes(q);
     if (!matchesSearch) return false;
     if (crFilter === 'all') return true;
-    var crNum = parseCR(m.cr);
+    const crNum = parseCR(m.cr);
     if (crFilter === '11-15') return crNum >= 11 && crNum <= 15;
     if (crFilter === '16-20') return crNum >= 16 && crNum <= 20;
     if (crFilter === '21+')   return crNum >= 21;
     return m.cr === crFilter;
   });
 
-  var container = document.getElementById('monster-browser-list');
+  const container = document.getElementById('monster-browser-list');
   if (filtered.length === 0) {
     container.innerHTML = '<p class="empty-state">No monsters match.</p>';
     return;
   }
   // Limit display to 60 to keep the DOM manageable
-  var shown = filtered.slice(0, 60);
+  const shown = filtered.slice(0, 60);
   container.innerHTML = shown.map(function (m, i) {
     return '<div class="ref-card" style="cursor:pointer; padding:10px 14px; margin-bottom:6px;" onclick="addMonsterFromBrowser(' + i + ')" title="Click to add to encounter">' +
       '<div style="display:flex; justify-content:space-between; align-items:center;">' +
@@ -345,9 +345,9 @@ function filterMonsterBrowser() {
 }
 
 function addMonsterFromBrowser(index) {
-  var m = window._monsterBrowserList && window._monsterBrowserList[index];
+  const m = window._monsterBrowserList && window._monsterBrowserList[index];
   if (!m) return;
-  var xp = CR_TO_XP[m.cr] || 0;
+  const xp = CR_TO_XP[m.cr] || 0;
   creatures.push({ name: m.name, cr: m.cr, xp: xp, hp: String(m.hp || ''), ac: String(m.ac || '') });
   renderCreatures();
   recalculate();
@@ -373,13 +373,13 @@ function saveEncounter() {
     showToast('Add some monsters before saving.', 'error');
     return;
   }
-  var name = prompt('Name this encounter:');
+  const name = prompt('Name this encounter:');
   if (!name || !name.trim()) return;
 
-  var partySize  = parseInt(document.getElementById('party-size').value) || 4;
-  var partyLevel = parseInt(document.getElementById('party-level').value) || 4;
+  const partySize  = parseInt(document.getElementById('party-size').value) || 4;
+  const partyLevel = parseInt(document.getElementById('party-level').value) || 4;
 
-  var saved = getSavedEncounters();
+  const saved = getSavedEncounters();
   saved.push({
     name:       name.trim(),
     creatures:  JSON.parse(JSON.stringify(creatures)),
@@ -393,11 +393,11 @@ function saveEncounter() {
 }
 
 function computeDifficultyLabel(encounter) {
-  var thresh = XP_THRESHOLDS[encounter.partyLevel] || XP_THRESHOLDS[1];
-  var baseXP = encounter.creatures.reduce(function (s, c) { return s + (c.xp || 0); }, 0);
-  var multi  = getMultiplier(encounter.creatures.length, encounter.partySize);
-  var adjXP  = Math.round(baseXP * multi);
-  var budgets = thresh.map(function (t) { return t * encounter.partySize; });
+  const thresh = XP_THRESHOLDS[encounter.partyLevel] || XP_THRESHOLDS[1];
+  const baseXP = encounter.creatures.reduce(function (s, c) { return s + (c.xp || 0); }, 0);
+  const multi  = getMultiplier(encounter.creatures.length, encounter.partySize);
+  const adjXP  = Math.round(baseXP * multi);
+  const budgets = thresh.map(function (t) { return t * encounter.partySize; });
 
   if      (adjXP < budgets[0]) return { label: 'Trivial',  cls: 'diff-trivial' };
   else if (adjXP < budgets[1]) return { label: 'Easy',     cls: 'diff-easy' };
@@ -407,8 +407,8 @@ function computeDifficultyLabel(encounter) {
 }
 
 function loadSavedEncounters() {
-  var saved = getSavedEncounters();
-  var container = document.getElementById('saved-encounters-list');
+  const saved = getSavedEncounters();
+  const container = document.getElementById('saved-encounters-list');
   if (!container) return;
 
   if (saved.length === 0) {
@@ -417,10 +417,10 @@ function loadSavedEncounters() {
   }
 
   container.innerHTML = saved.map(function (enc, i) {
-    var diff = computeDifficultyLabel(enc);
-    var date = new Date(enc.savedAt);
-    var dateStr = date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-    var count = enc.creatures.length;
+    const diff = computeDifficultyLabel(enc);
+    const date = new Date(enc.savedAt);
+    const dateStr = date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    const count = enc.creatures.length;
     return '<div class="ref-card" style="padding:12px 14px; margin-bottom:8px;">' +
       '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">' +
         '<div>' +
@@ -442,8 +442,8 @@ function loadSavedEncounters() {
 }
 
 function loadEncounter(index) {
-  var saved = getSavedEncounters();
-  var enc = saved[index];
+  const saved = getSavedEncounters();
+  const enc = saved[index];
   if (!enc) return;
 
   creatures = JSON.parse(JSON.stringify(enc.creatures));
@@ -455,8 +455,8 @@ function loadEncounter(index) {
 }
 
 function deleteSavedEncounter(index) {
-  var saved = getSavedEncounters();
-  var enc = saved[index];
+  const saved = getSavedEncounters();
+  const enc = saved[index];
   if (!enc) return;
 
   showConfirm({

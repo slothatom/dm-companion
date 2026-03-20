@@ -53,7 +53,7 @@ function restoreInitiativeState() {
 }
 
 function rollInitiative() {
-  var result = Math.floor(Math.random() * 20) + 1;
+  const result = Math.floor(Math.random() * 20) + 1;
   document.getElementById('new-init').value = result;
 }
 

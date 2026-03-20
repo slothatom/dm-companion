@@ -14,12 +14,16 @@ let activeCampaignFilter = '';   // '' = show all
 setupDirtyGuard(function () { return isDirty; });
 
 (async function () {
-  const user = await requireAuth();
-  if (!user) return;
-  currentUserId = user.id;
-  renderNav(user);
-  await loadCharCampaigns();
-  await loadAll();
+  try {
+    const user = await requireAuth();
+    if (!user) return;
+    currentUserId = user.id;
+    renderNav(user);
+    await loadCharCampaigns();
+    await loadAll();
+  } catch (err) {
+    showToast('Failed to load characters page: ' + err.message, 'error');
+  }
 })();
 
 // ── Campaign filter helpers ───────────────────────────────
@@ -54,23 +58,23 @@ async function loadCharCampaigns() {
   bar.style.display = '';
   const sel = document.getElementById('char-campaign-select');
   (data || []).forEach(function (c) {
-    var opt = document.createElement('option');
+    const opt = document.createElement('option');
     opt.value    = c.id;
     opt.textContent = c.name;
     sel.appendChild(opt);
   });
 
   // Restore last-used filter
-  var stored = localStorage.getItem('char-campaign-filter-' + currentUserId);
+  const stored = localStorage.getItem('char-campaign-filter-' + currentUserId);
   if (stored) {
-    var exists = Array.from(sel.options).some(function (o) { return o.value === stored; });
+    const exists = Array.from(sel.options).some(function (o) { return o.value === stored; });
     if (exists) sel.value = stored;
   }
   activeCampaignFilter = sel.value;
 }
 
 function filterByCampaign() {
-  var sel = document.getElementById('char-campaign-select');
+  const sel = document.getElementById('char-campaign-select');
   activeCampaignFilter = sel.value;
   localStorage.setItem('char-campaign-filter-' + currentUserId, activeCampaignFilter);
   renderAll();
@@ -78,11 +82,11 @@ function filterByCampaign() {
 
 function filteredList(list, type) {
   if (!activeCampaignFilter) return list;
-  var map = getCharCampaignMap();
+  const map = getCharCampaignMap();
   return list.filter(function (item) {
     if (!item._id) return true;               // new unsaved items always visible
-    var key = charKey(type, item._id);
-    var cid = map[key];
+    const key = charKey(type, item._id);
+    const cid = map[key];
     return cid === activeCampaignFilter || !cid;  // matches campaign OR unassigned
   });
 }
@@ -125,7 +129,7 @@ function buildCard(item, index, type) {
   const crField = type === 'creature' ? `
             <div>
               <label>CR</label>
-              <input type="text" value="${escapeHtml(item.cr)}"
+              <input type="text" value="${escapeHtml(String(item.cr ?? ''))}"
                 onchange="updateField('${type}', ${index}, 'cr', this.value)"
                 placeholder="e.g. 2 or 1/2" />
             </div>` : '';
@@ -140,13 +144,13 @@ function buildCard(item, index, type) {
             </div>
             <div>
               <label>HP</label>
-              <input type="number" value="${escapeHtml(item.hp)}"
+              <input type="number" value="${escapeHtml(String(item.hp ?? ''))}"
                 onchange="updateField('${type}', ${index}, 'hp', this.value)"
                 placeholder="e.g. 30" />
             </div>
             <div>
               <label>AC</label>
-              <input type="number" value="${escapeHtml(item.ac)}"
+              <input type="number" value="${escapeHtml(String(item.ac ?? ''))}"
                 onchange="updateField('${type}', ${index}, 'ac', this.value)"
                 placeholder="e.g. 13" />
             </div>
@@ -185,26 +189,26 @@ function addCreature() {
 
 function updateField(type, index, field, value) {
   // index is relative to the filtered list — resolve back to the master array
-  var master = type === 'npc' ? npcs : creatures;
-  var visible = filteredList(master, type);
-  var item = visible[index];
+  const master = type === 'npc' ? npcs : creatures;
+  const visible = filteredList(master, type);
+  const item = visible[index];
   if (item) item[field] = value;
   markDirty();
 }
 
 function removeItem(type, index) {
   // index is relative to the filtered list — resolve back to the master array
-  var master = type === 'npc' ? npcs : creatures;
-  var visible = filteredList(master, type);
-  var item = visible[index];
+  const master = type === 'npc' ? npcs : creatures;
+  const visible = filteredList(master, type);
+  const item = visible[index];
   if (!item) return;
-  var masterIndex = master.indexOf(item);
+  const masterIndex = master.indexOf(item);
 
   if (type === 'npc') {
     if (item._id) {
       deletedNpcIds.push(item._id);
       // Clean up campaign map entry
-      var map = getCharCampaignMap();
+      const map = getCharCampaignMap();
       delete map[charKey('npc', item._id)];
       saveCharCampaignMap(map);
     }
@@ -213,7 +217,7 @@ function removeItem(type, index) {
   if (type === 'creature') {
     if (item._id) {
       deletedCreatureIds.push(item._id);
-      var map2 = getCharCampaignMap();
+      const map2 = getCharCampaignMap();
       delete map2[charKey('creature', item._id)];
       saveCharCampaignMap(map2);
     }
@@ -229,6 +233,17 @@ async function saveCharacters() {
   clearTimeout(autosaveTimer);
   const btn = document.getElementById('save-btn');
   setButtonLoading(btn, true);
+
+  // Validate: filter out items with empty/whitespace-only names
+  const emptyNpcs = npcs.filter(function (n) { return !n.name || !n.name.trim(); });
+  const emptyCreatures = creatures.filter(function (c) { return !c.name || !c.name.trim(); });
+  const skipped = emptyNpcs.length + emptyCreatures.length;
+  npcs      = npcs.filter(function (n) { return n.name && n.name.trim(); });
+  creatures = creatures.filter(function (c) { return c.name && c.name.trim(); });
+  if (skipped > 0) {
+    showToast('Skipped ' + skipped + ' item(s) with no name.', 'info');
+    renderAll();
+  }
 
   // Step 1: delete only rows the user explicitly removed
   const deleteOps = [];
@@ -280,13 +295,13 @@ async function saveCharacters() {
         .eq('user_id', currentUserId).order('created_at', { ascending: false }).limit(newNpcsWithoutId.length);
       if (npcRows) {
         const reversed = npcRows.slice().reverse();
-        for (var ni = 0; ni < newNpcsWithoutId.length && ni < reversed.length; ni++) {
+        for (let ni = 0; ni < newNpcsWithoutId.length && ni < reversed.length; ni++) {
           newNpcsWithoutId[ni]._id = reversed[ni].id;
           // Auto-associate new NPC with active campaign
           if (activeCampaignFilter) {
-            var map = getCharCampaignMap();
-            map[charKey('npc', reversed[ni].id)] = activeCampaignFilter;
-            saveCharCampaignMap(map);
+            const npcMap = getCharCampaignMap();
+            npcMap[charKey('npc', reversed[ni].id)] = activeCampaignFilter;
+            saveCharCampaignMap(npcMap);
           }
         }
       }
@@ -297,13 +312,13 @@ async function saveCharacters() {
         .eq('user_id', currentUserId).order('created_at', { ascending: false }).limit(newCreaturesWithoutId.length);
       if (creatureRows) {
         const reversed = creatureRows.slice().reverse();
-        for (var ci = 0; ci < newCreaturesWithoutId.length && ci < reversed.length; ci++) {
+        for (let ci = 0; ci < newCreaturesWithoutId.length && ci < reversed.length; ci++) {
           newCreaturesWithoutId[ci]._id = reversed[ci].id;
           // Auto-associate new creature with active campaign
           if (activeCampaignFilter) {
-            var map2 = getCharCampaignMap();
-            map2[charKey('creature', reversed[ci].id)] = activeCampaignFilter;
-            saveCharCampaignMap(map2);
+            const creatureMap = getCharCampaignMap();
+            creatureMap[charKey('creature', reversed[ci].id)] = activeCampaignFilter;
+            saveCharCampaignMap(creatureMap);
           }
         }
       }

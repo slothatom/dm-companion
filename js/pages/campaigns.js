@@ -15,11 +15,15 @@ let sessionsAutosave   = null;
 setupDirtyGuard(function () { return worldDirty || sessionsDirty; });
 
 (async function () {
-  const user = await requireAuth();
-  if (!user) return;
-  currentUserId = user.id;
-  renderNav(user);
-  await loadCampaigns();
+  try {
+    const user = await requireAuth();
+    if (!user) return;
+    currentUserId = user.id;
+    renderNav(user);
+    await loadCampaigns();
+  } catch (err) {
+    showToast('Failed to load campaigns page: ' + err.message, 'error');
+  }
 })();
 
 // ── Load ───────────────────────────────────────────────────────
@@ -128,7 +132,7 @@ function renderSessions() {
           <div class="row-actions" style="align-items:flex-end;">
             <div>
               <label>Session #</label>
-              <input type="number" value="${escapeHtml(String(s.sessionNumber))}" min="1"
+              <input type="number" value="${escapeHtml(String(s.sessionNumber ?? ''))}" min="1"
                 style="width:70px; margin:0;"
                 onchange="updateSession(${i}, 'sessionNumber', this.value)" />
             </div>

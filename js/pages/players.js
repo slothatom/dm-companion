@@ -11,19 +11,25 @@ let autosaveTimer    = null;
 setupDirtyGuard(function () { return isDirty; });
 
 (async function () {
-  const user = await requireAuth();
-  if (!user) return;
-  currentUserId = user.id;
-  renderNav(user);
-  await loadPlayers();
+  try {
+    const user = await requireAuth();
+    if (!user) return;
+    currentUserId = user.id;
+    renderNav(user);
+    await loadPlayers();
+  } catch (err) {
+    showToast('Failed to load players page: ' + err.message, 'error');
+  }
 })();
 
 async function loadPlayers() {
-  const { data } = await db
+  const { data, error } = await db
     .from('players')
     .select('*')
     .eq('user_id', currentUserId)
     .order('created_at');
+
+  if (error) { showToast('Could not load players: ' + error.message, 'error'); return; }
 
   players = (data || []).map(function (r) {
     return {
@@ -83,25 +89,25 @@ function buildPlayerCard(player, index) {
             </div>
             <div>
               <label>Level</label>
-              <input type="number" value="${escapeHtml(player.level)}"
+              <input type="number" value="${escapeHtml(String(player.level ?? ''))}"
                 onchange="updatePlayer(${index}, 'level', this.value)"
                 placeholder="e.g. 5" />
             </div>
             <div>
               <label>HP</label>
-              <input type="number" value="${escapeHtml(player.hp)}"
+              <input type="number" value="${escapeHtml(String(player.hp ?? ''))}"
                 onchange="updatePlayer(${index}, 'hp', this.value)"
                 placeholder="e.g. 38" />
             </div>
             <div>
               <label>AC</label>
-              <input type="number" value="${escapeHtml(player.ac)}"
+              <input type="number" value="${escapeHtml(String(player.ac ?? ''))}"
                 onchange="updatePlayer(${index}, 'ac', this.value)"
                 placeholder="e.g. 15" />
             </div>
             <div>
               <label>Passive Perception</label>
-              <input type="number" value="${escapeHtml(player.passivePerception)}"
+              <input type="number" value="${escapeHtml(String(player.passivePerception ?? ''))}"
                 onchange="updatePlayer(${index}, 'passivePerception', this.value)"
                 placeholder="e.g. 13" />
             </div>
@@ -153,6 +159,18 @@ async function savePlayers() {
   clearTimeout(autosaveTimer);
   const btn = document.getElementById('save-btn');
   setButtonLoading(btn, true);
+
+  // Validate: filter out players with both empty playerName AND empty charName
+  const emptyPlayers = players.filter(function (p) {
+    return (!p.playerName || !p.playerName.trim()) && (!p.charName || !p.charName.trim());
+  });
+  if (emptyPlayers.length > 0) {
+    players = players.filter(function (p) {
+      return (p.playerName && p.playerName.trim()) || (p.charName && p.charName.trim());
+    });
+    showToast('Skipped ' + emptyPlayers.length + ' item(s) with no name.', 'info');
+    renderPlayers();
+  }
 
   // Step 1: delete only rows the user explicitly removed
   if (deletedPlayerIds.length > 0) {
@@ -212,8 +230,8 @@ function saveSlots(playerId, slots) {
 }
 
 function toggleSlots(index) {
-  var body  = document.getElementById('slots-body-' + index);
-  var arrow = document.getElementById('slots-arrow-' + index);
+  const body  = document.getElementById('slots-body-' + index);
+  const arrow = document.getElementById('slots-arrow-' + index);
   if (body.style.display === 'none') {
     body.style.display = 'block';
     arrow.textContent  = '▴';
@@ -224,13 +242,13 @@ function toggleSlots(index) {
 }
 
 function renderSlots(player, index) {
-  var slots = getSlots(player._id);
-  var html  = '';
-  for (var lvl = 1; lvl <= 9; lvl++) {
-    var data = slots[lvl] || { max: 0, used: 0 };
-    var pips = '';
-    for (var p = 0; p < data.max; p++) {
-      var isUsed = p < data.used;
+  const slots = getSlots(player._id);
+  let html  = '';
+  for (let lvl = 1; lvl <= 9; lvl++) {
+    const data = slots[lvl] || { max: 0, used: 0 };
+    let pips = '';
+    for (let p = 0; p < data.max; p++) {
+      const isUsed = p < data.used;
       pips += '<span class="slot-pip' + (isUsed ? ' used' : '') + '" onclick="toggleSlot(' + index + ',' + lvl + ',' + p + ')"></span>';
     }
     html += '<div class="slot-row">'
@@ -244,28 +262,28 @@ function renderSlots(player, index) {
 }
 
 function refreshSlotsUI(index) {
-  var body = document.getElementById('slots-body-' + index);
+  const body = document.getElementById('slots-body-' + index);
   if (body) {
     body.innerHTML = renderSlots(players[index], index);
   }
 }
 
 function updateSlotMax(index, level, max) {
-  var player = players[index];
+  const player = players[index];
   if (!player._id) return;
-  var slots = getSlots(player._id);
+  const slots = getSlots(player._id);
   max = Math.max(0, Math.min(9, parseInt(max, 10) || 0));
-  var prev  = slots[level] || { max: 0, used: 0 };
+  const prev  = slots[level] || { max: 0, used: 0 };
   slots[level] = { max: max, used: Math.min(prev.used, max) };
   saveSlots(player._id, slots);
   refreshSlotsUI(index);
 }
 
 function toggleSlot(index, level, pipIndex) {
-  var player = players[index];
+  const player = players[index];
   if (!player._id) return;
-  var slots = getSlots(player._id);
-  var data  = slots[level] || { max: 0, used: 0 };
+  const slots = getSlots(player._id);
+  const data  = slots[level] || { max: 0, used: 0 };
   // Clicking pip at pipIndex: if it's within 'used' range, reduce used to that pip.
   // Otherwise, increase used to include that pip.
   if (pipIndex < data.used) {

@@ -11,12 +11,16 @@ let autosaveTimer    = null;
 setupDirtyGuard(function () { return isDirty; });
 
 (async function () {
-  const user = await requireAuth();
-  if (!user) return;
-  currentUserId = user.id;
-  renderNav(user);
-  await loadCampaigns();
-  await loadNotesForCampaign();
+  try {
+    const user = await requireAuth();
+    if (!user) return;
+    currentUserId = user.id;
+    renderNav(user);
+    await loadCampaigns();
+    await loadNotesForCampaign();
+  } catch (err) {
+    showToast('Failed to load notes page: ' + err.message, 'error');
+  }
 })();
 
 // ── Campaign selector ─────────────────────────────────────

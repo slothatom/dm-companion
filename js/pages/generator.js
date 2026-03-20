@@ -133,7 +133,7 @@ function generate() {
 
 function copyEntry() {
   if (!currentEntry) { showToast('Generate something first!', 'info'); return; }
-  var text;
+  let text;
   if (currentEntry._type === 'npc') {
     text = [
       currentEntry.name,

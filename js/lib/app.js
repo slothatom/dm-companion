@@ -50,14 +50,14 @@ function escapeHtml(str) {
 
 function showToast(message, type) {
   // type: 'success' | 'error' | 'info'
-  var container = document.getElementById('toast-container');
+  let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');
     container.id = 'toast-container';
     document.body.appendChild(container);
   }
 
-  var toast = document.createElement('div');
+  const toast = document.createElement('div');
   toast.className = 'toast toast-' + (type || 'info');
   toast.textContent = message;
   container.appendChild(toast);
@@ -125,7 +125,7 @@ function closeModal() {
 
 // opts: { title, body }
 function showInfoModal(opts) {
-  var modal = document.getElementById('dm-info-modal');
+  let modal = document.getElementById('dm-info-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'dm-info-modal';
@@ -147,7 +147,7 @@ function showInfoModal(opts) {
 }
 
 function closeInfoModal() {
-  var modal = document.getElementById('dm-info-modal');
+  const modal = document.getElementById('dm-info-modal');
   if (modal) modal.style.display = 'none';
 }
 
@@ -231,7 +231,7 @@ function renderNav(user) {
     </div>`;
 
   // Apply saved theme preference
-  var savedTheme = localStorage.getItem('theme') || '';
+  const savedTheme = localStorage.getItem('theme') || '';
   document.documentElement.dataset.theme = savedTheme;
   updateThemeButton();
 
@@ -245,8 +245,11 @@ function renderNav(user) {
   document.body.classList.add('has-sidebar');
 
   // Reveal main content now that auth is complete and nav is rendered
-  var mainEl = document.querySelector('main');
+  const mainEl = document.querySelector('main');
   if (mainEl) mainEl.style.visibility = 'visible';
+
+  // Start loading timeout safety net
+  setupLoadingTimeout();
 
   // ── Mobile backdrop (injected once) ──────────────────────
   if (!document.getElementById('sidebar-backdrop')) {
@@ -293,18 +296,45 @@ function openMobileSidebar() {
 
 // ── Theme toggle ────────────────────────────────────────
 function toggleTheme() {
-  var current = document.documentElement.dataset.theme;
-  var next = current === 'light' ? '' : 'light';
+  const current = document.documentElement.dataset.theme;
+  const next = current === 'light' ? '' : 'light';
   document.documentElement.dataset.theme = next;
   localStorage.setItem('theme', next);
   updateThemeButton();
 }
 
 function updateThemeButton() {
-  var btn = document.getElementById('theme-toggle-btn');
+  const btn = document.getElementById('theme-toggle-btn');
   if (!btn) return;
-  var isLight = document.documentElement.dataset.theme === 'light';
+  const isLight = document.documentElement.dataset.theme === 'light';
   btn.textContent = isLight ? '\u2600\uFE0F Light' : '\uD83C\uDF19 Dark';
+}
+
+// ── Loading timeout safety net ────────────────────────────
+// If any .loading-state elements are still visible after 15 seconds,
+// replace them with an error message so the user isn't stuck on a spinner.
+function setupLoadingTimeout() {
+  setTimeout(function () {
+    const loaders = document.querySelectorAll('.loading-state');
+    loaders.forEach(function (el) {
+      if (el.offsetParent !== null) {
+        el.innerHTML = '<p style="color:#aa4040;">Something went wrong — data failed to load. Please refresh the page.</p>';
+      }
+    });
+  }, 15000);
+}
+
+// ── Tagged template literal helper for safe HTML ─────────
+// Auto-escapes all interpolated values to prevent XSS.
+// Usage: html`<div>${userInput}</div>` — each ${} value is escaped.
+// This is a utility for future use; existing code is not refactored to use it.
+function html(strings) {
+  let result = strings[0];
+  for (let i = 1; i < arguments.length; i++) {
+    result += escapeHtml(String(arguments[i] ?? ''));
+    result += strings[i];
+  }
+  return result;
 }
 
 function closeMobileSidebar() {

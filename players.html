@@ -32,7 +32,8 @@
   <script>
 
     let players = [];
-    let currentUserId = null;
+    let currentUserId  = null;
+    let deletedPlayerIds = [];
 
     (async function () {
       const user = await requireAuth();
@@ -51,6 +52,7 @@
 
       players = (data || []).map(function (r) {
         return {
+          _id:        r.id,
           playerName: r.player_name,
           charName:   r.char_name,
           charClass:  r.char_class,
@@ -60,6 +62,7 @@
           notes:      r.notes
         };
       });
+      deletedPlayerIds = [];
       renderPlayers();
     }
 
@@ -76,19 +79,19 @@
           <div class="stat-grid">
             <div>
               <label>Player Name</label>
-              <input type="text" value="${player.playerName || ''}"
+              <input type="text" value="${escapeHtml(player.playerName)}"
                 onchange="updatePlayer(${index}, 'playerName', this.value)"
                 placeholder="e.g. Sarah" />
             </div>
             <div>
               <label>Character Name</label>
-              <input type="text" value="${player.charName || ''}"
+              <input type="text" value="${escapeHtml(player.charName)}"
                 onchange="updatePlayer(${index}, 'charName', this.value)"
                 placeholder="e.g. Aria Swiftblade" />
             </div>
             <div>
               <label>Class</label>
-              <input type="text" value="${player.charClass || ''}"
+              <input type="text" value="${escapeHtml(player.charClass)}"
                 onchange="updatePlayer(${index}, 'charClass', this.value)"
                 placeholder="e.g. Rogue" />
             </div>
@@ -96,19 +99,19 @@
           <div class="stat-grid">
             <div>
               <label>Race</label>
-              <input type="text" value="${player.race || ''}"
+              <input type="text" value="${escapeHtml(player.race)}"
                 onchange="updatePlayer(${index}, 'race', this.value)"
                 placeholder="e.g. Half-Elf" />
             </div>
             <div>
               <label>Level</label>
-              <input type="number" value="${player.level || ''}"
+              <input type="number" value="${escapeHtml(player.level)}"
                 onchange="updatePlayer(${index}, 'level', this.value)"
                 placeholder="e.g. 5" />
             </div>
             <div>
               <label>HP</label>
-              <input type="number" value="${player.hp || ''}"
+              <input type="number" value="${escapeHtml(player.hp)}"
                 onchange="updatePlayer(${index}, 'hp', this.value)"
                 placeholder="e.g. 38" />
             </div>
@@ -118,7 +121,7 @@
             onchange="updatePlayer(${index}, 'notes', this.value)"
             placeholder="e.g. Looking for her missing brother. Doesn't trust clerics."
             style="min-height: 80px;"
-          >${player.notes || ''}</textarea>
+          >${escapeHtml(player.notes)}</textarea>
           <button class="danger" onclick="removePlayer(${index})">🗑 Remove</button>
         </div>`;
     }
@@ -133,36 +136,38 @@
     }
 
     function removePlayer(index) {
+      if (players[index]._id) deletedPlayerIds.push(players[index]._id);
       players.splice(index, 1);
       renderPlayers();
     }
 
     async function savePlayers() {
-      const { error: delError } = await db
-        .from('players')
-        .delete()
-        .eq('user_id', currentUserId);
-
-      if (delError) { alert('Save failed: ' + delError.message); return; }
-
-      if (players.length > 0) {
-        const { error: insError } = await db.from('players').insert(
-          players.map(function (p) {
-            return {
-              user_id:     currentUserId,
-              player_name: p.playerName,
-              char_name:   p.charName,
-              char_class:  p.charClass,
-              race:        p.race,
-              level:       p.level,
-              hp:          p.hp,
-              notes:       p.notes
-            };
-          })
-        );
-        if (insError) { alert('Save failed: ' + insError.message); return; }
+      // Step 1: delete only rows the user explicitly removed
+      if (deletedPlayerIds.length > 0) {
+        const { error } = await db.from('players').delete().in('id', deletedPlayerIds);
+        if (error) { alert('Save failed: ' + error.message); return; }
       }
 
+      // Step 2: upsert existing rows (have _id), insert new rows (no _id)
+      const existing = players.filter(function (p) { return  p._id; }).map(function (p) {
+        return { id: p._id, user_id: currentUserId, player_name: p.playerName, char_name: p.charName, char_class: p.charClass, race: p.race, level: p.level, hp: p.hp, notes: p.notes };
+      });
+      const newRows = players.filter(function (p) { return !p._id; }).map(function (p) {
+        return { user_id: currentUserId, player_name: p.playerName, char_name: p.charName, char_class: p.charClass, race: p.race, level: p.level, hp: p.hp, notes: p.notes };
+      });
+
+      const saveOps = [];
+      if (existing.length > 0) saveOps.push(db.from('players').upsert(existing));
+      if (newRows.length > 0)  saveOps.push(db.from('players').insert(newRows));
+
+      if (saveOps.length > 0) {
+        const results = await Promise.all(saveOps);
+        const errors  = results.map(function (r) { return r.error; }).filter(Boolean);
+        if (errors.length) { alert('Save failed: ' + errors[0].message); return; }
+      }
+
+      // Reload to get server-assigned IDs for newly inserted rows
+      await loadPlayers();
       showSaved();
     }
 

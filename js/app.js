@@ -9,6 +9,16 @@ function showSaved() {
   setTimeout(function () { el.classList.remove('visible'); }, 2000);
 }
 
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // =============================================
 //   Sidebar Navigation
 // =============================================

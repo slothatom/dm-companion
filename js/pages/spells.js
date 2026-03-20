@@ -20,7 +20,7 @@ function renderSpells(list) {
     return;
   }
   container.innerHTML = list.map(function (s) {
-    const levelLabel = s.level === 'cantrip' ? 'Cantrip' : 'Level ' + s.level;
+    const levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
     const concBadge  = s.conc   ? '<span class="spell-badge badge-conc">Concentration</span>'  : '';
     const ritualBadge= s.ritual ? '<span class="spell-badge badge-ritual">Ritual</span>' : '';
     return `
@@ -35,6 +35,7 @@ function renderSpells(list) {
               <span class="spell-stat">⏱ <span>${s.cast}</span></span>
               <span class="spell-stat">📍 <span>${s.range}</span></span>
               <span class="spell-stat">⏳ <span>${s.duration}</span></span>
+              ${s.components ? '<span class="spell-stat">🧩 <span>' + s.components + '</span></span>' : ''}
             </div>
             <div class="spell-desc">${s.desc}</div>
           </div>`;

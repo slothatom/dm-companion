@@ -12,7 +12,7 @@
 
   <main>
     <h1>📖 Spell Reference</h1>
-    <p class="subtitle">Quick lookup for the most common D&D 5e spells. Search by name or filter by level.</p>
+    <p class="subtitle">Full SRD spell reference — 319 spells. Search by name, school, or filter by level.</p>
 
     <div class="spell-search">
       <input type="text" id="spell-search" placeholder="🔍 Search spells..."
@@ -21,12 +21,16 @@
 
     <div class="spell-filters" id="level-filters">
       <button class="filter-btn active-filter" onclick="setLevel('all', this)">All</button>
-      <button class="filter-btn" onclick="setLevel('cantrip', this)">Cantrips</button>
-      <button class="filter-btn" onclick="setLevel('1', this)">Level 1</button>
-      <button class="filter-btn" onclick="setLevel('2', this)">Level 2</button>
-      <button class="filter-btn" onclick="setLevel('3', this)">Level 3</button>
-      <button class="filter-btn" onclick="setLevel('4', this)">Level 4</button>
-      <button class="filter-btn" onclick="setLevel('5', this)">Level 5</button>
+      <button class="filter-btn" onclick="setLevel(0, this)">Cantrips</button>
+      <button class="filter-btn" onclick="setLevel(1, this)">1</button>
+      <button class="filter-btn" onclick="setLevel(2, this)">2</button>
+      <button class="filter-btn" onclick="setLevel(3, this)">3</button>
+      <button class="filter-btn" onclick="setLevel(4, this)">4</button>
+      <button class="filter-btn" onclick="setLevel(5, this)">5</button>
+      <button class="filter-btn" onclick="setLevel(6, this)">6</button>
+      <button class="filter-btn" onclick="setLevel(7, this)">7</button>
+      <button class="filter-btn" onclick="setLevel(8, this)">8</button>
+      <button class="filter-btn" onclick="setLevel(9, this)">9</button>
     </div>
     <div class="spell-filters" style="margin-top:8px;">
       <button class="filter-btn" id="filter-conc"   onclick="toggleFilter('conc',   this)">🔵 Concentration</button>

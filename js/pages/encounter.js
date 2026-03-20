@@ -61,7 +61,13 @@ function addCreature() {
   const cr   = document.getElementById('new-cr').value.trim();
   const xp   = parseInt(document.getElementById('new-xp').value) || 0;
   if (!name) { showToast('Please enter a monster name.', 'error'); return; }
-  creatures.push({ name, cr, xp, hp: '', ac: '' });
+  // Try to pull HP/AC from SRD bestiary
+  var hp = '', ac = '';
+  if (typeof MONSTERS !== 'undefined') {
+    var match = MONSTERS.find(function (m) { return m.name.toLowerCase() === name.toLowerCase(); });
+    if (match) { hp = String(match.hp || ''); ac = String(match.ac || ''); }
+  }
+  creatures.push({ name, cr, xp, hp: hp, ac: ac });
   document.getElementById('new-name').value = '';
   document.getElementById('new-cr').value   = '';
   document.getElementById('new-xp').value   = '';
@@ -212,4 +218,108 @@ function clearAll() {
       recalculate();
     },
   });
+}
+
+// ── SRD Monster Browser ───────────────────────────────────
+
+function showMonsterBrowser() {
+  if (typeof MONSTERS === 'undefined' || MONSTERS.length === 0) {
+    showToast('Monster data not loaded.', 'error');
+    return;
+  }
+
+  var modal = document.getElementById('monster-browser-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'monster-browser-modal';
+    modal.className = 'dm-modal-overlay';
+    modal.innerHTML =
+      '<div class="dm-modal" style="max-width:680px; max-height:80vh; display:flex; flex-direction:column;" role="dialog" aria-modal="true">' +
+        '<h3 class="dm-modal-title">📖 SRD Bestiary <span style="font-weight:400; font-size:13px; color:var(--text-muted);">(' + MONSTERS.length + ' monsters)</span></h3>' +
+        '<div style="display:flex; gap:8px; margin-bottom:12px;">' +
+          '<input type="text" id="monster-search" placeholder="Search by name or type..." oninput="filterMonsterBrowser()" style="flex:1; margin:0;" />' +
+          '<select id="monster-cr-filter" onchange="filterMonsterBrowser()" style="margin:0; width:auto;">' +
+            '<option value="all">All CRs</option>' +
+            '<option value="0">CR 0</option><option value="1/8">CR 1/8</option><option value="1/4">CR 1/4</option><option value="1/2">CR 1/2</option>' +
+            '<option value="1">CR 1</option><option value="2">CR 2</option><option value="3">CR 3</option><option value="4">CR 4</option><option value="5">CR 5</option>' +
+            '<option value="6">CR 6</option><option value="7">CR 7</option><option value="8">CR 8</option><option value="9">CR 9</option><option value="10">CR 10</option>' +
+            '<option value="11-15">CR 11–15</option><option value="16-20">CR 16–20</option><option value="21+">CR 21+</option>' +
+          '</select>' +
+        '</div>' +
+        '<div id="monster-browser-list" style="overflow-y:auto; flex:1; min-height:200px;"></div>' +
+        '<div class="dm-modal-actions" style="justify-content:center; margin-top:12px;">' +
+          '<button onclick="closeMonsterBrowser()">Close</button>' +
+        '</div>' +
+      '</div>';
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeMonsterBrowser(); });
+    document.body.appendChild(modal);
+  }
+
+  modal.style.display = 'flex';
+  document.getElementById('monster-search').value = '';
+  document.getElementById('monster-cr-filter').value = 'all';
+  filterMonsterBrowser();
+  document.getElementById('monster-search').focus();
+}
+
+function closeMonsterBrowser() {
+  var modal = document.getElementById('monster-browser-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function parseCR(cr) {
+  if (cr === '1/8') return 0.125;
+  if (cr === '1/4') return 0.25;
+  if (cr === '1/2') return 0.5;
+  return parseFloat(cr) || 0;
+}
+
+function filterMonsterBrowser() {
+  var q      = (document.getElementById('monster-search').value || '').toLowerCase();
+  var crFilter = document.getElementById('monster-cr-filter').value;
+
+  var filtered = MONSTERS.filter(function (m) {
+    var matchesSearch = !q || m.name.toLowerCase().includes(q) || (m.type || '').toLowerCase().includes(q);
+    if (!matchesSearch) return false;
+    if (crFilter === 'all') return true;
+    var crNum = parseCR(m.cr);
+    if (crFilter === '11-15') return crNum >= 11 && crNum <= 15;
+    if (crFilter === '16-20') return crNum >= 16 && crNum <= 20;
+    if (crFilter === '21+')   return crNum >= 21;
+    return m.cr === crFilter;
+  });
+
+  var container = document.getElementById('monster-browser-list');
+  if (filtered.length === 0) {
+    container.innerHTML = '<p class="empty-state">No monsters match.</p>';
+    return;
+  }
+  // Limit display to 60 to keep the DOM manageable
+  var shown = filtered.slice(0, 60);
+  container.innerHTML = shown.map(function (m, i) {
+    return '<div class="ref-card" style="cursor:pointer; padding:10px 14px; margin-bottom:6px;" onclick="addMonsterFromBrowser(' + i + ')" title="Click to add to encounter">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+        '<strong style="color:var(--accent);">' + escapeHtml(m.name) + '</strong>' +
+        '<span style="color:var(--text-muted); font-size:13px;">CR ' + escapeHtml(m.cr) + ' · ' + (CR_TO_XP[m.cr] || '?') + ' XP</span>' +
+      '</div>' +
+      '<div style="color:var(--text-muted); font-size:13px; margin-top:4px;">' +
+        escapeHtml(m.type) + ' · AC ' + m.ac + ' · HP ' + m.hp + ' · ' + escapeHtml(m.speed) +
+      '</div>' +
+    '</div>';
+  }).join('');
+  // Store filtered list for click handler
+  window._monsterBrowserList = filtered;
+  if (filtered.length > 60) {
+    container.innerHTML += '<p style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:8px;">Showing 60 of ' + filtered.length + ' — narrow your search.</p>';
+  }
+}
+
+function addMonsterFromBrowser(index) {
+  var m = window._monsterBrowserList && window._monsterBrowserList[index];
+  if (!m) return;
+  var xp = CR_TO_XP[m.cr] || 0;
+  creatures.push({ name: m.name, cr: m.cr, xp: xp, hp: String(m.hp || ''), ac: String(m.ac || '') });
+  renderCreatures();
+  recalculate();
+  showToast(m.name + ' added to encounter.', 'success');
 }

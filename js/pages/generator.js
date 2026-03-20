@@ -6,6 +6,7 @@ let generatorMode  = 'npc';   // 'npc' | 'creature'
 let currentEntry   = null;
 let sessionEntries = [];
 let currentUserId  = null;
+let autoSaveOn     = false;
 
 (async function () {
   const user = await requireAuth();
@@ -13,6 +14,11 @@ let currentUserId  = null;
   currentUserId = user.id;
   renderNav(user);
   await loadGenCampaigns();
+  // Restore autosave preference
+  if (localStorage.getItem('gen-autosave') === '1') {
+    autoSaveOn = true;
+    document.getElementById('gen-autosave').checked = true;
+  }
 })();
 
 async function loadGenCampaigns() {
@@ -147,9 +153,15 @@ function renderCreature(c) {
 
 // ── Shared ─────────────────────────────────────────────────
 
+function toggleAutosave() {
+  autoSaveOn = document.getElementById('gen-autosave').checked;
+  localStorage.setItem('gen-autosave', autoSaveOn ? '1' : '');
+}
+
 function generate() {
   if (generatorMode === 'npc') generateNPC();
   else                          generateCreature();
+  if (autoSaveOn) saveToCharacters();
 }
 
 function copyEntry() {

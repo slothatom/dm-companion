@@ -56,6 +56,15 @@
       var lines = md.split('\n');
       var html = '';
       var inList = false;
+      var inCard = false;
+
+      function closeList() {
+        if (inList) { html += '</ul>'; inList = false; }
+      }
+      function closeCard() {
+        closeList();
+        if (inCard) { html += '</div>'; inCard = false; }
+      }
 
       for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
@@ -66,28 +75,31 @@
         if (/^Format follows/.test(line)) continue;
         if (/^---$/.test(line)) continue;
         if (line.trim() === '') {
-          if (inList) { html += '</ul>'; inList = false; }
+          closeList();
           continue;
         }
 
         // Version heading: ## [x.y.z] - date
         var versionMatch = line.match(/^## \[(.+?)\](.*)/);
         if (versionMatch) {
-          if (inList) { html += '</ul>'; inList = false; }
+          closeCard();
           var version = escapeHtml(versionMatch[1]);
           var datePart = versionMatch[2] ? escapeHtml(versionMatch[2].replace(/^\s*-?\s*/, '')) : '';
-          var badge = version === 'Unreleased'
-            ? '<span class="release-badge release-badge-dev">dev</span>'
-            : '<span class="release-badge">v' + version + '</span>';
-          html += '<div class="card" style="margin-bottom:16px;">';
-          html += '<h3 class="release-version">' + badge + ' ' + (datePart || version) + '</h3>';
+          if (version === 'Unreleased') {
+            html += '<div class="card" style="margin-bottom:16px;">';
+            html += '<h3 class="release-version"><span class="release-badge release-badge-dev">dev</span> Upcoming Changes</h3>';
+          } else {
+            html += '<div class="card" style="margin-bottom:16px;">';
+            html += '<h3 class="release-version"><span class="release-badge">v' + version + '</span> ' + (datePart || version) + '</h3>';
+          }
+          inCard = true;
           continue;
         }
 
         // Section heading: ### Added / Fixed / Changed
         var sectionMatch = line.match(/^### (.+)/);
         if (sectionMatch) {
-          if (inList) { html += '</ul>'; inList = false; }
+          closeList();
           var sectionName = escapeHtml(sectionMatch[1]);
           var iconMap = {
             'Added': 'fi-rr-plus',
@@ -116,14 +128,9 @@
           html += '<li>' + text + '</li>';
           continue;
         }
-
-        // Close card at end of version block (detected by next version or EOF)
       }
 
-      if (inList) html += '</ul>';
-      // Close last card
-      html += '</div>';
-
+      closeCard();
       return html;
     }
   </script>

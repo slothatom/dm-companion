@@ -25,6 +25,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ### Fixed
 - Magic Items icon missing — replaced with `fi-rr-sparkles` (verified in Flaticon CSS) in sidebar nav and page header
+- Release notes page: fixed "devUnreleased" display — cards now close properly between versions, Unreleased section shows "Upcoming Changes" label
 - API first-load performance: pagination now fetches all pages in parallel instead of sequentially; cache upgraded from sessionStorage to localStorage with 4-hour TTL so data persists across tabs and sessions
 
 ---

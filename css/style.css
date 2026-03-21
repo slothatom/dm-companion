@@ -553,6 +553,30 @@ p.subtitle {
   font-size: 15px;
 }
 
+/* ---- Sticky page header ---- */
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  padding: 16px 0 14px;
+  margin: 0 -32px;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+.page-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--border-dim);
+  opacity: 0.6;
+}
+.page-header h1 { margin-bottom: 4px; }
+.page-header p.subtitle { margin-bottom: 0; }
+
 /* ---- Cards (no texture) ---- */
 .card {
   background-color: var(--surface);
@@ -603,6 +627,12 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary);
+}
+input[type="date"] {
+  height: 40px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  box-sizing: border-box;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.7);
@@ -1134,6 +1164,9 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 
   /* Add top padding so content doesn't hide under hamburger */
   main { padding-top: 58px; }
+
+  /* Sticky header sits below hamburger on mobile */
+  .page-header { top: 58px; }
 }
 
 /* =============================================

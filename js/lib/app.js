@@ -466,6 +466,21 @@ function renderNav(user) {
   const mainEl = document.querySelector('main');
   if (mainEl) mainEl.style.visibility = 'visible';
 
+  // Wrap h1 + subtitle in sticky page-header
+  if (mainEl) {
+    var h1El = mainEl.querySelector('h1');
+    if (h1El && !h1El.closest('.page-header')) {
+      var pageHeader = document.createElement('div');
+      pageHeader.className = 'page-header';
+      h1El.parentNode.insertBefore(pageHeader, h1El);
+      pageHeader.appendChild(h1El);
+      var subtitleEl = pageHeader.nextElementSibling;
+      if (subtitleEl && subtitleEl.tagName === 'P' && subtitleEl.classList.contains('subtitle')) {
+        pageHeader.appendChild(subtitleEl);
+      }
+    }
+  }
+
   // Restore sidebar scroll position
   var sidebarLinks = nav.querySelector('.sidebar-links');
   if (sidebarLinks) {

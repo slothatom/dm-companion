@@ -321,3 +321,397 @@ function copyLoot() {
     .then(function () { showToast('Loot copied!', 'success'); })
     .catch(function () { showToast('Copy failed.', 'error'); });
 }
+
+// ── Tab switching ───────────────────────────────────────
+
+function setLootTab(tab, btn) {
+  document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });
+  btn.classList.add('active-gen-tab');
+  document.getElementById('hoard-controls').style.display   = tab === 'hoard'   ? '' : 'none';
+  document.getElementById('body-controls').style.display    = tab === 'body'    ? '' : 'none';
+  document.getElementById('room-controls').style.display    = tab === 'room'    ? '' : 'none';
+  document.getElementById('trinket-controls').style.display = tab === 'trinket' ? '' : 'none';
+  document.getElementById('loot-output').innerHTML = '';
+}
+
+// ── Mundane Items Tables ────────────────────────────────
+
+var MUNDANE_WEAPONS = ['Dagger', 'Shortsword', 'Handaxe', 'Javelin', 'Light crossbow with 10 bolts', 'Shortbow with 12 arrows', 'Mace', 'Quarterstaff', 'Club', 'Spear', 'Sling with 20 bullets'];
+var MUNDANE_ARMOR = ['Leather armor', 'Padded armor', 'Shield', 'Hide armor', 'Chain shirt', 'Studded leather armor'];
+var MUNDANE_GEAR = ['50 ft of hempen rope', 'Tinderbox', 'Bedroll', 'Waterskin', 'Rations (3 days)', 'Torch (2)', 'Crowbar', 'Grappling hook', 'Iron pot', 'Mess kit', 'Pitons (10)', 'Belt pouch', 'Sack', 'Caltrops (bag of 20)', 'Ball bearings (bag of 1,000)', 'Chalk (3 pieces)', 'String (10 ft)', 'Small knife', 'Candles (5)', 'Fishing tackle', 'Block and tackle', 'Chain (10 ft)', 'Hammer', 'Hunting trap', 'Lantern (hooded)', 'Lock (iron)', 'Manacles', 'Mirror (steel)', 'Oil flask', 'Healer\'s kit', 'Antitoxin vial', 'Ink bottle and pen', 'Parchment (3 sheets)', 'Soap bar', 'Whetstone'];
+var CLOTHING = ['Common clothes', 'Traveler\'s cloak', 'Fine clothes', 'Leather boots', 'Hooded cloak', 'Worn gloves', 'Wide-brimmed hat', 'Fur-lined cloak', 'Silk scarf', 'Costume clothes', 'Robes'];
+var VALUABLES = ['Silver ring', 'Copper bracelet', 'Small jade pendant', 'Ivory comb', 'Embroidered handkerchief', 'Silver earring', 'Pearl button', 'Gold tooth (pulled)', 'Crystal vial', 'Pewter tankard with initials', 'Carved wooden figurine', 'Brass locket with a portrait', 'Onyx chess piece', 'Silver holy symbol', 'Turquoise brooch', 'Coral hair pin'];
+var DOCUMENTS = ['Crumpled letter from a loved one', 'Map fragment showing a nearby region', 'Wanted poster (for someone else)', 'Tavern receipt', 'Deed to a small plot of land', 'List of names (some crossed out)', 'Coded message', 'Bounty notice', 'Love letter (unsent)', 'Page torn from a spellbook', 'Trade guild membership card', 'IOU note for 50 gp', 'Diary entry about a secret passage', 'Hand-drawn map to a hidden cache', 'Contract for a shady job', 'Recipe for a local ale'];
+var FOOD_DRINK = ['Flask of cheap wine', 'Dried meat strips', 'Wheel of cheese', 'Loaf of bread (slightly stale)', 'Flask of dwarven ale', 'Bag of nuts and dried fruit', 'Bottle of fine wine', 'Flask of brandy', 'Honey jar', 'Pouch of tea leaves', 'Pickled eggs (jar)', 'Jerky (mystery meat)'];
+var CURIOSITIES = ['Lucky rabbit\'s foot', 'Wooden holy symbol', 'Loaded dice', 'Worn playing cards', 'Small hand mirror', 'Pipe and tobacco pouch', 'Harmonica', 'Bag of marbles', 'Wooden flute', 'Compass (cracked glass)', 'Magnifying glass', 'Hourglass (small)', 'Dice set (bone)', 'Bird whistle', 'Jar of fireflies (dead)', 'Snuff box', 'Corkscrew', 'Jar of strange-smelling salve', 'Tiny music box', 'Glass eye', 'Locket with a lock of hair', 'Collection of feathers', 'Pouch of polished stones', 'Sketch of an unknown face', 'Wooden toy soldier', 'Key to an unknown lock', 'Severed finger (preserved)', 'Vial of perfume', 'Monocle', 'Tiny bell'];
+var TOOLS_KITS = ['Thieves\' tools', 'Herbalism kit', 'Alchemist\'s supplies', 'Poisoner\'s kit', 'Disguise kit', 'Forgery kit', 'Carpenter\'s tools', 'Smith\'s tools', 'Cook\'s utensils', 'Brewer\'s supplies', 'Cartographer\'s tools', 'Navigator\'s tools'];
+var BOOKS_SCROLLS = ['Bestiary of local fauna', 'Prayer book', 'Book of riddles', 'History of the local region', 'Herbalist\'s field guide', 'Almanac (current year)', 'Grimoire (blank)', 'Poetry collection', 'Cookbook (exotic recipes)', 'Adventurer\'s journal (half-filled)', 'Scroll of lineage', 'Tome of religious doctrine', 'Book of local legends', 'Manual of traps and locks', 'Star chart'];
+var POTIONS_CONSUMABLES = ['Potion of healing', 'Antitoxin', 'Alchemist\'s fire', 'Acid vial', 'Holy water', 'Oil of taggit (poison)', 'Potion of climbing', 'Perfume (vial)', 'Smokestick', 'Tanglefoot bag'];
+var RELIGIOUS = ['Holy symbol (wooden)', 'Holy symbol (silver)', 'Incense (10 sticks)', 'Prayer beads', 'Vial of holy water', 'Small idol of a deity', 'Candle of meditation', 'Offering bowl', 'Ceremonial dagger', 'Book of prayers'];
+
+var TRINKETS = [
+  'A mummified goblin hand', 'A piece of crystal that faintly glows in the moonlight',
+  'A gold coin minted in an unknown land', 'A diary written in a language you don\'t know',
+  'A brass ring that never tarnishes', 'An old chess piece made from glass',
+  'A pair of knucklebone dice with skulls on the 6 side', 'A small idol depicting a nightmarish creature',
+  'A lock of someone\'s hair tied with a black ribbon', 'A four-leaf clover pressed inside a heavy book',
+  'A small mechanical crab or spider', 'A glass jar containing a weird bit of flesh floating in pickling fluid',
+  'A tiny gnome-crafted music box that plays a song you dimly remember', 'A small wooden statuette of a smug halfling',
+  'A brass orb etched with strange runes', 'A multicolored stone disk',
+  'A petrified mouse', 'A black pirate flag with a skull and crossbones',
+  'A tiny silver bell that makes no sound', 'A mechanical canary inside a gnomish lamp',
+  'A tiny chest carved from the bone of an unknown beast', 'A dead sprite inside a glass bottle',
+  'A metal can that has no opening but sounds like it is full of liquid',
+  'A glass orb filled with moving smoke', 'A 1-ounce egg with a bright red shell',
+  'A pipe that blows bubbles', 'A glass eye that looks around of its own accord',
+  'A small box with a sliding puzzle on its lid', 'A signet ring of an unknown noble house',
+  'A tooth from an unknown beast', 'An enormous nail made from an unusual metal',
+  'A candle that can\'t be lit', 'A fan that, when unfolded, shows a sleeping cat',
+  'An ornate scabbard that doesn\'t fit any sword you\'ve found', 'An invitation to a party where a murder happened',
+  'A bronze pentacle with an etching of a rat\'s head in its center',
+  'A purple handkerchief embroidered with the name of an archmage',
+  'Half of a floorplan for a temple or castle', 'A folded cloth that contains a pressed flower',
+  'A receipt for a deposit at a bank in a far-off city', 'A blank book whose pages refuse to hold ink or chalk',
+  'A silver badge shaped like a five-pointed star', 'A knife that belonged to a relative',
+  'A vial of dragon blood', 'A tiny meteorite', 'A glass eye with a slit pupil',
+  'An old divination card bearing your likeness', 'A feathered token from a griffin',
+  'A bone from a troll', 'A small stone cube with a glyph on each face',
+  'A coin-sized gear from a clockwork mechanism', 'A pair of old socks',
+  'A blank page torn from a wizard\'s spellbook', 'A small stone with a hole through the center',
+  'A tiny twig doll with button eyes', 'A portrait of a goblin general',
+  'A miniature brass horn', 'A shrunken head', 'A bottle of invisible ink',
+  'A shard of obsidian that always feels warm', 'A rag doll with the name of a child stitched on it'
+];
+
+// ── Body / Pocket Loot ──────────────────────────────────
+
+var BODY_TABLES = {
+  commoner: {
+    coins: function() { return { cp: rollDice(2,6), sp: rollDice(1,4) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.6) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.3) items.push(pick(CLOTHING));
+      if (Math.random() < 0.2) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.1) items.push(pick(VALUABLES));
+      return items;
+    }
+  },
+  merchant: {
+    coins: function() { return { sp: rollDice(3,6), gp: rollDice(2,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(DOCUMENTS));
+      items.push(pick(VALUABLES));
+      if (Math.random() < 0.5) items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.5) items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.2) items.push(pick(TOOLS_KITS));
+      return items;
+    }
+  },
+  soldier: {
+    coins: function() { return { sp: rollDice(2,6), gp: rollDice(1,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(MUNDANE_WEAPONS));
+      if (Math.random() < 0.5) items.push(pick(MUNDANE_ARMOR));
+      items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.4) items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.2) items.push(pick(DOCUMENTS));
+      return items;
+    }
+  },
+  bandit: {
+    coins: function() { return { cp: rollDice(3,6), sp: rollDice(2,6), gp: rollDice(1,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(MUNDANE_WEAPONS));
+      items.push(pick(VALUABLES));
+      if (Math.random() < 0.5) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.4) items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.3) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.2) items.push(pick(TOOLS_KITS));
+      if (Math.random() < 0.1) items.push(pick(POTIONS_CONSUMABLES));
+      return items;
+    }
+  },
+  noble: {
+    coins: function() { return { gp: rollDice(4,6), pp: rollDice(1,4) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(VALUABLES));
+      items.push(pick(VALUABLES));
+      items.push('Fine clothes');
+      if (Math.random() < 0.5) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.4) items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.2) items.push(pick(BOOKS_SCROLLS));
+      return items;
+    }
+  },
+  adventurer: {
+    coins: function() { return { sp: rollDice(3,6), gp: rollDice(3,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(MUNDANE_WEAPONS));
+      items.push(pick(MUNDANE_ARMOR));
+      items.push(pick(MUNDANE_GEAR));
+      items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.5) items.push(pick(POTIONS_CONSUMABLES));
+      if (Math.random() < 0.4) items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.3) items.push(pick(VALUABLES));
+      if (Math.random() < 0.2) items.push(pick(DOCUMENTS));
+      return items;
+    }
+  },
+  mage: {
+    coins: function() { return { sp: rollDice(2,6), gp: rollDice(2,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(BOOKS_SCROLLS));
+      items.push(pick(POTIONS_CONSUMABLES));
+      if (Math.random() < 0.6) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.5) items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.3) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.3) items.push(pick(VALUABLES));
+      if (Math.random() < 0.2) items.push(pick(TOOLS_KITS));
+      return items;
+    }
+  },
+  cultist: {
+    coins: function() { return { cp: rollDice(2,6), sp: rollDice(1,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(RELIGIOUS));
+      items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.5) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.4) items.push(pick(MUNDANE_WEAPONS));
+      if (Math.random() < 0.3) items.push(pick(POTIONS_CONSUMABLES));
+      if (Math.random() < 0.2) items.push(pick(VALUABLES));
+      return items;
+    }
+  }
+};
+
+function generateBodyLoot() {
+  var type = document.getElementById('body-type').value;
+  var table = BODY_TABLES[type];
+  var coins = table.coins();
+  var items = table.items();
+
+  // Chance for a trinket
+  if (Math.random() < 0.25) items.push(pick(TRINKETS));
+
+  renderGenericLoot('Body Search: ' + capitalize(type), coins, items);
+}
+
+// ── Room / Chest Loot ───────────────────────────────────
+
+var ROOM_TABLES = {
+  peasant: {
+    coins: function() { return { cp: rollDice(3,6), sp: rollDice(1,4) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(FOOD_DRINK)); items.push(pick(FOOD_DRINK));
+      items.push(pick(MUNDANE_GEAR));
+      items.push(pick(CLOTHING));
+      if (Math.random() < 0.3) items.push(pick(TOOLS_KITS));
+      if (Math.random() < 0.2) items.push(pick(CURIOSITIES));
+      return items;
+    }
+  },
+  tavern: {
+    coins: function() { return { cp: rollDice(4,6), sp: rollDice(3,6), gp: rollDice(1,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(FOOD_DRINK)); items.push(pick(FOOD_DRINK)); items.push(pick(FOOD_DRINK));
+      items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.5) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.4) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.3) items.push(pick(CLOTHING));
+      return items;
+    }
+  },
+  shop: {
+    coins: function() { return { sp: rollDice(4,6), gp: rollDice(2,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(MUNDANE_GEAR)); items.push(pick(MUNDANE_GEAR)); items.push(pick(MUNDANE_GEAR));
+      items.push(pick(TOOLS_KITS));
+      if (Math.random() < 0.5) items.push(pick(VALUABLES));
+      if (Math.random() < 0.4) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      return items;
+    }
+  },
+  barracks: {
+    coins: function() { return { sp: rollDice(2,6), gp: rollDice(1,4) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(MUNDANE_WEAPONS)); items.push(pick(MUNDANE_WEAPONS));
+      items.push(pick(MUNDANE_ARMOR));
+      items.push(pick(MUNDANE_GEAR)); items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.4) items.push(pick(FOOD_DRINK));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      return items;
+    }
+  },
+  temple: {
+    coins: function() { return { sp: rollDice(3,6), gp: rollDice(2,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(RELIGIOUS)); items.push(pick(RELIGIOUS));
+      items.push(pick(VALUABLES));
+      if (Math.random() < 0.5) items.push(pick(BOOKS_SCROLLS));
+      if (Math.random() < 0.4) items.push(pick(POTIONS_CONSUMABLES));
+      if (Math.random() < 0.3) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.2) items.push(pick(DOCUMENTS));
+      return items;
+    }
+  },
+  library: {
+    coins: function() { return { sp: rollDice(1,6), gp: rollDice(1,4) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(BOOKS_SCROLLS)); items.push(pick(BOOKS_SCROLLS)); items.push(pick(BOOKS_SCROLLS));
+      items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.5) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.3) items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.2) items.push(pick(VALUABLES));
+      return items;
+    }
+  },
+  dungeon: {
+    coins: function() { return { sp: rollDice(3,6), gp: rollDice(2,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(MUNDANE_WEAPONS));
+      items.push(pick(MUNDANE_GEAR)); items.push(pick(MUNDANE_GEAR));
+      if (Math.random() < 0.5) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.4) items.push(pick(VALUABLES));
+      if (Math.random() < 0.3) items.push(pick(POTIONS_CONSUMABLES));
+      if (Math.random() < 0.3) items.push(pick(MUNDANE_ARMOR));
+      if (Math.random() < 0.2) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.15) items.push(pick(TRINKETS));
+      return items;
+    }
+  },
+  vault: {
+    coins: function() { return { gp: rollDice(6,6) * 10, pp: rollDice(2,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(VALUABLES)); items.push(pick(VALUABLES)); items.push(pick(VALUABLES));
+      items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.6) items.push(pick(POTIONS_CONSUMABLES));
+      if (Math.random() < 0.5) items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.4) { var g = Object.keys(GEMS); items.push(pick(GEMS[pick(g)]) + ' (gem)'); }
+      if (Math.random() < 0.3) { var a = Object.keys(ART_OBJECTS); items.push(pick(ART_OBJECTS[pick(a)])); }
+      return items;
+    }
+  },
+  wizard: {
+    coins: function() { return { gp: rollDice(3,6), pp: rollDice(1,4) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(BOOKS_SCROLLS)); items.push(pick(BOOKS_SCROLLS));
+      items.push(pick(POTIONS_CONSUMABLES)); items.push(pick(POTIONS_CONSUMABLES));
+      items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.5) items.push(pick(TOOLS_KITS));
+      if (Math.random() < 0.4) items.push(pick(VALUABLES));
+      if (Math.random() < 0.3) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.2) items.push(pick(TRINKETS));
+      return items;
+    }
+  },
+  tomb: {
+    coins: function() { return { gp: rollDice(4,6) * 5, pp: rollDice(1,6) }; },
+    items: function() {
+      var items = [];
+      items.push(pick(VALUABLES)); items.push(pick(VALUABLES));
+      items.push(pick(RELIGIOUS));
+      items.push(pick(CURIOSITIES));
+      if (Math.random() < 0.5) items.push(pick(MUNDANE_WEAPONS));
+      if (Math.random() < 0.4) items.push(pick(MUNDANE_ARMOR));
+      if (Math.random() < 0.3) items.push(pick(DOCUMENTS));
+      if (Math.random() < 0.3) items.push(pick(TRINKETS));
+      if (Math.random() < 0.2) items.push(pick(POTIONS_CONSUMABLES));
+      return items;
+    }
+  }
+};
+
+function generateRoomLoot() {
+  var type = document.getElementById('room-type').value;
+  var table = ROOM_TABLES[type];
+  var coins = table.coins();
+  var items = table.items();
+  renderGenericLoot('Room Search: ' + capitalize(type.replace(/-/g, ' ')), coins, items);
+}
+
+// ── Trinkets ────────────────────────────────────────────
+
+function generateTrinkets() {
+  var count = parseInt(document.getElementById('trinket-count').value, 10) || 3;
+  var results = [];
+  var used = {};
+  for (var i = 0; i < count; i++) {
+    var t;
+    var attempts = 0;
+    do { t = pick(TRINKETS); attempts++; } while (used[t] && attempts < 50);
+    used[t] = true;
+    results.push(t);
+  }
+
+  var output = document.getElementById('loot-output');
+  var html = '<div class="card" style="padding:18px;">';
+  html += '<h3 style="margin:0 0 12px; color:var(--accent);">Random Trinkets</h3>';
+  html += '<ul style="margin:0; padding-left:20px;">';
+  results.forEach(function (t) {
+    html += '<li style="margin-bottom:6px;">' + escapeHtml(t) + '</li>';
+  });
+  html += '</ul></div>';
+  output.innerHTML = html;
+}
+
+// ── Generic loot renderer ───────────────────────────────
+
+function renderGenericLoot(title, coins, items) {
+  var output = document.getElementById('loot-output');
+  var html = '<div class="card" style="padding:18px;">';
+  html += '<h3 style="margin:0 0 12px; color:var(--accent);">' + escapeHtml(title) + '</h3>';
+
+  // Coins
+  var coinParts = [];
+  if (coins.pp) coinParts.push(coins.pp + ' pp');
+  if (coins.gp) coinParts.push(coins.gp + ' gp');
+  if (coins.ep) coinParts.push(coins.ep + ' ep');
+  if (coins.sp) coinParts.push(coins.sp + ' sp');
+  if (coins.cp) coinParts.push(coins.cp + ' cp');
+
+  if (coinParts.length > 0) {
+    html += '<div style="margin-bottom:12px;"><strong>Coins:</strong> ' + escapeHtml(coinParts.join(', ')) + '</div>';
+  }
+
+  // Items
+  if (items.length > 0) {
+    html += '<div><strong>Items Found (' + items.length + '):</strong>';
+    html += '<ul style="margin:6px 0; padding-left:20px;">';
+    items.forEach(function (item) {
+      html += '<li style="margin-bottom:4px;">' + escapeHtml(item) + '</li>';
+    });
+    html += '</ul></div>';
+  } else {
+    html += '<div style="color:var(--text-dim);"><em>Nothing of interest found.</em></div>';
+  }
+
+  html += '</div>';
+  output.innerHTML = html;
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

@@ -16,15 +16,92 @@
     <h1><i class="fi fi-rr-box-open"></i> Loot Generator</h1>
     <p class="subtitle">Generate random loot drops by challenge rating tier.</p>
 
-    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
-      <label for="cr-tier">CR Tier</label>
-      <select id="cr-tier">
-        <option value="0-4">CR 0–4</option>
-        <option value="5-10">CR 5–10</option>
-        <option value="11-16">CR 11–16</option>
-        <option value="17+">CR 17+</option>
-      </select>
-      <button onclick="generateLoot()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+    <!-- Loot type tabs -->
+    <div class="gen-type-tabs" style="margin-bottom:16px;">
+      <button class="gen-tab active-gen-tab" id="tab-hoard" onclick="setLootTab('hoard', this)"><i class="fi fi-rr-treasure-chest"></i> Treasure Hoard</button>
+      <button class="gen-tab" id="tab-body" onclick="setLootTab('body', this)"><i class="fi fi-rr-user"></i> Body / Pocket</button>
+      <button class="gen-tab" id="tab-room" onclick="setLootTab('room', this)"><i class="fi fi-rr-home"></i> Room / Chest</button>
+      <button class="gen-tab" id="tab-trinket" onclick="setLootTab('trinket', this)"><i class="fi fi-rr-star"></i> Trinkets</button>
+    </div>
+
+    <!-- Hoard controls -->
+    <div id="hoard-controls" class="card" style="padding:14px;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <div>
+          <label for="cr-tier">CR Tier</label>
+          <select id="cr-tier" style="margin:0;">
+            <option value="0-4">CR 0-4</option>
+            <option value="5-10">CR 5-10</option>
+            <option value="11-16">CR 11-16</option>
+            <option value="17+">CR 17+</option>
+          </select>
+        </div>
+        <div>
+          <label for="hoard-toggle" style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="checkbox" id="hoard-toggle" checked style="width:16px; height:16px; accent-color:var(--primary);" />
+            Treasure Hoard (vs Individual)
+          </label>
+        </div>
+        <button onclick="generateLoot()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+      </div>
+    </div>
+
+    <!-- Body/pocket controls -->
+    <div id="body-controls" class="card" style="padding:14px; display:none;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <div>
+          <label for="body-type">Who was it?</label>
+          <select id="body-type" style="margin:0;">
+            <option value="commoner">Commoner</option>
+            <option value="merchant">Merchant</option>
+            <option value="soldier">Soldier / Guard</option>
+            <option value="bandit">Bandit / Thief</option>
+            <option value="noble">Noble</option>
+            <option value="adventurer">Adventurer</option>
+            <option value="mage">Mage / Scholar</option>
+            <option value="cultist">Cultist</option>
+          </select>
+        </div>
+        <button onclick="generateBodyLoot()"><i class="fi fi-rr-dice-d20"></i> Search Body</button>
+      </div>
+    </div>
+
+    <!-- Room/chest controls -->
+    <div id="room-controls" class="card" style="padding:14px; display:none;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <div>
+          <label for="room-type">Location</label>
+          <select id="room-type" style="margin:0;">
+            <option value="peasant">Peasant Home</option>
+            <option value="tavern">Tavern / Inn</option>
+            <option value="shop">Shop / Workshop</option>
+            <option value="barracks">Barracks</option>
+            <option value="temple">Temple / Shrine</option>
+            <option value="library">Library / Study</option>
+            <option value="dungeon">Dungeon Room</option>
+            <option value="vault">Vault / Treasury</option>
+            <option value="wizard">Wizard's Tower</option>
+            <option value="tomb">Tomb / Crypt</option>
+          </select>
+        </div>
+        <button onclick="generateRoomLoot()"><i class="fi fi-rr-dice-d20"></i> Search Room</button>
+      </div>
+    </div>
+
+    <!-- Trinket controls -->
+    <div id="trinket-controls" class="card" style="padding:14px; display:none;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <div>
+          <label for="trinket-count">How many?</label>
+          <select id="trinket-count" style="margin:0;">
+            <option value="1">1 trinket</option>
+            <option value="3" selected>3 trinkets</option>
+            <option value="5">5 trinkets</option>
+            <option value="10">10 trinkets</option>
+          </select>
+        </div>
+        <button onclick="generateTrinkets()"><i class="fi fi-rr-dice-d20"></i> Roll Trinkets</button>
+      </div>
     </div>
 
     <div id="loot-output"></div>

@@ -150,8 +150,12 @@ function restoreInitiativeState() {
 }
 
 function rollInitiative() {
-  const result = Math.floor(Math.random() * 20) + 1;
-  document.getElementById('new-init').value = result;
+  const roll = Math.floor(Math.random() * 20) + 1;
+  const mod = parseInt(document.getElementById('new-init-mod').value) || 0;
+  const total = roll + mod;
+  document.getElementById('new-init').value = total;
+  var modStr = mod >= 0 ? '+' + mod : String(mod);
+  showToast('Rolled ' + roll + ' ' + modStr + ' = ' + total, 'info');
 }
 
 function addCombatant() {
@@ -424,9 +428,9 @@ function renderList() {
             </div>
             <div class="init-row-sub">
               <div class="hp-adj">
-                <input type="number" id="hp-adj-${i}" placeholder="amt" min="0" style="width:64px;" />
-                <button onclick="applyDamage(${i})" style="padding:4px 10px; font-size:13px;" class="danger"><i class="fi fi-rr-sword"></i> Dmg</button>
-                <button onclick="applyHeal(${i})"   style="padding:4px 10px; font-size:13px;" class="secondary"><i class="fi fi-rr-heart"></i> Heal</button>
+                <input type="number" id="hp-adj-${i}" placeholder="HP ±" min="0" style="width:64px;" />
+                <button onclick="applyDamage(${i})" class="danger btn-x" style="min-width:auto; padding:6px 12px;"><i class="fi fi-rr-sword"></i> Dmg</button>
+                <button onclick="applyHeal(${i})" class="secondary btn-x" style="min-width:auto; padding:6px 12px;"><i class="fi fi-rr-heart"></i> Heal</button>
               </div>
               <div class="cond-row">${condChips}</div>
               ${activeCondInfo}

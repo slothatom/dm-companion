@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https://www.transparenttextures.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
-  <title>DM Companion – Treasure &amp; Currency</title>
+  <title>DM Companion – Currency</title>
   <meta name="description" content="D&amp;D currency converter and random purse generator." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
@@ -18,20 +18,8 @@
   <nav id="main-nav" aria-label="Main navigation"></nav>
 
   <main id="main-content">
-    <h1><i class="fi fi-rr-coins"></i> Treasure &amp; Currency</h1>
-    <p class="subtitle">Currency converter and random treasure generation by wealth level.</p>
-
-    <details class="card" style="margin-bottom:16px; padding:14px;">
-      <summary style="cursor:pointer; font-weight:600; color:var(--accent);"><i class="fi fi-rr-pen-nib"></i> Rename Currency</summary>
-      <p style="color:var(--text-muted); margin:8px 0 12px; font-size:13px;">Customize denomination names for your world. Changes apply to all outputs on this page.</p>
-      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:8px;">
-        <div><label style="font-size:11px;">Platinum (PP)</label><input type="text" id="curr-pp" value="PP" style="margin:0;" onchange="saveCurrencyNames()" /></div>
-        <div><label style="font-size:11px;">Gold (GP)</label><input type="text" id="curr-gp" value="GP" style="margin:0;" onchange="saveCurrencyNames()" /></div>
-        <div><label style="font-size:11px;">Electrum (EP)</label><input type="text" id="curr-ep" value="EP" style="margin:0;" onchange="saveCurrencyNames()" /></div>
-        <div><label style="font-size:11px;">Silver (SP)</label><input type="text" id="curr-sp" value="SP" style="margin:0;" onchange="saveCurrencyNames()" /></div>
-        <div><label style="font-size:11px;">Copper (CP)</label><input type="text" id="curr-cp" value="CP" style="margin:0;" onchange="saveCurrencyNames()" /></div>
-      </div>
-    </details>
+    <h1><i class="fi fi-rr-coins"></i> Currency</h1>
+    <p class="subtitle">Currency converter and random purse generator.</p>
 
     <div class="card" style="margin-bottom:20px;">
       <h3>Currency Converter</h3>
@@ -68,40 +56,6 @@
     </div>
 
     <div id="purse-output"></div>
-
-    <div class="card" style="margin-bottom:20px;">
-      <h3>Encounter Treasure</h3>
-      <p style="color:var(--text-muted); margin-bottom:12px;">Generate treasure for a defeated encounter based on monster count and CR.</p>
-      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-        <div>
-          <label for="enc-cr">Average CR</label>
-          <select id="enc-cr" style="margin:0;">
-            <option value="0.125">CR 1/8</option>
-            <option value="0.25">CR 1/4</option>
-            <option value="0.5">CR 1/2</option>
-            <option value="1" selected>CR 1</option>
-            <option value="2">CR 2</option>
-            <option value="3">CR 3</option>
-            <option value="4">CR 4</option>
-            <option value="5">CR 5</option>
-            <option value="6">CR 6</option>
-            <option value="7">CR 7</option>
-            <option value="8">CR 8</option>
-            <option value="10">CR 10</option>
-            <option value="13">CR 13</option>
-            <option value="17">CR 17</option>
-            <option value="20">CR 20</option>
-          </select>
-        </div>
-        <div>
-          <label for="enc-count">Number of Monsters</label>
-          <input type="number" id="enc-count" value="3" min="1" max="20" style="width:70px; margin:0;" />
-        </div>
-        <button onclick="generateEncounterTreasure()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
-      </div>
-    </div>
-
-    <div id="encounter-output"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

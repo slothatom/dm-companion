@@ -212,5 +212,75 @@ var LANGUAGES = [
     script: "\u2014",
     speakers: "Vegepygmies, myconids",
     desc: "A rudimentary language of spore-based communication used by plant creatures. It conveys emotion and intent through chemical signals rather than sound. Most humanoids cannot perceive it without magical aid."
+  },
+  {
+    name: "Blink Dog",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Blink dogs",
+    desc: "A language of barks, yips, and whines understood only by blink dogs and those magically attuned to fey creatures. It carries complex spatial concepts related to teleportation."
+  },
+  {
+    name: "Bullywug",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Bullywugs",
+    desc: "A croaking, gurgling language spoken by the frog-like bullywugs of swamplands. It is nearly impossible for non-amphibious creatures to pronounce correctly."
+  },
+  {
+    name: "Giant Eagle",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Giant eagles, aarakocra",
+    desc: "A language of shrieks, whistles, and complex aerial calls used by giant eagles and understood by some aarakocra communities."
+  },
+  {
+    name: "Giant Owl",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Giant owls",
+    desc: "A hooting, clicking language used by giant owls. It carries well in darkness and includes ultrasonic components inaudible to most humanoids."
+  },
+  {
+    name: "Grung",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Grung",
+    desc: "A chirping, croaking language spoken by the small, poisonous frog-folk known as grung. Its tonal nature makes it difficult for non-grung to master."
+  },
+  {
+    name: "Hook Horror",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Hook horrors",
+    desc: "A clicking, clacking language using the creatures' hook-like appendages to create percussive sounds that echo through Underdark caverns."
+  },
+  {
+    name: "Sahuagin",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Sahuagin, sea devils",
+    desc: "A hissing, clicking language adapted for underwater communication. It includes frequencies that carry well through water but are barely audible in air."
+  },
+  {
+    name: "Thri-kreen",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Thri-kreen",
+    desc: "A language of clicks, whistles, and mandible-clacking used by the insectoid thri-kreen. It can convey complex tactical information rapidly."
+  },
+  {
+    name: "Worg",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Worgs",
+    desc: "A growling, snarling language understood by worgs and some goblinoid tribes. It consists largely of body language supplemented by vocalizations."
+  },
+  {
+    name: "Yeti",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Yeti",
+    desc: "A howling, roaring language used by yeti in mountainous regions. It carries over great distances in cold, thin air."
   }
 ];

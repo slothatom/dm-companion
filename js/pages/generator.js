@@ -52,14 +52,28 @@ function setGenMode(mode, btn) {
   const savBtn      = document.getElementById('save-chars-btn');
   const placeholder = document.getElementById('gen-placeholder');
 
+  // Toggle NPC vs creature controls
+  var archSel = document.getElementById('gen-archetype');
+  var crSel = document.getElementById('gen-cr');
+  var sizeSel = document.getElementById('gen-size');
+  var typeSel = document.getElementById('gen-creature-type');
+
   if (mode === 'npc') {
     genBtn.innerHTML = '<i class="fi fi-rr-dice-d20"></i> Generate NPC';
     savBtn.innerHTML = '<i class="fi fi-rr-disk"></i> Save to Characters';
     if (placeholder) placeholder.textContent = 'Hit "Generate NPC" to bring someone to life.';
+    archSel.style.display = '';
+    crSel.style.display = 'none';
+    sizeSel.style.display = 'none';
+    typeSel.style.display = 'none';
   } else {
     genBtn.innerHTML = '<i class="fi fi-rr-dice-d20"></i> Generate Creature';
     savBtn.innerHTML = '<i class="fi fi-rr-disk"></i> Save to Characters';
     if (placeholder) placeholder.textContent = 'Hit "Generate Creature" to roll up a monster.';
+    archSel.style.display = 'none';
+    crSel.style.display = '';
+    sizeSel.style.display = '';
+    typeSel.style.display = '';
   }
 
   // Clear output when switching modes
@@ -129,13 +143,47 @@ function renderNPC(npc) {
 
 // ── Creature ───────────────────────────────────────────────
 
+// CR filter ranges
+var CR_RANGES = {
+  low:       ['0','1/8','1/4','1/2','1','2'],
+  mid:       ['3','4','5','6'],
+  high:      ['7','8','9','10','11','12'],
+  deadly:    ['13','14','15','16','17','18','19','20'],
+  legendary: ['21','22','23','24','25','26','27','28','29','30']
+};
+
 function generateCreature() {
+  var crFilter = document.getElementById('gen-cr').value;
+  var sizeFilter = document.getElementById('gen-size').value;
+  var typeFilter = document.getElementById('gen-creature-type').value;
+
+  // Pick CR based on filter
+  var crPool = CREATURE_CRS;
+  if (crFilter !== 'any' && CR_RANGES[crFilter]) {
+    crPool = CREATURE_CRS.filter(function (cr) { return CR_RANGES[crFilter].indexOf(cr) !== -1; });
+    if (crPool.length === 0) crPool = CREATURE_CRS;
+  }
+
+  // Pick size based on filter
+  var sizePool = CREATURE_SIZES;
+  if (sizeFilter !== 'any') {
+    sizePool = CREATURE_SIZES.filter(function (s) { return s === sizeFilter; });
+    if (sizePool.length === 0) sizePool = [sizeFilter]; // use the filter value directly
+  }
+
+  // Pick type based on filter
+  var typePool = CREATURE_TYPES;
+  if (typeFilter !== 'any') {
+    typePool = CREATURE_TYPES.filter(function (t) { return t.indexOf(typeFilter) !== -1; });
+    if (typePool.length === 0) typePool = [typeFilter];
+  }
+
   const creature = {
     _type:   'creature',
     name:    pick(CREATURE_ADJECTIVES) + ' ' + pick(CREATURE_BASE_NAMES),
-    type:    pick(CREATURE_TYPES),
-    size:    pick(CREATURE_SIZES),
-    cr:      pick(CREATURE_CRS),
+    type:    pick(typePool),
+    size:    pick(sizePool),
+    cr:      pick(crPool),
     trait:   pick(CREATURE_TRAITS),
     attack:  pick(CREATURE_ATTACKS),
     habitat: pick(CREATURE_HABITATS),

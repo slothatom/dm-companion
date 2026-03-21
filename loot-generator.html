@@ -24,6 +24,7 @@
     <!-- Loot type tabs -->
     <div class="gen-type-tabs" style="margin-bottom:16px;">
       <button class="gen-tab active-gen-tab" id="tab-hoard" onclick="setLootTab('hoard', this)"><i class="fi fi-rr-treasure-chest"></i> Treasure Hoard</button>
+      <button class="gen-tab" id="tab-encounter" onclick="setLootTab('encounter', this)"><i class="fi fi-rr-sword"></i> Encounter Loot</button>
       <button class="gen-tab" id="tab-body" onclick="setLootTab('body', this)"><i class="fi fi-rr-user"></i> Body / Pocket</button>
       <button class="gen-tab" id="tab-room" onclick="setLootTab('room', this)"><i class="fi fi-rr-home"></i> Room / Chest</button>
       <button class="gen-tab" id="tab-trinket" onclick="setLootTab('trinket', this)"><i class="fi fi-rr-star"></i> Trinkets</button>
@@ -48,6 +49,31 @@
           </label>
         </div>
         <button onclick="generateLoot()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+      </div>
+    </div>
+
+    <!-- Encounter loot controls -->
+    <div id="encounter-controls" class="card" style="padding:14px; display:none;">
+      <p style="color:var(--text-muted); margin-bottom:12px; font-size:13px;">Generate treasure for a defeated encounter based on monster count and CR.</p>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+        <div>
+          <label for="enc-cr">Average CR</label>
+          <select id="enc-cr" style="margin:0;">
+            <option value="0.125">CR 1/8</option><option value="0.25">CR 1/4</option>
+            <option value="0.5">CR 1/2</option><option value="1" selected>CR 1</option>
+            <option value="2">CR 2</option><option value="3">CR 3</option>
+            <option value="4">CR 4</option><option value="5">CR 5</option>
+            <option value="6">CR 6</option><option value="7">CR 7</option>
+            <option value="8">CR 8</option><option value="10">CR 10</option>
+            <option value="13">CR 13</option><option value="17">CR 17</option>
+            <option value="20">CR 20</option>
+          </select>
+        </div>
+        <div>
+          <label for="enc-count">Monster Count</label>
+          <input type="number" id="enc-count" value="3" min="1" max="20" style="width:70px; margin:0;" />
+        </div>
+        <button onclick="generateEncounterLoot()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
       </div>
     </div>
 

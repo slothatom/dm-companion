@@ -34,6 +34,7 @@
 
     <div class="gen-controls">
       <div class="gen-controls-row">
+        <!-- NPC archetype selector -->
         <select id="gen-archetype" style="margin:0; min-width:140px;">
           <option value="any">Any Type</option>
           <option value="commoner">Commoner</option>
@@ -44,6 +45,43 @@
           <option value="magic">Magic User</option>
           <option value="adventurer">Adventurer</option>
           <option value="religious">Religious</option>
+        </select>
+        <!-- Creature CR selector -->
+        <select id="gen-cr" style="margin:0; min-width:100px; display:none;">
+          <option value="any">Any CR</option>
+          <option value="low">CR 0-2</option>
+          <option value="mid">CR 3-6</option>
+          <option value="high">CR 7-12</option>
+          <option value="deadly">CR 13-20</option>
+          <option value="legendary">CR 21+</option>
+        </select>
+        <!-- Creature size selector -->
+        <select id="gen-size" style="margin:0; min-width:100px; display:none;">
+          <option value="any">Any Size</option>
+          <option value="Tiny">Tiny</option>
+          <option value="Small">Small</option>
+          <option value="Medium">Medium</option>
+          <option value="Large">Large</option>
+          <option value="Huge">Huge</option>
+          <option value="Gargantuan">Gargantuan</option>
+        </select>
+        <!-- Creature type selector -->
+        <select id="gen-creature-type" style="margin:0; min-width:120px; display:none;">
+          <option value="any">Any Type</option>
+          <option value="Aberration">Aberration</option>
+          <option value="Beast">Beast</option>
+          <option value="Celestial">Celestial</option>
+          <option value="Construct">Construct</option>
+          <option value="Dragon">Dragon</option>
+          <option value="Elemental">Elemental</option>
+          <option value="Fey">Fey</option>
+          <option value="Fiend">Fiend</option>
+          <option value="Giant">Giant</option>
+          <option value="Humanoid">Humanoid</option>
+          <option value="Monstrosity">Monstrosity</option>
+          <option value="Ooze">Ooze</option>
+          <option value="Plant">Plant</option>
+          <option value="Undead">Undead</option>
         </select>
         <button id="gen-btn" onclick="generate()"><i class="fi fi-rr-dice-d20"></i> Generate NPC</button>
       </div>

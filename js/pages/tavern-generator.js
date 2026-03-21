@@ -365,3 +365,14 @@ function renderTavern(name, quality, keeper, atmo, menu, drinks, rooms, quirks, 
 
   output.innerHTML = html;
 }
+
+function copyTavern() {
+  var output = document.getElementById('tavern-output');
+  if (!output || !output.textContent.trim()) {
+    showToast('Generate a tavern first!', 'info');
+    return;
+  }
+  navigator.clipboard.writeText(output.textContent)
+    .then(function () { showToast('Tavern copied!', 'success'); })
+    .catch(function () { showToast('Copy failed.', 'error'); });
+}

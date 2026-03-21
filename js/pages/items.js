@@ -79,11 +79,15 @@ function openItemDetail(index) {
   var item = _dl.items && _dl.items[index];
   if (!item) return;
 
-  var md = '**Category:** ' + item.category + '\n\n';
-  if (item.cost)   md += '**Cost:** ' + item.cost + '\n\n';
-  if (item.weight) md += '**Weight:** ' + item.weight + '\n\n';
-  if (item.properties) md += '**Properties:** ' + item.properties + '\n\n';
-  md += '---\n\n' + (item.desc || 'No description available.');
+  var html = '<div class="detail-stats">';
+  html += '<div class="detail-stat"><strong>Category</strong><span>' + escapeHtml(item.category) + '</span></div>';
+  if (item.cost) html += '<div class="detail-stat"><strong>Cost</strong><span>' + escapeHtml(item.cost) + '</span></div>';
+  if (item.weight) html += '<div class="detail-stat"><strong>Weight</strong><span>' + escapeHtml(item.weight) + '</span></div>';
+  html += '</div>';
+  if (item.properties) {
+    html += '<p style="margin-bottom:12px;"><strong>Properties:</strong> ' + escapeHtml(item.properties) + '</p>';
+  }
+  html += mdToHtml(item.desc || 'No description available.');
 
-  showInfoModal({ title: item.name, bodyHtml: mdToHtml(md) });
+  showInfoModal({ title: item.name, bodyHtml: html });
 }

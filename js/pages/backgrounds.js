@@ -12,10 +12,17 @@ var allBackgrounds = [];
   DndApi.showLoading('bg-list');
 
   try {
-    allBackgrounds = await DndApi.fetchBackgrounds();
-    if (allBackgrounds.length === 0 && typeof BACKGROUNDS !== 'undefined') {
-      allBackgrounds = BACKGROUNDS;
+    var apiBg = await DndApi.fetchBackgrounds();
+    // Merge API data with offline data — offline has many more entries
+    if (typeof BACKGROUNDS !== 'undefined' && BACKGROUNDS.length > 0) {
+      var apiNames = {};
+      apiBg.forEach(function (b) { apiNames[b.name.toLowerCase()] = true; });
+      // Add offline entries not in API
+      BACKGROUNDS.forEach(function (b) {
+        if (!apiNames[b.name.toLowerCase()]) apiBg.push(b);
+      });
     }
+    allBackgrounds = apiBg.sort(function (a, b) { return a.name.localeCompare(b.name); });
     renderBackgrounds(allBackgrounds);
     document.querySelector('.subtitle').textContent =
       'Background reference - ' + allBackgrounds.length + ' backgrounds. Proficiencies, equipment, and features.';
@@ -63,21 +70,32 @@ function openBgDetail(index) {
   var b = _dl.backgrounds && _dl.backgrounds[index];
   if (!b) return;
 
-  var md = '';
-  if (b.skillProf)   md += '**Skill Proficiencies:** ' + b.skillProf + '\n\n';
-  if (b.toolProf)    md += '**Tool Proficiencies:** ' + b.toolProf + '\n\n';
-  if (b.languages)   md += '**Languages:** ' + b.languages + '\n\n';
-  if (b.equipment)   md += '**Equipment:** ' + b.equipment + '\n\n';
+  var html = '<div class="detail-stats">';
+  if (b.skillProf) html += '<div class="detail-stat"><strong>Skills</strong><span>' + escapeHtml(b.skillProf) + '</span></div>';
+  if (b.toolProf && b.toolProf !== 'None') html += '<div class="detail-stat"><strong>Tools</strong><span>' + escapeHtml(b.toolProf) + '</span></div>';
+  if (b.languages && b.languages !== 'None') html += '<div class="detail-stat"><strong>Languages</strong><span>' + escapeHtml(b.languages) + '</span></div>';
+  html += '</div>';
+
+  if (b.equipment) {
+    html += '<p style="margin-bottom:12px;"><strong>Equipment:</strong> ' + escapeHtml(b.equipment) + '</p>';
+  }
 
   if (b.feature) {
-    md += '---\n\n## Feature: ' + b.feature + '\n\n' + (b.featureDesc || '') + '\n\n';
+    html += '<hr style="border-color:var(--border-dim); margin:16px 0;" />';
+    html += '<h3>Feature: ' + escapeHtml(b.feature) + '</h3>';
+    html += '<p>' + escapeHtml(b.featureDesc || '') + '</p>';
+  }
+
+  if (b.desc) {
+    html += '<hr style="border-color:var(--border-dim); margin:16px 0;" />';
+    html += mdToHtml(b.desc);
   }
 
   if (b.personality) {
-    md += '---\n\n## Suggested Characteristics\n\n' + b.personality + '\n\n';
+    html += '<hr style="border-color:var(--border-dim); margin:16px 0;" />';
+    html += '<h3>Suggested Characteristics</h3>';
+    html += mdToHtml(b.personality);
   }
 
-  if (b.desc) md += '---\n\n' + b.desc;
-
-  showInfoModal({ title: b.name, bodyHtml: mdToHtml(md) });
+  showInfoModal({ title: b.name, bodyHtml: html });
 }

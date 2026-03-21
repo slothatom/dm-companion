@@ -57,22 +57,32 @@ function openClassDetail(index) {
   var c = _dl.classes && _dl.classes[index];
   if (!c) return;
 
-  var body = '';
-  if (c.hitDie)         body += 'Hit Die: ' + c.hitDie + '\n';
-  if (c.primaryAbility) body += 'Primary Ability: ' + c.primaryAbility + '\n';
-  if (c.savingThrows)   body += 'Saving Throws: ' + c.savingThrows + '\n';
+  var html = '<div class="detail-stats">';
+  if (c.hitDie) html += '<div class="detail-stat"><strong>Hit Die</strong><span>' + escapeHtml(c.hitDie) + '</span></div>';
+  if (c.primaryAbility) html += '<div class="detail-stat"><strong>Primary</strong><span>' + escapeHtml(c.primaryAbility) + '</span></div>';
+  if (c.savingThrows) html += '<div class="detail-stat"><strong>Saves</strong><span>' + escapeHtml(c.savingThrows) + '</span></div>';
+  html += '</div>';
 
-  body += '\n--- Proficiencies ---\n';
-  if (c.armorProf)    body += 'Armor: ' + c.armorProf + '\n';
-  if (c.weaponProf)   body += 'Weapons: ' + c.weaponProf + '\n';
-  if (c.skillChoices) body += 'Skills: ' + c.skillChoices + '\n';
+  html += '<h3>Proficiencies</h3><ul style="margin:0 0 16px; padding-left:20px;">';
+  if (c.armorProf) html += '<li><strong>Armor:</strong> ' + escapeHtml(c.armorProf) + '</li>';
+  if (c.weaponProf) html += '<li><strong>Weapons:</strong> ' + escapeHtml(c.weaponProf) + '</li>';
+  if (c.skillChoices) html += '<li><strong>Skills:</strong> ' + escapeHtml(c.skillChoices) + '</li>';
+  html += '</ul>';
 
-  if (c.features) body += '\n--- Features ---\n' + c.features + '\n';
-  if (c.subclassName) body += '\nSubclass: ' + c.subclassName;
-  if (c.spellcasting) body += '\n\n--- Spellcasting ---\n' + c.spellcasting;
-  if (c.desc) body += '\n\n' + c.desc;
+  if (c.features) {
+    html += '<h3>Features</h3>' + mdToHtml(c.features);
+  }
+  if (c.subclassName) {
+    html += '<p style="margin-top:12px;"><strong>Subclass:</strong> ' + escapeHtml(c.subclassName) + '</p>';
+  }
+  if (c.spellcasting) {
+    html += '<h3>Spellcasting</h3>' + mdToHtml(c.spellcasting);
+  }
+  if (c.desc) {
+    html += '<hr style="border-color:var(--border-dim); margin:16px 0;" />' + mdToHtml(c.desc);
+  }
 
-  showInfoModal({ title: c.name, body: body });
+  showInfoModal({ title: c.name, bodyHtml: html });
 }
 
 function filterClasses() {

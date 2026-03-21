@@ -320,10 +320,11 @@ function copyLoot() {
 function setLootTab(tab, btn) {
   document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });
   btn.classList.add('active-gen-tab');
-  document.getElementById('hoard-controls').style.display   = tab === 'hoard'   ? '' : 'none';
-  document.getElementById('body-controls').style.display    = tab === 'body'    ? '' : 'none';
-  document.getElementById('room-controls').style.display    = tab === 'room'    ? '' : 'none';
-  document.getElementById('trinket-controls').style.display = tab === 'trinket' ? '' : 'none';
+  document.getElementById('hoard-controls').style.display     = tab === 'hoard'     ? '' : 'none';
+  document.getElementById('encounter-controls').style.display = tab === 'encounter' ? '' : 'none';
+  document.getElementById('body-controls').style.display      = tab === 'body'      ? '' : 'none';
+  document.getElementById('room-controls').style.display      = tab === 'room'      ? '' : 'none';
+  document.getElementById('trinket-controls').style.display   = tab === 'trinket'   ? '' : 'none';
   document.getElementById('loot-output').innerHTML = '';
 }
 
@@ -707,4 +708,65 @@ function renderGenericLoot(title, coins, items) {
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// ── Encounter Loot Generator ────────────────────────────
+
+function generateEncounterLoot() {
+  var cr = parseFloat(document.getElementById('enc-cr').value);
+  var count = parseInt(document.getElementById('enc-count').value, 10);
+  if (isNaN(count) || count < 1) { showToast('Enter a valid monster count.', 'error'); return; }
+  if (count > 20) count = 20;
+
+  var totalCoins = { cp: 0, sp: 0, gp: 0, pp: 0 };
+  var gems = [];
+  var items = [];
+
+  for (var i = 0; i < count; i++) {
+    if (cr <= 4) {
+      totalCoins.cp += rollDice(5, 6);
+      totalCoins.sp += rollDice(2, 6);
+      if (Math.random() < 0.10) totalCoins.gp += rollDice(1, 6);
+      if (Math.random() < 0.15) items.push(pick(MUNDANE_GEAR));
+    } else if (cr <= 10) {
+      totalCoins.sp += rollDice(4, 6) * 10;
+      totalCoins.gp += rollDice(2, 6) * 10;
+      if (Math.random() < 0.20) gems.push(pick(GEMS[50]) + ' (50 gp)');
+      if (Math.random() < 0.20) items.push(pick(MUNDANE_WEAPONS));
+      if (Math.random() < 0.10) items.push(pick(POTIONS_CONSUMABLES));
+    } else if (cr <= 16) {
+      totalCoins.gp += rollDice(3, 6) * 10;
+      totalCoins.pp += rollDice(1, 6);
+      if (Math.random() < 0.25) gems.push(pick(GEMS[100]) + ' (100 gp)');
+      if (Math.random() < 0.15) items.push(pick(POTIONS_CONSUMABLES));
+    } else {
+      totalCoins.gp += rollDice(2, 6) * 100;
+      totalCoins.pp += rollDice(2, 6) * 10;
+      if (Math.random() < 0.30) gems.push(pick(GEMS[500]) + ' (500 gp)');
+      if (Math.random() < 0.15) items.push(pick(POTIONS_CONSUMABLES));
+    }
+  }
+
+  var crLabel = cr < 1 ? ('CR ' + (cr === 0.125 ? '1/8' : cr === 0.25 ? '1/4' : '1/2')) : 'CR ' + cr;
+  var html = '<div class="card" style="padding:18px;">';
+  html += '<h3 style="margin:0 0 4px; color:var(--accent);">Encounter Loot</h3>';
+  html += '<div style="color:var(--text-dim); margin-bottom:12px; font-style:italic;">' + count + ' creature' + (count > 1 ? 's' : '') + ' at ' + escapeHtml(crLabel) + '</div>';
+  html += '<div class="scores-grid">';
+  ['pp', 'gp', 'sp', 'cp'].forEach(function (d) {
+    var val = totalCoins[d] || 0;
+    if (val > 0) {
+      html += '<div class="score-card"><div class="score-label">' + d.toUpperCase() + '</div><div class="score-value" style="font-size:22px;">' + val + '</div></div>';
+    }
+  });
+  html += '</div>';
+  if (gems.length > 0) {
+    html += '<div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border);"><strong>Gems:</strong> ' + escapeHtml(gems.join(', ')) + '</div>';
+  }
+  if (items.length > 0) {
+    html += '<div style="margin-top:8px;"><strong>Items:</strong> ' + escapeHtml(items.join(', ')) + '</div>';
+  }
+  var totalGP = (totalCoins.pp || 0) * 10 + (totalCoins.gp || 0) + (totalCoins.sp || 0) * 0.1 + (totalCoins.cp || 0) * 0.01;
+  html += '<div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); color:var(--text-dim);"><strong>Total Value:</strong> ~' + totalGP.toFixed(1) + ' gp</div>';
+  html += '</div>';
+  document.getElementById('loot-output').innerHTML = html;
 }

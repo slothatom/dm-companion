@@ -148,6 +148,27 @@ function removePin(mapIndex, pinIndex) {
   renderMaps();
 }
 
+// ── Image Upload Handler ────────────────────────────────
+
+function handleMapUpload(index, input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Image too large (max 5 MB). Try a smaller image.', 'error');
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function (ev) {
+    maps[index].imageUrl = ev.target.result;
+    var urlInput = document.getElementById('map-url-' + index);
+    if (urlInput) urlInput.value = '(uploaded image)';
+    markDirty();
+    renderMaps();
+    showToast('Image uploaded successfully.', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
 // ── Image Paste Handler ─────────────────────────────────
 
 function setupPasteHandler(index) {
@@ -272,8 +293,12 @@ function renderMaps() {
         '</div>' +
       '</div>' +
       '<div>' +
-        '<label>Image URL <span style="color:var(--text-dim);font-size:10px;text-transform:none;">(or paste an image)</span></label>' +
-        '<input type="text" id="map-url-' + realIdx + '" value="' + escapeHtml(urlDisplay) + '" placeholder="https://example.com/map.jpg or paste image" onchange="updateMap(' + realIdx + ', \'imageUrl\', this.value)" />' +
+        '<label>Image <span style="color:var(--text-dim);font-size:10px;text-transform:none;">(URL, paste, or upload)</span></label>' +
+        '<div style="display:flex; gap:6px; align-items:flex-start;">' +
+          '<input type="text" id="map-url-' + realIdx + '" value="' + escapeHtml(urlDisplay) + '" placeholder="https://example.com/map.jpg or paste image" onchange="updateMap(' + realIdx + ', \'imageUrl\', this.value)" style="flex:1;" />' +
+          '<button type="button" class="secondary" onclick="document.getElementById(\'map-file-' + realIdx + '\').click()" style="padding:10px 12px; margin-bottom:16px; white-space:nowrap;" title="Upload from computer"><i class="fi fi-rr-upload"></i></button>' +
+          '<input type="file" id="map-file-' + realIdx + '" accept="image/*" style="display:none;" onchange="handleMapUpload(' + realIdx + ', this)" />' +
+        '</div>' +
       '</div>' +
       '<div class="map-preview">' + mapImageHtml + '</div>' +
       '<div style="display:flex;gap:8px;margin-top:8px;">' +

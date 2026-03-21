@@ -52,9 +52,11 @@ function renderFeats(list) {
     var prereq = f.prerequisite
       ? '<span class="spell-badge badge-conc">' + escapeHtml(f.prerequisite) + '</span>'
       : '<span class="spell-badge">No prerequisite</span>';
+    var shortDesc = f.desc ? truncateText(f.desc.replace(/\*\*/g, '').replace(/\n/g, ' '), 120) : '';
     return '<div class="ref-card" onclick="openFeatDetail(' + idx + ')" title="Click to expand">' +
       '<div class="ref-name">' + escapeHtml(f.name) + '</div>' +
       '<div class="spell-stats">' + prereq + '</div>' +
+      (shortDesc ? '<div class="ref-desc">' + escapeHtml(shortDesc) + '</div>' : '') +
     '</div>';
   }).join('');
 }
@@ -63,11 +65,11 @@ function openFeatDetail(index) {
   var f = _dl.feats && _dl.feats[index];
   if (!f) return;
 
-  var md = '';
+  var html = '';
   if (f.prerequisite) {
-    md += '**Prerequisite:** ' + f.prerequisite + '\n\n';
+    html += '<div class="detail-stats"><div class="detail-stat"><strong>Prerequisite</strong><span>' + escapeHtml(f.prerequisite) + '</span></div></div>';
   }
-  md += f.desc || 'No description available.';
+  html += mdToHtml(f.desc || 'No description available.');
 
-  showInfoModal({ title: f.name, bodyHtml: mdToHtml(md) });
+  showInfoModal({ title: f.name, bodyHtml: html });
 }

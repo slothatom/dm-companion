@@ -228,6 +228,31 @@ var SHOP_INVENTORY = {
 
 var SHOP_TYPES = Object.keys(SHOP_INVENTORY);
 
+// ── Shop Quirks ──────────────────────────────────────────
+
+var SHOP_QUIRKS = [
+  'The shop has a "no haggling" policy carved into a wooden sign above the counter.',
+  'A large, lazy cat sleeps on the counter and refuses to move.',
+  'The shopkeeper insists on telling the origin story of every item.',
+  'The shelves are meticulously organized, almost obsessively so.',
+  'The shop smells faintly of cinnamon and old books.',
+  'A bell above the door plays a different note each time someone enters.',
+  'Previous customers have left small review notes pinned to a board near the entrance.',
+  'The shopkeeper offers a free cup of herbal tea with every purchase.',
+  'The shop has a "buy one, get one half off" deal on a random item today.',
+  'A wanted poster for a local bandit is pinned prominently near the door.',
+  'The shopkeeper has a pet pseudodragon perched on their shoulder.',
+  'The back wall is covered in trophies from the shopkeeper\'s adventuring days.',
+  'There\'s a mysterious locked cabinet that the shopkeeper refuses to discuss.',
+  'The prices are all written in a code that only regulars understand.',
+  'A bard is performing in the corner, providing unexpected background music.',
+  'The shop has a "no weapons drawn" rule, enforced by an animated suit of armor at the door.',
+  'The floor creaks ominously in one specific spot near the back.',
+  'The shop doubles as a small lending library with a shelf of well-worn books.',
+  'A chalkboard by the door lists today\'s "specials" with questionable discounts.',
+  'The shopkeeper uses an abacus for all calculations, even simple ones.'
+];
+
 // ── Settlement Tier Configuration ───────────────────────
 
 var SETTLEMENT_TIERS = {
@@ -338,10 +363,11 @@ function generateShop() {
     };
   });
 
-  renderShop(shopName, shopType, tier.label, keeperName, keeperRace, keeperPersonality, items);
+  var shopQuirk = pick(SHOP_QUIRKS);
+  renderShop(shopName, shopType, tier.label, keeperName, keeperRace, keeperPersonality, items, shopQuirk);
 }
 
-function renderShop(shopName, shopType, tierLabel, keeperName, keeperRace, keeperPersonality, items) {
+function renderShop(shopName, shopType, tierLabel, keeperName, keeperRace, keeperPersonality, items, shopQuirk) {
   var output = document.getElementById('shop-output');
   var htmlStr = '';
 
@@ -353,6 +379,12 @@ function renderShop(shopName, shopType, tierLabel, keeperName, keeperRace, keepe
   htmlStr += '<strong>Shopkeeper:</strong> ' + escapeHtml(keeperName) + ' <span style="color:var(--text-dim);">(' + escapeHtml(keeperRace) + ')</span><br/>';
   htmlStr += '<em style="color:var(--text-muted);">' + escapeHtml(keeperPersonality) + '</em>';
   htmlStr += '</div>';
+  if (shopQuirk) {
+    htmlStr += '<div style="margin-bottom:14px; padding:10px 12px; background:var(--card-inner-bg, rgba(255,255,255,0.03)); border-radius:8px; border-left:3px solid var(--accent);">';
+    htmlStr += '<strong style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim);">Shop Quirk</strong><br/>';
+    htmlStr += '<span style="color:var(--text-muted); font-style:italic;">' + escapeHtml(shopQuirk) + '</span>';
+    htmlStr += '</div>';
+  }
 
   htmlStr += '<h4 style="margin:0 0 8px;">Inventory</h4>';
   htmlStr += '<table style="width:100%; border-collapse:collapse; font-size:14px;">';

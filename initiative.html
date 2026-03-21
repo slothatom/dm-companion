@@ -53,35 +53,35 @@
         </div>
       </div>
 
-      <div class="stat-grid" style="margin-top:14px;">
+      <div class="stat-grid" style="margin-top:14px; grid-template-columns: 1fr auto 1fr 1fr;">
         <div>
           <label>Name</label>
-          <input type="text" id="new-name" placeholder="e.g. Goblin Chief" />
+          <input type="text" id="new-name" placeholder="Goblin Chief" style="margin:0;" />
         </div>
         <div>
           <label>Initiative</label>
-          <div style="display:flex; gap:6px; align-items:flex-start;">
-            <input type="number" id="new-init" placeholder="e.g. 14" style="flex:1;" />
-            <button type="button" onclick="rollInitiative()" style="padding:10px 12px; margin-bottom:16px; white-space:nowrap;" title="Roll d20 for initiative"><i class="fi fi-rr-dice-d20"></i></button>
+          <div style="display:flex; gap:4px; align-items:center;">
+            <input type="number" id="new-init" placeholder="14" style="width:64px; margin:0;" />
+            <span style="color:var(--text-dim); font-size:12px;">+</span>
+            <input type="number" id="new-init-mod" placeholder="DEX" title="Initiative modifier (DEX bonus)" style="width:54px; margin:0;" />
+            <button type="button" onclick="rollInitiative()" style="padding:8px 10px; white-space:nowrap; margin:0;" title="Roll d20 + modifier"><i class="fi fi-rr-dice-d20"></i></button>
           </div>
         </div>
         <div>
-          <label>HP (optional)</label>
-          <input type="number" id="new-hp" placeholder="e.g. 30" />
+          <label>HP</label>
+          <input type="number" id="new-hp" placeholder="30" style="margin:0;" />
         </div>
-      </div>
-      <div class="stat-grid-2">
         <div>
           <label>Type</label>
-          <select id="new-type">
-            <option value="player"> Player</option>
-            <option value="npc"> NPC</option>
-            <option value="creature"> Creature</option>
+          <select id="new-type" style="margin:0;">
+            <option value="player">Player</option>
+            <option value="npc">NPC</option>
+            <option value="creature">Creature</option>
           </select>
         </div>
-        <div style="display:flex; align-items:flex-end; padding-bottom:16px;">
-          <button onclick="addCombatant()" style="width:100%;">+ Add</button>
-        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <button onclick="addCombatant()" style="width:100%;"><i class="fi fi-rr-plus"></i> Add Combatant</button>
       </div>
     </div>
 

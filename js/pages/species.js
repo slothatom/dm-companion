@@ -59,25 +59,43 @@ function renderSpecies(list) {
   }).join('');
 }
 
+function cleanSpeciesText(text) {
+  if (!text) return '';
+  // Remove repeated field labels like "Size: _Size._" or "Languages: *Languages.*"
+  return text
+    .replace(/\*?_?Size[.:]\s*_?Size\.?_?\*?/gi, '')
+    .replace(/\*?_?Languages[.:]\s*_?Languages\.?_?\*?/gi, '')
+    .replace(/\*?_?Speed[.:]\s*_?Speed\.?_?\*?/gi, '')
+    .replace(/^\s*\n/gm, '');
+}
+
 function openSpeciesDetail(index) {
   var s = _dl.species && _dl.species[index];
   if (!s) return;
 
-  var md = '';
-  if (s.size)      md += '**Size:** ' + s.size + '\n\n';
-  if (s.speed)     md += '**Speed:** ' + s.speed + '\n\n';
-  if (s.languages) md += '**Languages:** ' + s.languages + '\n\n';
+  var html = '<div class="detail-stats">';
+  if (s.size)      html += '<div class="detail-stat"><strong>Size</strong><span>' + escapeHtml(s.size) + '</span></div>';
+  if (s.speed)     html += '<div class="detail-stat"><strong>Speed</strong><span>' + escapeHtml(s.speed) + '</span></div>';
+  if (s.languages) html += '<div class="detail-stat"><strong>Languages</strong><span>' + escapeHtml(s.languages) + '</span></div>';
+  html += '</div>';
 
-  if (s.traits) md += '## Traits\n\n' + s.traits + '\n\n';
+  var traits = cleanSpeciesText(s.traits);
+  if (traits) html += '<h3>Traits</h3>' + mdToHtml(traits);
 
   if (s.subraces && s.subraces.length > 0) {
-    md += '---\n\n## Subraces\n\n';
+    html += '<hr style="border-color:var(--border-dim); margin:16px 0;" />';
+    html += '<h3>Subraces</h3>';
     s.subraces.forEach(function (sub) {
-      md += '### ' + sub.name + '\n\n' + sub.traits + '\n\n';
+      var subTraits = cleanSpeciesText(sub.traits);
+      html += '<h4 style="color:var(--primary); margin:12px 0 6px;">' + escapeHtml(sub.name) + '</h4>';
+      html += mdToHtml(subTraits);
     });
   }
 
-  if (s.desc) md += '---\n\n' + s.desc;
+  if (s.desc) {
+    html += '<hr style="border-color:var(--border-dim); margin:16px 0;" />';
+    html += mdToHtml(cleanSpeciesText(s.desc));
+  }
 
-  showInfoModal({ title: s.name, bodyHtml: mdToHtml(md) });
+  showInfoModal({ title: s.name, bodyHtml: html });
 }

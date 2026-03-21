@@ -344,7 +344,7 @@ function renderNav(user) {
       { href: 'loot-generator.html', icon: '<i class="fi fi-rr-box-open"></i>',       label: 'Loot'           },
       { href: 'market-generator.html',icon: '<i class="fi fi-rr-shop"></i>',          label: 'Market'         },
       { href: 'tavern-generator.html',icon: '<i class="fi fi-rr-mug-hot-alt"></i>',  label: 'Tavern'         },
-      { href: 'treasure.html',       icon: '<i class="fi fi-rr-coins"></i>',          label: 'Treasure'       },
+      { href: 'treasure.html',       icon: '<i class="fi fi-rr-coins"></i>',          label: 'Currency'       },
       { href: 'trap-generator.html', icon: '<i class="fi fi-rr-triangle-warning"></i>',label: 'Traps'         },
     ]},
     { heading: 'Compendium', pages: [

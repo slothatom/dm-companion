@@ -1509,6 +1509,144 @@ input[type="time"] {
 }
 
 /* =============================================
+   Stats Generator - D&D sheet style
+   ============================================= */
+
+.method-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.method-btn:hover { border-color: var(--primary); color: var(--text); }
+.method-btn.active {
+  background: var(--primary);
+  color: #1a1210;
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.scores-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+  .scores-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 380px) {
+  .scores-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.score-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 8px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 0;
+}
+
+.score-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.score-value {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--heading);
+  line-height: 1;
+}
+
+.score-mod {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.scores-summary {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--text-dim);
+  padding: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.point-buy-remaining {
+  text-align: center;
+  font-size: 15px;
+  color: var(--heading);
+  margin-bottom: 8px;
+  padding: 8px 16px;
+  background: rgba(192,132,87,0.08);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.pb-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pb-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.pb-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #1a1210;
+  border-color: var(--primary);
+}
+.pb-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* =============================================
    Character Sheet styles
    ============================================= */
 

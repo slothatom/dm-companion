@@ -17,12 +17,15 @@
     <p class="subtitle">Generate ability scores - roll 4d6 drop lowest, use standard array, or point buy.</p>
 
     <div class="gen-type-tabs">
-      <button class="method-btn active" data-method="4d6" onclick="setMethod('4d6')">4d6 Drop Lowest</button>
+      <button class="method-btn" data-method="4d6" onclick="setMethod('4d6')">4d6 Drop Lowest</button>
       <button class="method-btn" data-method="standard" onclick="setMethod('standard')">Standard Array</button>
       <button class="method-btn" data-method="pointbuy" onclick="setMethod('pointbuy')">Point Buy</button>
     </div>
 
-    <button id="reroll-btn" style="display:none;" onclick="rerollScores()"><i class="fi fi-rr-dice-d20"></i> Reroll</button>
+    <div class="row-actions" style="margin-top:12px;">
+      <button id="reroll-btn" style="display:none;" onclick="rerollScores()"><i class="fi fi-rr-dice-d20"></i> Reroll</button>
+      <button class="secondary" onclick="copyScores()"><i class="fi fi-rr-copy"></i> Copy</button>
+    </div>
 
     <div id="scores-output"></div>
   </main>

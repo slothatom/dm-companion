@@ -6,6 +6,7 @@
   const user = await requireAuth();
   if (!user) return;
   renderNav(user);
+  setMethod('4d6');
 })();
 
 const ABILITIES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];

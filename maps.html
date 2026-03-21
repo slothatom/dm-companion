@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https://www.transparenttextures.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https: http:; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
   <title>DM Companion – Maps</title>
   <meta name="description" content="Campaign maps for your D&amp;D adventures." />
   <link rel="stylesheet" href="css/style.css" />
@@ -18,11 +18,15 @@
 
   <main id="main-content">
     <h1><i class="fi fi-rr-map"></i> Maps</h1>
-    <p class="subtitle">Map notes and battle maps (coming soon).</p>
+    <p class="subtitle">Map notes — keep image links, room descriptions, and encounter notes for your battle maps.</p>
 
-    <div id="maps-area">
-      <p class="empty-state">Map tools are coming soon - stay tuned!</p>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
+      <button onclick="addMap()"><i class="fi fi-rr-plus"></i> Add Map</button>
+      <button onclick="saveMaps()" id="save-btn"><i class="fi fi-rr-disk"></i> Save</button>
+      <span class="save-status" id="save-status"></span>
     </div>
+
+    <div id="maps-area" aria-live="polite"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

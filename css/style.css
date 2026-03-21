@@ -7,30 +7,30 @@
 
 /* ---- Design Tokens ---- */
 :root {
-  --bg:          #2B1E1A;
-  --surface:     #3A2A24;
-  --surface2:    #30201A;
-  --border:      #5C3D2E;
-  --border-dim:  #4A3028;
-  --primary:     #C08457;
-  --primary-h:   #D4935F;
-  --secondary:   #6D9F71;
-  --secondary-h: #85B889;
-  --accent:      #E6C07B;
-  --danger:      #8B3A3A;
-  --danger-h:    #A84848;
-  --text:        #F5E6D3;
-  --text-muted:  #B89070;
-  --text-dim:    #7A5A48;
+  --bg:          #1A1410;
+  --surface:     #2A211B;
+  --surface2:    #221A14;
+  --border:      #4A3628;
+  --border-dim:  #3A2A20;
+  --primary:     #C4894C;
+  --primary-h:   #D9A065;
+  --secondary:   #5A9E6F;
+  --secondary-h: #72B585;
+  --accent:      #F0C75E;
+  --danger:      #9B3A3A;
+  --danger-h:    #B84848;
+  --text:        #F5E8D8;
+  --text-muted:  #B8956E;
+  --text-dim:    #7A5C44;
 
   --sidebar-w:     220px;
   --sidebar-w-col: 62px;
 
-  --gold:    #E6C07B;
-  --success: #6D9F71;
-  --info:    #5a8abf;
-  --card-bg: #3A2A24;
-  --heading: #E6C07B;
+  --gold:    #F0C75E;
+  --success: #5A9E6F;
+  --info:    #5090C0;
+  --card-bg: #2A211B;
+  --heading: #F0C75E;
 
   /* Z-index scale */
   --z-mobile-btn:  100;
@@ -43,26 +43,26 @@
 }
 
 [data-theme="light"] {
-  --bg:          #f5f0e8;
-  --surface:     #fff;
-  --surface2:    #ede8df;
-  --text:        #2c2416;
-  --text-muted:  #6b5d4d;
-  --text-dim:    #9a8b78;
-  --border:      #d4c9b8;
-  --border-dim:  #d4c9b8;
-  --primary:     #8b6914;
-  --primary-h:   #a07a1a;
-  --accent:      #b8860b;
-  --secondary:   #4a8a4e;
-  --secondary-h: #5a9a5e;
-  --danger:      #a83030;
-  --danger-h:    #c04040;
-  --gold:        #b8860b;
-  --success:     #4a8a4e;
-  --info:        #3a6a9f;
-  --card-bg:     #fff;
-  --heading:     #5a4020;
+  --bg:          #F7F2EA;
+  --surface:     #FFFFFF;
+  --surface2:    #F0EBE2;
+  --text:        #2A1F14;
+  --text-muted:  #6B5A46;
+  --text-dim:    #9A8B78;
+  --border:      #D8CDB8;
+  --border-dim:  #D8CDB8;
+  --primary:     #8B6914;
+  --primary-h:   #A57A1A;
+  --accent:      #C4940A;
+  --secondary:   #3D7D48;
+  --secondary-h: #4D8D58;
+  --danger:      #A83030;
+  --danger-h:    #C04040;
+  --gold:        #C4940A;
+  --success:     #3D7D48;
+  --info:        #3060A0;
+  --card-bg:     #FFFFFF;
+  --heading:     #5A3F1A;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2467,3 +2467,53 @@ button .fi { margin-right: 5px; font-size: 1em; }
   vertical-align: -0.15em;
   margin-right: 6px;
 }
+
+/* ---- Map Pins ---- */
+.map-image-wrap { position: relative; display: inline-block; width: 100%; }
+.map-image-wrap.pinning { outline: 2px dashed var(--accent); outline-offset: 2px; border-radius: 6px; }
+.map-image-wrap img { display: block; max-width: 100%; border-radius: 6px; }
+
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+.map-pin > i {
+  font-size: 20px;
+  color: var(--danger);
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+.map-pin-label {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 10px;
+  color: var(--text);
+  white-space: nowrap;
+  margin-top: -2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.map-pin-remove {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  font-size: 8px;
+  padding: 0;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.map-pin:hover .map-pin-remove { display: flex; }

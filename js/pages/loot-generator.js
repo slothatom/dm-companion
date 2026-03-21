@@ -8,13 +8,6 @@
   renderNav(user);
 })();
 
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function rollDice(num, sides) {
-  var total = 0;
-  for (var i = 0; i < num; i++) total += Math.floor(Math.random() * sides) + 1;
-  return total;
-}
-
 // ── Gem Tables ──────────────────────────────────────────
 var GEMS = {
   10:   ['Azurite', 'Banded agate', 'Blue quartz', 'Eye agate', 'Hematite', 'Lapis lazuli', 'Malachite', 'Moss agate', 'Obsidian', 'Rhodochrosite', 'Tiger eye', 'Turquoise'],

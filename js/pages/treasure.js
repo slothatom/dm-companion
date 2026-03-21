@@ -9,12 +9,6 @@
   loadCurrencyNames();
 })();
 
-function rollDice(num, sides) {
-  var total = 0;
-  for (var i = 0; i < num; i++) total += Math.floor(Math.random() * sides) + 1;
-  return total;
-}
-
 // ── Currency Name Customization ─────────────────────────
 
 function getCurrencyNames() {

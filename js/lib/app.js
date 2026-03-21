@@ -329,6 +329,8 @@ function renderNav(user) {
       { href: 'players.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Players'    },
       { href: 'charsheet.html',    icon: '<i class="fi fi-rr-document-signed"></i>', label: 'Char Sheets' },
       { href: 'characters.html',    icon: '<i class="fi fi-rr-skull"></i>',          label: 'NPCs'       },
+      { href: 'locations.html',     icon: '<i class="fi fi-rr-marker"></i>',         label: 'Locations'  },
+      { href: 'maps.html',          icon: '<i class="fi fi-rr-map-pin"></i>',        label: 'Maps'       },
     ]},
     { heading: 'Play', pages: [
       { href: 'initiative.html',    icon: '<i class="fi fi-rr-sword"></i>',          label: 'Initiative'     },
@@ -345,7 +347,7 @@ function renderNav(user) {
       { href: 'treasure.html',       icon: '<i class="fi fi-rr-coins"></i>',          label: 'Treasure'       },
       { href: 'trap-generator.html', icon: '<i class="fi fi-rr-triangle-warning"></i>',label: 'Traps'         },
     ]},
-    { heading: 'Reference', pages: [
+    { heading: 'Compendium', pages: [
       { href: 'spells.html',        icon: '<i class="fi fi-rr-book-spells"></i>',    label: 'Spells'         },
       { href: 'bestiary.html',      icon: '<i class="fi fi-rr-dragon"></i>',         label: 'Bestiary'       },
       { href: 'species.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Species'        },
@@ -353,17 +355,16 @@ function renderNav(user) {
       { href: 'feats.html',         icon: '<i class="fi fi-rr-star"></i>',           label: 'Feats'          },
       { href: 'items.html',         icon: '<i class="fi fi-rr-backpack"></i>',       label: 'Items'          },
       { href: 'magic-items.html',  icon: '<i class="fi fi-rr-sparkles"></i>',  label: 'Magic Items'    },
-      { href: 'conditions.html',   icon: '<i class="fi fi-rr-exclamation"></i>',    label: 'Conditions'     },
       { href: 'backgrounds.html',   icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Backgrounds'    },
+    ]},
+    { heading: 'Reference', pages: [
+      { href: 'conditions.html',   icon: '<i class="fi fi-rr-exclamation"></i>',    label: 'Conditions'     },
       { href: 'languages.html',     icon: '<i class="fi fi-rr-comment"></i>',        label: 'Languages'      },
+      { href: 'objects.html',       icon: '<i class="fi fi-rr-box"></i>',            label: 'Objects'        },
+      { href: 'hazards.html',       icon: '<i class="fi fi-rr-flame"></i>',          label: 'Hazards'        },
       { href: 'rules.html',         icon: '<i class="fi fi-rr-book"></i>',           label: 'Rules'          },
       { href: 'quick-ref.html',     icon: '<i class="fi fi-rr-clipboard-list"></i>', label: 'Quick Ref'      },
       { href: 'glossary.html',      icon: '<i class="fi fi-rr-book"></i>',           label: 'Glossary'       },
-      { href: 'hazards.html',       icon: '<i class="fi fi-rr-flame"></i>',          label: 'Hazards'        },
-      { href: 'objects.html',       icon: '<i class="fi fi-rr-box"></i>',            label: 'Objects'        },
-    ]},
-    { heading: 'World', pages: [
-      { href: 'maps.html',          icon: '<i class="fi fi-rr-map"></i>',            label: 'Maps'           },
     ]},
   ];
 
@@ -697,6 +698,14 @@ function truncateText(str, len) {
   if (!str) return '';
   if (str.length <= len) return str;
   return str.substring(0, len) + '...';
+}
+
+// ── Shared random helpers (used by generators) ────────
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function rollDice(num, sides) {
+  var total = 0;
+  for (var i = 0; i < num; i++) total += Math.floor(Math.random() * sides) + 1;
+  return total;
 }
 
 function closeMobileSidebar() {

@@ -43,10 +43,6 @@ async function loadGenCampaigns() {
   });
 }
 
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 function setGenMode(mode, btn) {
   generatorMode = mode;
   document.querySelectorAll('.gen-tab').forEach(function (b) { b.classList.remove('active-gen-tab'); });

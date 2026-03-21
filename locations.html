@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https: http:; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
-  <title>DM Companion – Maps</title>
-  <meta name="description" content="Campaign maps for your D&amp;D adventures." />
+  <title>DM Companion – Locations</title>
+  <meta name="description" content="Manage campaign locations - towns, dungeons, landmarks, and points of interest." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
@@ -18,26 +18,26 @@
   <nav id="main-nav" aria-label="Main navigation"></nav>
 
   <main id="main-content">
-    <h1><i class="fi fi-rr-map-pin"></i> Maps</h1>
-    <p class="subtitle">Battle maps, world maps, and dungeon layouts — link to campaigns and pin locations.</p>
+    <h1><i class="fi fi-rr-marker"></i> Locations</h1>
+    <p class="subtitle">Manage locations for your campaigns - towns, dungeons, wilderness, and points of interest.</p>
 
     <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
-      <select id="map-campaign-filter" onchange="renderMaps()" style="min-width:180px; margin:0;">
+      <select id="location-campaign-filter" onchange="filterLocations()" style="min-width:180px; margin:0;">
         <option value="">All Campaigns</option>
       </select>
-      <button onclick="addMap()"><i class="fi fi-rr-plus"></i> Add Map</button>
-      <button onclick="saveMaps()" id="save-btn"><i class="fi fi-rr-disk"></i> Save</button>
+      <button onclick="addLocation()"><i class="fi fi-rr-plus"></i> Add Location</button>
+      <button onclick="saveLocations()" id="save-btn"><i class="fi fi-rr-disk"></i> Save</button>
       <span class="save-status" id="save-status"></span>
     </div>
 
-    <div id="maps-area" aria-live="polite"></div>
+    <div id="locations-area" aria-live="polite"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script>window.ACTIVE_PAGE = 'maps.html';</script>
+  <script>window.ACTIVE_PAGE = 'locations.html';</script>
   <script src="js/lib/supabase.js"></script>
   <script src="js/lib/auth.js"></script>
   <script src="js/lib/app.js"></script>
-  <script src="js/pages/maps.js"></script>
+  <script src="js/pages/locations.js"></script>
 </body>
 </html>

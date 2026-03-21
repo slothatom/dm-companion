@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ---
 
+## [0.9.0] - 2026-03-21
+
+### Added
+- **Locations page** — manage campaign locations (Town, City, Village, Dungeon, Wilderness, Landmark, Building) with descriptions, DM notes, map images, tags, and NPC/creature assignment per location
+- **Maps**: campaign assignment per map, map type selector (Battle Map, World Map, Dungeon Map, Regional Map, City Map), image paste-to-upload support (base64), and interactive pin system — click to place labeled pins on map images
+- **Sidebar menu restructure** — new "Compendium" section for SRD data (spells, bestiary, species, classes, etc.), cleaner "Reference" section for quick-lookup pages, Locations and Maps moved under Campaign
+
+### Changed
+- **Color theme refresh** — darker backgrounds for more contrast, brighter gold accent (#F0C75E), richer browns, warmer light theme
+- **Code optimization** — moved `pick()` and `rollDice()` helper functions to shared `app.js` (removed duplicates from 7 generator files)
+
+---
+
 ## [0.8.0] - 2026-03-21
 
 ### Added

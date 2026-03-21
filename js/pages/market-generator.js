@@ -8,12 +8,6 @@
   renderNav(user);
 })();
 
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function rollDice(num, sides) {
-  var total = 0;
-  for (var i = 0; i < num; i++) total += Math.floor(Math.random() * sides) + 1;
-  return total;
-}
 function randPrice(base) {
   var multiplier = 0.8 + Math.random() * 0.5; // 0.8 to 1.3
   return Math.round(base * multiplier * 100) / 100;

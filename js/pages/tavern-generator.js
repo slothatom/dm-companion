@@ -8,8 +8,6 @@
   renderNav(user);
 })();
 
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function rollDice(n, s) { var t = 0; for (var i = 0; i < n; i++) t += Math.floor(Math.random() * s) + 1; return t; }
 function coinStr(cp) {
   if (cp >= 100) return (cp / 100) + ' gp';
   if (cp >= 10) return (cp / 10) + ' sp';

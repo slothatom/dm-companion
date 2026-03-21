@@ -175,7 +175,93 @@ function closePromptModal() {
 //   Info / Detail Modal (read-only, single Close button)
 // =============================================
 
-// opts: { title, body }
+// ── Simple markdown → HTML converter for API text fields ──
+// Handles: ## headings, **bold**, markdown tables, - lists, blank-line paragraphs
+function mdToHtml(md) {
+  if (!md) return '';
+  var lines = md.split('\n');
+  var html = '';
+  var inList = false;
+  var inTable = false;
+  var i = 0;
+
+  function closeLists() {
+    if (inList)  { html += '</ul>'; inList = false; }
+    if (inTable) { html += '</tbody></table>'; inTable = false; }
+  }
+
+  while (i < lines.length) {
+    var line = lines[i];
+    var trimmed = line.trim();
+
+    // Blank line → close open blocks
+    if (!trimmed) { closeLists(); i++; continue; }
+
+    // Headings
+    if (/^###\s+/.test(trimmed)) {
+      closeLists();
+      html += '<h3>' + inlineMd(trimmed.replace(/^###\s+/, '')) + '</h3>';
+      i++; continue;
+    }
+    if (/^##\s+/.test(trimmed)) {
+      closeLists();
+      html += '<h2>' + inlineMd(trimmed.replace(/^##\s+/, '')) + '</h2>';
+      i++; continue;
+    }
+
+    // Markdown table (line starts with |)
+    if (/^\|/.test(trimmed)) {
+      closeLists();
+      if (!inTable) {
+        html += '<table><thead>';
+        // Header row
+        var hCells = trimmed.split('|').filter(function (c) { return c.trim(); });
+        html += '<tr>' + hCells.map(function (c) { return '<th>' + inlineMd(c.trim()) + '</th>'; }).join('') + '</tr>';
+        html += '</thead><tbody>';
+        inTable = true;
+        i++;
+        // Skip separator row (|---|---|)
+        if (i < lines.length && /^\|[\s\-:|]+\|/.test(lines[i].trim())) i++;
+        continue;
+      }
+      // Data row
+      var dCells = trimmed.split('|').filter(function (c) { return c.trim(); });
+      html += '<tr>' + dCells.map(function (c) { return '<td>' + inlineMd(c.trim()) + '</td>'; }).join('') + '</tr>';
+      i++; continue;
+    }
+
+    // Unordered list item
+    if (/^[-*]\s+/.test(trimmed)) {
+      if (inTable) { html += '</tbody></table>'; inTable = false; }
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += '<li>' + inlineMd(trimmed.replace(/^[-*]\s+/, '')) + '</li>';
+      i++; continue;
+    }
+
+    // Horizontal rule
+    if (/^---+$/.test(trimmed) || /^\*\*\*+$/.test(trimmed)) {
+      closeLists();
+      html += '<hr>';
+      i++; continue;
+    }
+
+    // Regular paragraph
+    closeLists();
+    html += '<p>' + inlineMd(trimmed) + '</p>';
+    i++;
+  }
+  closeLists();
+  return html;
+}
+
+// Inline markdown: **bold**, *italic*
+function inlineMd(text) {
+  return escapeHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+// opts: { title, body, bodyHtml, headerHtml }
 function showInfoModal(opts) {
   let modal = document.getElementById('dm-info-modal');
   if (!modal) {
@@ -199,8 +285,16 @@ function showInfoModal(opts) {
   }
   document.getElementById('dm-info-header').innerHTML = opts.headerHtml || '';
   document.getElementById('dm-info-title').textContent = opts.title || '';
-  // Use innerText to preserve \n as line breaks (works with white-space: pre-line)
-  document.getElementById('dm-info-body').innerText = opts.body || '';
+  var bodyEl = document.getElementById('dm-info-body');
+  if (opts.bodyHtml) {
+    // Pre-rendered HTML (from mdToHtml)
+    bodyEl.innerHTML = opts.bodyHtml;
+    bodyEl.style.whiteSpace = 'normal';
+  } else {
+    // Plain text with line-break preservation
+    bodyEl.innerText = opts.body || '';
+    bodyEl.style.whiteSpace = 'pre-line';
+  }
   modal.style.display = 'flex';
 }
 

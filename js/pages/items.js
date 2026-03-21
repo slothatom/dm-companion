@@ -79,11 +79,11 @@ function openItemDetail(index) {
   var item = _dl.items && _dl.items[index];
   if (!item) return;
 
-  var body = 'Category: ' + item.category + '\n';
-  if (item.cost)   body += 'Cost: ' + item.cost + '\n';
-  if (item.weight) body += 'Weight: ' + item.weight + '\n';
-  if (item.properties) body += 'Properties: ' + item.properties + '\n';
-  body += '\n' + (item.desc || 'No description available.');
+  var md = '**Category:** ' + item.category + '\n\n';
+  if (item.cost)   md += '**Cost:** ' + item.cost + '\n\n';
+  if (item.weight) md += '**Weight:** ' + item.weight + '\n\n';
+  if (item.properties) md += '**Properties:** ' + item.properties + '\n\n';
+  md += '---\n\n' + (item.desc || 'No description available.');
 
-  showInfoModal({ title: item.name, body: body });
+  showInfoModal({ title: item.name, bodyHtml: mdToHtml(md) });
 }

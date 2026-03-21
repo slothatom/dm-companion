@@ -294,7 +294,7 @@ function renderLoot(loot) {
   if (loot.magicItems.length > 0) {
     htmlStr += '<div style="margin-bottom:4px;"><strong>Magic Items (' + loot.magicItems.length + '):</strong><ul style="margin:4px 0; padding-left:20px;">';
     loot.magicItems.forEach(function (m) {
-      htmlStr += '<li>' + escapeHtml(m.name) + ' <span style="color:var(--text-dim);">[Table ' + escapeHtml(m.table) + ']</span></li>';
+      htmlStr += '<li>' + escapeHtml(m.name) + '</li>';
     });
     htmlStr += '</ul></div>';
   }

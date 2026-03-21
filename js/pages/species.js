@@ -63,21 +63,21 @@ function openSpeciesDetail(index) {
   var s = _dl.species && _dl.species[index];
   if (!s) return;
 
-  var body = '';
-  if (s.size)      body += 'Size: ' + s.size + '\n';
-  if (s.speed)     body += 'Speed: ' + s.speed + '\n';
-  if (s.languages) body += 'Languages: ' + s.languages + '\n';
+  var md = '';
+  if (s.size)      md += '**Size:** ' + s.size + '\n\n';
+  if (s.speed)     md += '**Speed:** ' + s.speed + '\n\n';
+  if (s.languages) md += '**Languages:** ' + s.languages + '\n\n';
 
-  if (s.traits) body += '\nTraits:\n' + s.traits;
+  if (s.traits) md += '## Traits\n\n' + s.traits + '\n\n';
 
   if (s.subraces && s.subraces.length > 0) {
-    body += '\n\n--- Subraces ---';
+    md += '---\n\n## Subraces\n\n';
     s.subraces.forEach(function (sub) {
-      body += '\n\n' + sub.name + ':\n' + sub.traits;
+      md += '### ' + sub.name + '\n\n' + sub.traits + '\n\n';
     });
   }
 
-  if (s.desc) body += '\n\n' + s.desc;
+  if (s.desc) md += '---\n\n' + s.desc;
 
-  showInfoModal({ title: s.name, body: body });
+  showInfoModal({ title: s.name, bodyHtml: mdToHtml(md) });
 }

@@ -75,14 +75,32 @@ function setGenMode(mode, btn) {
                     : 'Hit "Generate Creature" to roll up a monster.') + '</p>';
 }
 
+// ── Archetype occupation pools ─────────────────────────────
+
+const ARCHETYPE_OCCUPATIONS = {
+  commoner:   ['Innkeeper','Farmer','Fisherman','Woodcutter','Stable Hand','Dockworker','Tavern Wench','Beggar','Gravedigger','Mine Foreman'],
+  merchant:   ['Merchant','Traveling Trader','Jeweler','Tailor','Apothecary','Herbalist'],
+  guard:      ['City Guard','Militiaman','Bounty Hunter','Debt Collector'],
+  noble:      ['Noble','Magistrate','Diplomat','Court Advisor','Tax Collector','Heir'],
+  criminal:   ['Thief','Smuggler','Fence','Pickpocket','Assassin','Forger','Bounty Hunter','Debt Collector'],
+  magic:      ['Wizard','Sorcerer','Warlock','Alchemist','Enchanter','Fortune Teller','Herbalist','Scholar'],
+  adventurer: ['Bounty Hunter','Explorer','Mercenary','Treasure Hunter','Ranger','Monster Slayer','Sailor','Cartographer'],
+  religious:  ['Priest','Acolyte','Temple Guard','Pilgrim','Inquisitor','Monk','Healer']
+};
+
 // ── NPC ────────────────────────────────────────────────────
 
 function generateNPC() {
+  const archetype = document.getElementById('gen-archetype').value;
+  const occupationPool = archetype !== 'any' && ARCHETYPE_OCCUPATIONS[archetype]
+    ? ARCHETYPE_OCCUPATIONS[archetype]
+    : OCCUPATIONS;
+
   const npc = {
     _type:       'npc',
     name:        pick(FIRST_NAMES) + ' ' + pick(LAST_NAMES),
     race:        pick(RACES),
-    occupation:  pick(OCCUPATIONS),
+    occupation:  pick(occupationPool),
     personality: pick(PERSONALITIES),
     quirk:       pick(QUIRKS),
     motivation:  pick(MOTIVATIONS),

@@ -6,6 +6,24 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ---
 
+## [0.7.0] - 2026-03-21
+
+### Added
+- NPC Generator archetype filter — dropdown to generate NPCs by type (Commoner, Merchant, Guard, Noble, Criminal, Magic User, Adventurer, Religious)
+- Markdown-to-HTML renderer (`mdToHtml`) for API text fields — headings, bold, tables, lists render cleanly in detail modals
+- `showInfoModal` now accepts `bodyHtml` for rich HTML content alongside plain-text `body`
+
+### Fixed
+- Species detail modal — traits, subraces, and descriptions now render formatted instead of raw markdown
+- Feats detail modal — descriptions render with proper bold/list formatting
+- Items detail modal — formatted rendering with proper cost/weight display
+- Backgrounds missing descriptions — switched API from v2 (`/v2/backgrounds/`) to v1 (`/v1/backgrounds/`) which returns full `desc`, `feature`, and `suggested_characteristics`
+- Items/Equipment cost and weight display — v2 API returns nested objects for `cost` and `damage_type`; normalizers now handle both string and object formats
+- Loot Generator magic items no longer show `[Table X]` references
+- Generator page layout — controls (dropdown, buttons, autosave) now properly aligned with flexbox `.gen-controls` / `.gen-controls-row`
+
+---
+
 ## [0.6.0] - 2026-03-21
 
 ### Added

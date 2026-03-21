@@ -358,6 +358,19 @@ var DndApi = (function () {
     });
   }
 
+  function formatCost(c) {
+    if (!c) return '';
+    if (typeof c === 'string') return c;
+    if (typeof c === 'object') return (c.quantity || '') + ' ' + (c.unit || '');
+    return String(c);
+  }
+
+  function formatWeight(w) {
+    if (!w) return '';
+    if (typeof w === 'string') return w;
+    return String(w) + ' lb';
+  }
+
   function normalizeWeapon(w) {
     var props = [];
     if (w.properties) {
@@ -367,25 +380,34 @@ var DndApi = (function () {
         props = [String(w.properties)];
       }
     }
+    var dmgType = w.damage_type
+      ? (typeof w.damage_type === 'string' ? w.damage_type : w.damage_type.name || '')
+      : '';
+    var catLabel = w.category
+      ? (typeof w.category === 'string' ? w.category : w.category.name || '')
+      : 'Weapon';
     return {
       name:       w.name || '',
       category:   'weapon',
-      cost:       w.cost || '',
-      weight:     w.weight || '',
+      cost:       formatCost(w.cost),
+      weight:     formatWeight(w.weight),
       properties: props.join(', '),
-      desc:       (w.category || '') + '. ' + (w.damage_dice || '') + ' ' + (w.damage_type || '') + ' damage.',
+      desc:       catLabel + '. ' + (w.damage_dice || '') + (dmgType ? ' ' + dmgType : '') + ' damage.',
       _raw: w
     };
   }
 
   function normalizeArmor(a) {
+    var catLabel = a.category
+      ? (typeof a.category === 'string' ? a.category : a.category.name || 'Armor')
+      : 'Armor';
     return {
       name:       a.name || '',
       category:   'armor',
-      cost:       a.cost || '',
-      weight:     a.weight || '',
+      cost:       formatCost(a.cost),
+      weight:     formatWeight(a.weight),
       properties: 'AC ' + (a.base_ac || a.armor_class || '') + (a.plus_dex_mod ? ' + DEX' : '') + (a.plus_max ? ' (max ' + a.plus_max + ')' : ''),
-      desc:       (a.category || 'Armor') + '. ' + (a.stealth_disadvantage ? 'Disadvantage on Stealth.' : ''),
+      desc:       catLabel + '. ' + (a.stealth_disadvantage ? 'Disadvantage on Stealth.' : ''),
       _raw: a
     };
   }
@@ -469,7 +491,7 @@ var DndApi = (function () {
   // ── Backgrounds ─────────────────────────────────────────
 
   function fetchBackgrounds() {
-    return fetchAllOpen5e('/v2/backgrounds/', { limit: 100 }).then(function (raw) {
+    return fetchAllOpen5e('/v1/backgrounds/', { limit: 100, document__slug: 'wotc-srd' }).then(function (raw) {
       return raw.map(function (b) {
         return {
           name:        b.name || '',

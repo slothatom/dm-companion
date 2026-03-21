@@ -946,6 +946,49 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 .npc-trait-row { margin-bottom: 10px; font-size: 15px; line-height: 1.6; }
 .npc-trait-label { font-family: 'Cinzel', serif; color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 2px; }
 
+/* Generator controls layout */
+.gen-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.gen-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.gen-controls-row select {
+  margin: 0;
+  min-width: 140px;
+}
+.gen-controls-row button {
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .gen-controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .gen-controls-row select,
+  .gen-controls-row button {
+    width: 100%;
+  }
+}
+
+/* Markdown-rendered info body */
+.dm-info-body h2 { font-size: 16px; margin: 14px 0 6px; color: var(--heading); font-family: 'Cinzel', serif; }
+.dm-info-body h3 { font-size: 15px; margin: 12px 0 4px; color: var(--heading); font-family: 'Cinzel', serif; }
+.dm-info-body strong { color: var(--accent); }
+.dm-info-body ul { margin: 4px 0 8px 18px; }
+.dm-info-body li { margin-bottom: 2px; }
+.dm-info-body table { border-collapse: collapse; margin: 8px 0; width: 100%; font-size: 13px; }
+.dm-info-body th, .dm-info-body td { border: 1px solid var(--border); padding: 4px 8px; text-align: left; }
+.dm-info-body th { background: var(--surface2); color: var(--heading); font-weight: 600; }
+.dm-info-body p { margin: 6px 0; }
+.dm-info-body hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
 .empty-state { color: var(--text-dim); font-style: italic; font-size: 15px; text-align: center; padding: 20px 0; }
 
 /* =============================================

@@ -63,11 +63,11 @@ function openFeatDetail(index) {
   var f = _dl.feats && _dl.feats[index];
   if (!f) return;
 
-  var body = '';
+  var md = '';
   if (f.prerequisite) {
-    body += 'Prerequisite: ' + f.prerequisite + '\n\n';
+    md += '**Prerequisite:** ' + f.prerequisite + '\n\n';
   }
-  body += f.desc || 'No description available.';
+  md += f.desc || 'No description available.';
 
-  showInfoModal({ title: f.name, body: body });
+  showInfoModal({ title: f.name, bodyHtml: mdToHtml(md) });
 }

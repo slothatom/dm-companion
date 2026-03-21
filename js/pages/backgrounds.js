@@ -63,21 +63,21 @@ function openBgDetail(index) {
   var b = _dl.backgrounds && _dl.backgrounds[index];
   if (!b) return;
 
-  var body = '';
-  if (b.skillProf)   body += 'Skill Proficiencies: ' + b.skillProf + '\n';
-  if (b.toolProf)    body += 'Tool Proficiencies: ' + b.toolProf + '\n';
-  if (b.languages)   body += 'Languages: ' + b.languages + '\n';
-  if (b.equipment)   body += 'Equipment: ' + b.equipment + '\n';
+  var md = '';
+  if (b.skillProf)   md += '**Skill Proficiencies:** ' + b.skillProf + '\n\n';
+  if (b.toolProf)    md += '**Tool Proficiencies:** ' + b.toolProf + '\n\n';
+  if (b.languages)   md += '**Languages:** ' + b.languages + '\n\n';
+  if (b.equipment)   md += '**Equipment:** ' + b.equipment + '\n\n';
 
   if (b.feature) {
-    body += '\n--- Feature: ' + b.feature + ' ---\n' + (b.featureDesc || '');
+    md += '---\n\n## Feature: ' + b.feature + '\n\n' + (b.featureDesc || '') + '\n\n';
   }
 
   if (b.personality) {
-    body += '\n\n--- Personality Traits ---\n' + b.personality;
+    md += '---\n\n## Suggested Characteristics\n\n' + b.personality + '\n\n';
   }
 
-  if (b.desc) body += '\n\n' + b.desc;
+  if (b.desc) md += '---\n\n' + b.desc;
 
-  showInfoModal({ title: b.name, body: body });
+  showInfoModal({ title: b.name, bodyHtml: mdToHtml(md) });
 }

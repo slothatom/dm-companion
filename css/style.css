@@ -1509,6 +1509,134 @@ input[type="time"] {
 }
 
 /* =============================================
+   Character Sheet styles
+   ============================================= */
+
+.cs-abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .cs-abilities-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.cs-ability-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cs-ability-label {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.cs-ability-score {
+  width: 50px !important;
+  text-align: center;
+  font-size: 18px !important;
+  font-weight: 600;
+  margin: 0 !important;
+  padding: 4px !important;
+}
+
+.cs-ability-mod {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading);
+  background: rgba(192,132,87,0.12);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs-saves-grid,
+.cs-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px;
+}
+
+.cs-save-row,
+.cs-skill-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.cs-save-row input[type="checkbox"],
+.cs-skill-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+}
+
+.cs-small-input {
+  width: 42px !important;
+  text-align: center;
+  font-size: 13px !important;
+  padding: 3px 4px !important;
+  margin: 0 !important;
+}
+
+.cs-save-label,
+.cs-skill-label {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.cs-skill-ability {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.cs-attack-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.cs-attack-row input {
+  margin: 0 !important;
+}
+
+/* Button styled as a link */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 13px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.btn-link:hover {
+  border-color: var(--primary);
+  background: rgba(192,132,87,0.08);
+}
+
+/* =============================================
    Campaign Overview - Party & Notes summary
    ============================================= */
 

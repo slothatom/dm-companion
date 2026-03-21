@@ -451,6 +451,7 @@ function renderOverviewPlayers(list) {
         '<span>AC ' + escapeHtml(String(p.ac || '?')) + '</span>' +
         '<span>PP ' + escapeHtml(String(p.passive_perception || '?')) + '</span>' +
       '</div>' +
+      '<a href="charsheet.html?player=' + p.id + '" class="overview-link" style="margin-top:6px;">Character Sheet</a>' +
     '</div>';
   }).join('') +
   '<a href="players.html" class="overview-link">Manage Players</a>';

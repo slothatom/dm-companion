@@ -213,6 +213,7 @@ function buildPlayerCard(player, index) {
           </div>
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             ${buildPlayerCampaignDropdown(player)}
+            ${player._id ? '<a href="charsheet.html?player=' + player._id + '" class="btn-link" style="font-size:13px;"><i class="fi fi-rr-document-signed"></i> Character Sheet</a>' : ''}
             <button class="danger" onclick="removePlayer(${index})"><i class="fi fi-rr-trash"></i> Remove</button>
           </div>
         </div>`;

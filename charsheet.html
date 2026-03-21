@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion - Character Sheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-document-signed"></i> Character Sheets</h1>
+    <p class="subtitle">Full character sheets for your party. Select a player or create a standalone sheet.</p>
+
+    <!-- Sheet selector -->
+    <div class="card">
+      <div class="row-actions" style="margin-bottom:0; flex-wrap:wrap;">
+        <div style="flex:1; min-width:180px;">
+          <label for="sheet-select">Character Sheet</label>
+          <select id="sheet-select" onchange="switchSheet()" style="margin:0;">
+            <option value="">- Select a sheet -</option>
+          </select>
+        </div>
+        <button onclick="createNewSheet()" style="white-space:nowrap;">+ New Sheet</button>
+        <button class="danger" id="delete-sheet-btn" onclick="deleteSheet()" style="white-space:nowrap; display:none;">
+          <i class="fi fi-rr-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="sheet-loading" style="display:none;">
+      <p class="loading-state"><span class="spinner"></span> Loading...</p>
+    </div>
+
+    <!-- Character sheet form -->
+    <div id="sheet-form" style="display:none;">
+
+      <!-- Identity -->
+      <div class="card">
+        <h3><i class="fi fi-rr-id-badge"></i> Identity</h3>
+        <div class="stat-grid">
+          <div><label>Character Name</label><input type="text" id="cs-name" oninput="sheetDirty()" placeholder="e.g. Aria Swiftblade" /></div>
+          <div><label>Player Name</label><input type="text" id="cs-player" oninput="sheetDirty()" placeholder="e.g. Sarah" /></div>
+        </div>
+        <div class="stat-grid">
+          <div><label>Class & Level</label><input type="text" id="cs-class-level" oninput="sheetDirty()" placeholder="e.g. Rogue 5 / Fighter 2" /></div>
+          <div><label>Race</label><input type="text" id="cs-race" oninput="sheetDirty()" placeholder="e.g. Half-Elf" /></div>
+          <div><label>Background</label><input type="text" id="cs-background" oninput="sheetDirty()" placeholder="e.g. Criminal" /></div>
+          <div><label>Alignment</label><input type="text" id="cs-alignment" oninput="sheetDirty()" placeholder="e.g. Chaotic Good" /></div>
+        </div>
+        <div class="stat-grid">
+          <div><label>Experience Points</label><input type="number" id="cs-xp" oninput="sheetDirty()" placeholder="0" /></div>
+          <div>
+            <label>Linked Player</label>
+            <select id="cs-linked-player" onchange="sheetDirty()" style="margin:0;">
+              <option value="">None (standalone)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ability Scores -->
+      <div class="card">
+        <h3><i class="fi fi-rr-dice-d20"></i> Ability Scores</h3>
+        <div class="cs-abilities-grid" id="cs-abilities">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Combat -->
+      <div class="card">
+        <h3><i class="fi fi-rr-sword"></i> Combat</h3>
+        <div class="stat-grid">
+          <div><label>Armor Class</label><input type="number" id="cs-ac" oninput="sheetDirty()" /></div>
+          <div><label>Initiative</label><input type="text" id="cs-initiative" oninput="sheetDirty()" placeholder="e.g. +3" /></div>
+          <div><label>Speed</label><input type="text" id="cs-speed" oninput="sheetDirty()" placeholder="e.g. 30 ft" /></div>
+        </div>
+        <div class="stat-grid">
+          <div><label>Hit Point Maximum</label><input type="number" id="cs-hp-max" oninput="sheetDirty()" /></div>
+          <div><label>Current Hit Points</label><input type="number" id="cs-hp-current" oninput="sheetDirty()" /></div>
+          <div><label>Temporary HP</label><input type="number" id="cs-hp-temp" oninput="sheetDirty()" /></div>
+        </div>
+        <div class="stat-grid">
+          <div><label>Hit Dice</label><input type="text" id="cs-hit-dice" oninput="sheetDirty()" placeholder="e.g. 5d8" /></div>
+          <div><label>Proficiency Bonus</label><input type="text" id="cs-prof-bonus" oninput="sheetDirty()" placeholder="e.g. +3" /></div>
+        </div>
+      </div>
+
+      <!-- Saving Throws -->
+      <div class="card">
+        <h3><i class="fi fi-rr-shield"></i> Saving Throws</h3>
+        <div class="cs-saves-grid" id="cs-saves">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="card">
+        <h3><i class="fi fi-rr-star"></i> Skills</h3>
+        <div class="cs-skills-grid" id="cs-skills">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Proficiencies & Languages -->
+      <div class="card">
+        <h3><i class="fi fi-rr-diploma"></i> Proficiencies & Languages</h3>
+        <textarea id="cs-proficiencies" oninput="sheetDirty()" placeholder="Armor: Light, medium&#10;Weapons: Simple, martial&#10;Tools: Thieves' tools&#10;Languages: Common, Elvish, Thieves' Cant" style="min-height:100px;"></textarea>
+      </div>
+
+      <!-- Attacks & Spellcasting -->
+      <div class="card">
+        <h3><i class="fi fi-rr-sword"></i> Attacks & Spellcasting</h3>
+        <div id="cs-attacks-list"></div>
+        <button onclick="addAttack()" style="margin-top:8px;">+ Add Attack</button>
+      </div>
+
+      <!-- Equipment -->
+      <div class="card">
+        <h3><i class="fi fi-rr-backpack"></i> Equipment</h3>
+        <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr);">
+          <div><label>CP</label><input type="number" id="cs-cp" oninput="sheetDirty()" value="0" /></div>
+          <div><label>SP</label><input type="number" id="cs-sp" oninput="sheetDirty()" value="0" /></div>
+          <div><label>GP</label><input type="number" id="cs-gp" oninput="sheetDirty()" value="0" /></div>
+          <div><label>PP</label><input type="number" id="cs-pp" oninput="sheetDirty()" value="0" /></div>
+        </div>
+        <label style="margin-top:12px;">Inventory</label>
+        <textarea id="cs-equipment" oninput="sheetDirty()" placeholder="Rapier, shortbow, 20 arrows, leather armor, thieves' tools, burglar's pack..." style="min-height:100px;"></textarea>
+      </div>
+
+      <!-- Features & Traits -->
+      <div class="card">
+        <h3><i class="fi fi-rr-spark"></i> Features & Traits</h3>
+        <textarea id="cs-features" oninput="sheetDirty()" placeholder="Sneak Attack (3d6)&#10;Cunning Action&#10;Uncanny Dodge&#10;Darkvision (60 ft)&#10;Fey Ancestry" style="min-height:120px;"></textarea>
+      </div>
+
+      <!-- Backstory & Notes -->
+      <div class="card">
+        <h3><i class="fi fi-rr-book"></i> Backstory & Notes</h3>
+        <label>Personality Traits</label>
+        <textarea id="cs-personality" oninput="sheetDirty()" placeholder="I always have a plan for what to do when things go wrong." style="min-height:60px;"></textarea>
+        <label style="margin-top:12px;">Ideals</label>
+        <textarea id="cs-ideals" oninput="sheetDirty()" placeholder="Freedom. Chains are meant to be broken." style="min-height:60px;"></textarea>
+        <label style="margin-top:12px;">Bonds</label>
+        <textarea id="cs-bonds" oninput="sheetDirty()" placeholder="I'm trying to pay off an old debt I owe to a generous benefactor." style="min-height:60px;"></textarea>
+        <label style="margin-top:12px;">Flaws</label>
+        <textarea id="cs-flaws" oninput="sheetDirty()" placeholder="When I see something valuable, I can't help but think of a way to steal it." style="min-height:60px;"></textarea>
+        <label style="margin-top:12px;">Backstory</label>
+        <textarea id="cs-backstory" oninput="sheetDirty()" placeholder="Full backstory, motivations, goals..." style="min-height:120px;"></textarea>
+      </div>
+
+      <!-- Save button -->
+      <div class="row-actions" style="margin-top:8px;">
+        <button id="sheet-save-btn" onclick="saveSheet()"><i class="fi fi-rr-disk"></i> Save Sheet</button>
+        <span id="save-status" class="save-status"></span>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'charsheet.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/pages/charsheet.js"></script>
+</body>
+</html>

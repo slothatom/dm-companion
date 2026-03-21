@@ -6,6 +6,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ---
 
+## [1.0.0] - 2026-03-21
+
+### Added
+- **Character Sheet**: Spell section — spell ability modifier, spell save DC, spell attack bonus, per-level spell slot tracking (levels 1–9), and spells known/prepared textarea
+- **Loot Generator**: Encounter Loot tab — roll loot for a group of defeated creatures by average CR and monster count; scales coins, gems, and items by CR tier (0–4, 5–10, 11–16, 17+)
+- **Market Generator**: Shop Quirk — each generated shop now includes a random atmospheric detail (e.g. "a pseudodragon on the shopkeeper's shoulder", "a mysterious locked cabinet the keeper refuses to discuss")
+- **NPC/Creature Generator**: Creature filters — CR range (Low / Mid / High / Deadly / Legendary), size, and creature type selectors for targeted creature generation; NPC and Creature modes now show/hide the relevant controls
+- **Languages**: 11 new exotic creature languages — Blink Dog, Bullywug, Giant Eagle, Giant Owl, Grung, Hook Horror, Sahuagin, Thri-kreen, Worg, Yeti, and one more; total now 40
+
+### Changed
+- **UI**: Sticky page header on all pages — `<h1>` and subtitle pin below the nav bar when scrolling
+- **UI**: Uniform `btn-x` remove/close button style applied consistently across all pages
+- **Species**: Detail modal now shows a structured stat block (Size, Speed, Languages) before traits; repeated API field label artefacts (e.g. `Size: _Size._`) are stripped automatically
+- **Compendium**: Detail views improved for Backgrounds, Classes, Feats, and Items — structured display with formatted markdown, stat grids, and cleaner layout
+- **Character Sheet**: Autosave now runs silently (no toast, no dropdown rebuild) to avoid focus disruption; only explicit Save shows a toast
+- **Campaigns**: Sticky page header and quick-access links added to campaign overview
+
+### Fixed
+- **Auth**: Prevented spurious full-page refresh caused by Supabase background token refresh cycle
+- **Campaigns**: Date input height and alignment corrected using CSS grid layout to match other session row inputs
+
+---
+
 ## [0.9.0] - 2026-03-21
 
 ### Added

@@ -301,6 +301,7 @@ function renderNav(user) {
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn"></button>
       <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>
+      <a href="terms.html" class="sidebar-privacy">Terms &amp; Conditions</a>
       <a href="privacy.html" class="sidebar-privacy">Privacy Policy</a>
       <a href="cookies.html" class="sidebar-privacy">Cookie Policy</a>`;
   }

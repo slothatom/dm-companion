@@ -11,6 +11,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 ### Added
 - Dedicated Cookie Policy page (`cookies.html`) with full breakdown of authentication cookies, localStorage keys, and sessionStorage usage
 - Cookie Policy linked from sidebar navigation, login footer, and Privacy Policy page
+- Terms & Conditions page (`terms.html`) covering acceptance, accounts, user content, D&D IP/OGL, acceptable use, disclaimers, liability, and termination
+- Terms & Conditions linked from sidebar navigation and login footer
 
 ---
 

@@ -2,16 +2,16 @@
 //   charsheet.js - Character Sheet page
 // =============================================
 
-var currentUserId = null;
-var sheets        = [];   // [{id, name, data}, ...]
-var activeSheetId = null;
-var isDirty       = false;
-var autosaveTimer = null;
-var playersList   = [];   // for linking
+let currentUserId = null;
+let sheets        = [];   // [{id, name, data}, ...]
+let activeSheetId = null;
+let isDirty       = false;
+let autosaveTimer = null;
+let playersList   = [];   // for linking
 
-var ABILITIES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+const ABILITIES = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
 
-var SKILLS = [
+const SKILLS = [
   { name: 'Acrobatics',      ability: 'DEX' },
   { name: 'Animal Handling',  ability: 'WIS' },
   { name: 'Arcana',          ability: 'INT' },

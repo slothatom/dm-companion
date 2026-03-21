@@ -59,7 +59,7 @@ function renderItems(list) {
     return;
   }
 
-  window._itemDisplayList = list;
+  _dl.items = list;
 
   container.innerHTML = list.map(function (item, idx) {
     var props = item.properties ? escapeHtml(item.properties) : '';
@@ -76,7 +76,7 @@ function renderItems(list) {
 }
 
 function openItemDetail(index) {
-  var item = window._itemDisplayList && window._itemDisplayList[index];
+  var item = _dl.items && _dl.items[index];
   if (!item) return;
 
   var body = 'Category: ' + item.category + '\n';

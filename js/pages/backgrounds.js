@@ -46,7 +46,7 @@ function renderBackgrounds(list) {
     return;
   }
 
-  window._bgDisplayList = list;
+  _dl.backgrounds = list;
 
   container.innerHTML = list.map(function (b, idx) {
     return '<div class="ref-card" onclick="openBgDetail(' + idx + ')" title="Click to expand">' +
@@ -60,7 +60,7 @@ function renderBackgrounds(list) {
 }
 
 function openBgDetail(index) {
-  var b = window._bgDisplayList && window._bgDisplayList[index];
+  var b = _dl.backgrounds && _dl.backgrounds[index];
   if (!b) return;
 
   var body = '';

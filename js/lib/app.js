@@ -351,13 +351,16 @@ function renderNav(user) {
     if (savedScroll) {
       sidebarLinks.scrollTop = parseInt(savedScroll, 10);
     }
-    // Save scroll position before navigating away
-    nav.addEventListener('click', function (e) {
-      var link = e.target.closest('a.sidebar-link');
-      if (link && sidebarLinks) {
-        sessionStorage.setItem('sidebar-scroll', sidebarLinks.scrollTop);
-      }
-    });
+    // Save scroll position before navigating away (add listener only once)
+    if (!nav._scrollListenerAdded) {
+      nav.addEventListener('click', function (e) {
+        var link = e.target.closest('a.sidebar-link');
+        if (link && sidebarLinks) {
+          sessionStorage.setItem('sidebar-scroll', sidebarLinks.scrollTop);
+        }
+      });
+      nav._scrollListenerAdded = true;
+    }
   }
 
   // Start loading timeout safety net
@@ -447,6 +450,52 @@ function html(strings) {
     result += strings[i];
   }
   return result;
+}
+
+// ── Display list namespace (reduces global pollution) ───
+// Reference pages store their display lists here instead of
+// polluting window.* with individual variables.
+var _dl = {};
+
+// ── Shared helpers (DRY) ────────────────────────────────
+
+// Campaign map helpers — shared by players.js, characters.js, campaigns.js
+function getCampaignMapFor(mapKey, userId) {
+  try {
+    return JSON.parse(localStorage.getItem(mapKey + '-' + userId)) || {};
+  } catch (e) { return {}; }
+}
+
+function saveCampaignMapFor(mapKey, userId, map) {
+  localStorage.setItem(mapKey + '-' + userId, JSON.stringify(map));
+}
+
+function getCampaignTypeMapFor(userId) {
+  return getCampaignMapFor('campaign-type-map', userId);
+}
+
+// Build campaign dropdown — shared by players.js and characters.js
+function buildCampaignSelect(campaignsList, currentValue, onchangeExpr, typeMap) {
+  const options = '<option value="">No Campaign</option>' +
+    campaignsList.map(function (c) {
+      const sel = c.id === currentValue ? ' selected' : '';
+      const label = escapeHtml(c.name) + (typeMap[c.id] === 'oneshot' ? ' (one-shot)' : '');
+      return '<option value="' + escapeHtml(c.id) + '"' + sel + '>' + label + '</option>';
+    }).join('');
+  return '<select onchange="' + onchangeExpr + '" style="margin:0; min-width:140px; flex:1;">' + options + '</select>';
+}
+
+// Ability modifier — shared by bestiary.js and charsheet.js
+function abilityModifier(score) {
+  const mod = Math.floor((score - 10) / 2);
+  return mod >= 0 ? '+' + mod : String(mod);
+}
+
+// Truncate text — shared by multiple reference pages
+function truncateText(str, len) {
+  if (!str) return '';
+  if (str.length <= len) return str;
+  return str.substring(0, len) + '...';
 }
 
 function closeMobileSidebar() {

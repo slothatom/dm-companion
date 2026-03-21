@@ -2,7 +2,7 @@
 //   classes-ref.js - Class Reference page (API-powered)
 // =============================================
 
-var allClasses = [];
+let allClasses = [];
 
 (async function () {
   var user = await requireAuth();
@@ -37,7 +37,7 @@ function renderClasses(list) {
     return;
   }
 
-  window._classDisplayList = list;
+  _dl.classes = list;
 
   container.innerHTML = list.map(function (c, idx) {
     return '<div class="ref-card" onclick="openClassDetail(' + idx + ')" title="Click to expand">' +
@@ -51,14 +51,10 @@ function renderClasses(list) {
   }).join('');
 }
 
-function truncateText(str, len) {
-  if (!str) return '';
-  if (str.length <= len) return str;
-  return str.substring(0, len) + '...';
-}
+// truncateText() is now provided by app.js
 
 function openClassDetail(index) {
-  var c = window._classDisplayList && window._classDisplayList[index];
+  var c = _dl.classes && _dl.classes[index];
   if (!c) return;
 
   var body = '';

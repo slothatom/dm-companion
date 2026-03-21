@@ -46,7 +46,7 @@ function renderFeats(list) {
     return;
   }
 
-  window._featDisplayList = list;
+  _dl.feats = list;
 
   container.innerHTML = list.map(function (f, idx) {
     var prereq = f.prerequisite
@@ -60,7 +60,7 @@ function renderFeats(list) {
 }
 
 function openFeatDetail(index) {
-  var f = window._featDisplayList && window._featDisplayList[index];
+  var f = _dl.feats && _dl.feats[index];
   if (!f) return;
 
   var body = '';

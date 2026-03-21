@@ -63,6 +63,8 @@ function addCombatant() {
   const hp   = document.getElementById('new-hp').value;
   const type = document.getElementById('new-type').value;
   if (!name) { showToast('Please enter a name.', 'error'); return; }
+  // Validate HP is not negative
+  if (hp && parseInt(hp) < 0) { showToast('HP cannot be negative.', 'error'); return; }
   combatants.push({ name, init, hp: hp || '-', maxHp: hp || '-', type, conditions: [] });
   document.getElementById('new-name').value = '';
   document.getElementById('new-init').value = '';

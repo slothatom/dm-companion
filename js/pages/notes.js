@@ -2,14 +2,14 @@
 //   notes.js - Session Notes page (rich DM prep)
 // =============================================
 
-var currentUserId    = null;
-var activeCampaignId = null;
-var currentNoteId    = null;
-var isDirty          = false;
-var autosaveTimer    = null;
+let currentUserId    = null;
+let activeCampaignId = null;
+let currentNoteId    = null;
+let isDirty          = false;
+let autosaveTimer    = null;
 
 // Extra structured data (localStorage)
-var extraData = {
+let extraData = {
   players: '', playtime: '', tone: '', goal: '',
   scenes: [], npcs: [], items: [], mechanics: ''
 };

@@ -37,7 +37,7 @@ function renderConditions(list) {
     return;
   }
 
-  window._condDisplayList = list;
+  _dl.conditions = list;
 
   container.innerHTML = list.map(function (c, idx) {
     var truncDesc = c.desc.length > 150 ? c.desc.substring(0, 150) + '...' : c.desc;
@@ -49,7 +49,7 @@ function renderConditions(list) {
 }
 
 function openConditionDetail(index) {
-  var c = window._condDisplayList && window._condDisplayList[index];
+  var c = _dl.conditions && _dl.conditions[index];
   if (!c) return;
 
   showInfoModal({ title: c.name, body: c.desc || 'No description available.' });

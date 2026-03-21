@@ -2,9 +2,9 @@
 //   bestiary.js - Monster / Bestiary Reference (API-powered)
 // =============================================
 
-var allMonsters   = [];
-var activeCrRange = 'all';
-var activeMonType = 'all';
+let allMonsters   = [];
+let activeCrRange = 'all';
+let activeMonType = 'all';
 
 (async function () {
   var user = await requireAuth();
@@ -83,9 +83,9 @@ function filterBestiary() {
   renderBestiary(filtered);
 }
 
+// Use shared abilityModifier() from app.js
 function abilityMod(score) {
-  var mod = Math.floor((score - 10) / 2);
-  return mod >= 0 ? '+' + mod : String(mod);
+  return abilityModifier(score);
 }
 
 function renderBestiary(list) {
@@ -95,7 +95,7 @@ function renderBestiary(list) {
     return;
   }
 
-  window._bestiaryDisplayList = list;
+  _dl.bestiary = list;
 
   container.innerHTML = list.map(function (m, idx) {
     return '<div class="ref-card" onclick="openMonsterDetail(' + idx + ')" title="Click to expand">' +
@@ -115,7 +115,7 @@ function renderBestiary(list) {
 }
 
 function openMonsterDetail(index) {
-  var m = window._bestiaryDisplayList && window._bestiaryDisplayList[index];
+  var m = _dl.bestiary && _dl.bestiary[index];
   if (!m) return;
 
   var body = (m.size ? m.size + ' ' : '') + m.type +

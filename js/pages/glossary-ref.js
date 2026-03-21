@@ -75,7 +75,7 @@ function renderGlossary(list) {
   }
 
   list = list.slice().sort(function (a, b) { return a.term.localeCompare(b.term); });
-  window._glossDisplayList = list;
+  _dl.glossary = list;
 
   container.innerHTML = list.map(function (g, idx) {
     var truncDef = g.def.length > 120 ? g.def.substring(0, 120) + '...' : g.def;
@@ -90,7 +90,7 @@ function renderGlossary(list) {
 }
 
 function openGlossDetail(index) {
-  var g = window._glossDisplayList && window._glossDisplayList[index];
+  var g = _dl.glossary && _dl.glossary[index];
   if (!g) return;
 
   var body = 'Category: ' + g.category + '\n\n' + g.def;

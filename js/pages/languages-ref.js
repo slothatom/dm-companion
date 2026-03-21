@@ -2,7 +2,7 @@
 //   languages-ref.js - Languages Reference (API-powered)
 // =============================================
 
-var allLanguages = [];
+let allLanguages = [];
 
 (async function () {
   var user = await requireAuth();
@@ -35,7 +35,7 @@ function renderLanguages(list) {
     return;
   }
 
-  window._langDisplayList = list;
+  _dl.languages = list;
 
   var standard = [];
   var exotic = [];
@@ -87,7 +87,7 @@ function renderLanguages(list) {
 }
 
 function openLangDetail(index) {
-  var lang = window._langDisplayList && window._langDisplayList[index];
+  var lang = _dl.languages && _dl.languages[index];
   if (!lang) return;
 
   var body = 'Type: ' + (lang.type || 'Standard') + '\n' +

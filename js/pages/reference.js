@@ -155,7 +155,7 @@ function renderRef(list) {
   }
 
   // Store items for modal lookup by index
-  window._refDisplayList = list;
+  _dl.reference = list;
 
   // Group by category
   const groups = {};
@@ -187,7 +187,7 @@ function renderRef(list) {
 }
 
 function openRefDetail(index) {
-  const item = window._refDisplayList && window._refDisplayList[index];
+  const item = _dl.reference && _dl.reference[index];
   if (!item) return;
   showInfoModal({ title: item.name, body: item.desc });
 }

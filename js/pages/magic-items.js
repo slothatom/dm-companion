@@ -74,7 +74,7 @@ function renderMagicItems(list) {
     return;
   }
 
-  window._magicDisplayList = list;
+  _dl.magicItems = list;
 
   container.innerHTML = list.map(function (item, idx) {
     var rClass = rarityColor(item.rarity);
@@ -97,7 +97,7 @@ function truncateDesc(str, len) {
 }
 
 function openMagicDetail(index) {
-  var item = window._magicDisplayList && window._magicDisplayList[index];
+  var item = _dl.magicItems && _dl.magicItems[index];
   if (!item) return;
 
   var body = '';

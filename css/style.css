@@ -414,6 +414,22 @@ main {
   visibility: hidden;
 }
 
+/* Page-level loading spinner shown while auth resolves */
+body:not(.has-sidebar)::after {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+body.has-sidebar::after { display: none; }
+
 h1 {
   font-family: 'Cinzel', serif;
   font-size: 28px;

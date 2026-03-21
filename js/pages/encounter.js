@@ -80,6 +80,11 @@ function addCreature() {
   const cr   = document.getElementById('new-cr').value.trim();
   const xp   = parseInt(document.getElementById('new-xp').value) || 0;
   if (!name) { showToast('Please enter a monster name.', 'error'); return; }
+  // Validate CR if entered
+  if (cr && CR_TO_XP[cr] === undefined) {
+    showToast('Invalid CR "' + cr + '". Use values like 0, 1/8, 1/4, 1/2, or 1-30.', 'error');
+    return;
+  }
   // Try to pull HP/AC from SRD bestiary
   let hp = '', ac = '';
   var monList = getMonsterList();
@@ -360,14 +365,14 @@ function filterMonsterBrowser() {
     '</div>';
   }).join('');
   // Store filtered list for click handler
-  window._monsterBrowserList = filtered;
+  _dl.monsterBrowser = filtered;
   if (filtered.length > 60) {
     container.innerHTML += '<p style="text-align:center; color:var(--text-muted); font-size:13px; margin-top:8px;">Showing 60 of ' + filtered.length + ' - narrow your search.</p>';
   }
 }
 
 function addMonsterFromBrowser(index) {
-  const m = window._monsterBrowserList && window._monsterBrowserList[index];
+  const m = _dl.monsterBrowser && _dl.monsterBrowser[index];
   if (!m) return;
   const xp = CR_TO_XP[m.cr] || 0;
   creatures.push({ name: m.name, cr: m.cr, xp: xp, hp: String(m.hp || ''), ac: String(m.ac || '') });

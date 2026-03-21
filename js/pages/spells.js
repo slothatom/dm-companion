@@ -2,11 +2,11 @@
 //   spells.js - Spell Reference page (API-powered)
 // =============================================
 
-var allSpells    = [];
-var activeLevel  = 'all';
-var activeClass  = 'all';
-var filterConc   = false;
-var filterRitual = false;
+let allSpells    = [];
+let activeLevel  = 'all';
+let activeClass  = 'all';
+let filterConc   = false;
+let filterRitual = false;
 
 (async function () {
   var user = await requireAuth();
@@ -43,7 +43,7 @@ function renderSpells(list) {
     return;
   }
 
-  window._spellDisplayList = list;
+  _dl.spells = list;
 
   container.innerHTML = list.map(function (s, idx) {
     var levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
@@ -67,14 +67,13 @@ function renderSpells(list) {
   }).join('');
 }
 
+// Use shared truncateText() from app.js
 function truncate(str, len) {
-  if (!str) return '';
-  if (str.length <= len) return str;
-  return str.substring(0, len) + '...';
+  return truncateText(str, len);
 }
 
 function openSpellDetail(index) {
-  var s = window._spellDisplayList && window._spellDisplayList[index];
+  var s = _dl.spells && _dl.spells[index];
   if (!s) return;
 
   var levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;

@@ -45,7 +45,7 @@ function renderSpecies(list) {
     return;
   }
 
-  window._speciesDisplayList = list;
+  _dl.species = list;
 
   container.innerHTML = list.map(function (s, idx) {
     return '<div class="ref-card" onclick="openSpeciesDetail(' + idx + ')" title="Click to expand">' +
@@ -60,7 +60,7 @@ function renderSpecies(list) {
 }
 
 function openSpeciesDetail(index) {
-  var s = window._speciesDisplayList && window._speciesDisplayList[index];
+  var s = _dl.species && _dl.species[index];
   if (!s) return;
 
   var body = '';

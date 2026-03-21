@@ -11,14 +11,14 @@
 
 var DndApi = (function () {
 
-  var OPEN5E   = 'https://api.open5e.com';
-  var DND5EAPI = 'https://www.dnd5eapi.co/api';
+  const OPEN5E   = 'https://api.open5e.com';
+  const DND5EAPI = 'https://www.dnd5eapi.co/api';
 
   // In-memory cache (survives page navigation via sessionStorage)
-  var _memCache = {};
+  let _memCache = {};
 
   // Cache TTL: 1 hour for API data
-  var CACHE_TTL = 60 * 60 * 1000;
+  const CACHE_TTL = 60 * 60 * 1000;
 
   // ── Helpers ─────────────────────────────────────────────
 

@@ -577,6 +577,8 @@ input[type="text"],
 input[type="number"],
 input[type="email"],
 input[type="password"],
+input[type="date"],
+input[type="url"],
 textarea,
 select {
   width: 100%;
@@ -595,10 +597,16 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="url"]:focus,
 textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
 }
 textarea { min-height: 200px; }
 

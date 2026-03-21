@@ -1,18 +1,40 @@
 // =============================================
-//   feats.js - Feats Reference page
+//   feats.js - Feats Reference page (API-powered)
 // =============================================
 
+var allFeats = [];
+
 (async function () {
-  const user = await requireAuth();
+  var user = await requireAuth();
   if (!user) return;
   renderNav(user);
-  renderFeats(FEATS);
+
+  DndApi.showLoading('feat-list');
+
+  try {
+    allFeats = await DndApi.fetchFeats();
+    if (allFeats.length === 0 && typeof FEATS !== 'undefined') {
+      allFeats = FEATS;
+    }
+    renderFeats(allFeats);
+    document.querySelector('.subtitle').textContent =
+      'Feat reference - ' + allFeats.length + ' feats. Prerequisites, descriptions, and benefits.';
+  } catch (err) {
+    if (typeof FEATS !== 'undefined' && FEATS.length > 0) {
+      allFeats = FEATS;
+      renderFeats(allFeats);
+      showToast('Using offline feat data (API unavailable)', 'info');
+    } else {
+      DndApi.showError('feat-list', err.message);
+    }
+  }
 })();
 
 function filterFeats() {
   var q = document.getElementById('feat-search').value.toLowerCase();
-  var filtered = FEATS.filter(function (f) {
-    return f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q);
+  var filtered = allFeats.filter(function (f) {
+    return f.name.toLowerCase().includes(q) ||
+      (f.desc && f.desc.toLowerCase().includes(q));
   });
   renderFeats(filtered);
 }
@@ -45,7 +67,7 @@ function openFeatDetail(index) {
   if (f.prerequisite) {
     body += 'Prerequisite: ' + f.prerequisite + '\n\n';
   }
-  body += f.desc;
+  body += f.desc || 'No description available.';
 
   showInfoModal({ title: f.name, body: body });
 }

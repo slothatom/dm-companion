@@ -40,6 +40,15 @@ const CR_TO_XP = {
   '29': 135000, '30': 155000,
 };
 
+// API-loaded monsters (augments static MONSTERS)
+var _apiMonsters = null;
+
+function getMonsterList() {
+  if (_apiMonsters && _apiMonsters.length > 0) return _apiMonsters;
+  if (typeof MONSTERS !== 'undefined' && MONSTERS.length > 0) return MONSTERS;
+  return [];
+}
+
 (async function () {
   const user = await requireAuth();
   if (!user) return;
@@ -47,6 +56,15 @@ const CR_TO_XP = {
   renderNav(user);
   recalculate();
   loadSavedEncounters();
+
+  // Pre-load API monsters in background for the SRD browser
+  if (typeof DndApi !== 'undefined') {
+    try {
+      _apiMonsters = await DndApi.fetchMonsters();
+    } catch (e) {
+      // Fallback to static data - that's fine
+    }
+  }
 })();
 
 // Auto-fill XP when CR is typed
@@ -64,8 +82,9 @@ function addCreature() {
   if (!name) { showToast('Please enter a monster name.', 'error'); return; }
   // Try to pull HP/AC from SRD bestiary
   let hp = '', ac = '';
-  if (typeof MONSTERS !== 'undefined') {
-    const match = MONSTERS.find(function (m) { return m.name.toLowerCase() === name.toLowerCase(); });
+  var monList = getMonsterList();
+  if (monList.length > 0) {
+    const match = monList.find(function (m) { return m.name.toLowerCase() === name.toLowerCase(); });
     if (match) { hp = String(match.hp || ''); ac = String(match.ac || ''); }
   }
   creatures.push({ name, cr, xp, hp: hp, ac: ac });
@@ -253,8 +272,9 @@ function clearAll() {
 // ── SRD Monster Browser ───────────────────────────────────
 
 function showMonsterBrowser() {
-  if (typeof MONSTERS === 'undefined' || MONSTERS.length === 0) {
-    showToast('Monster data not loaded.', 'error');
+  var monList = getMonsterList();
+  if (monList.length === 0) {
+    showToast('Monster data not loaded yet. Try again in a moment.', 'info');
     return;
   }
 
@@ -265,7 +285,7 @@ function showMonsterBrowser() {
     modal.className = 'dm-modal-overlay';
     modal.innerHTML =
       '<div class="dm-modal" style="max-width:680px; max-height:80vh; display:flex; flex-direction:column;" role="dialog" aria-modal="true">' +
-        '<h3 class="dm-modal-title"><i class="fi fi-rr-book"></i> SRD Bestiary <span style="font-weight:400; font-size:13px; color:var(--text-muted);">(' + MONSTERS.length + ' monsters)</span></h3>' +
+        '<h3 class="dm-modal-title"><i class="fi fi-rr-book"></i> SRD Bestiary <span id="monster-browser-count" style="font-weight:400; font-size:13px; color:var(--text-muted);"></span></h3>' +
         '<div style="display:flex; gap:8px; margin-bottom:12px;">' +
           '<input type="text" id="monster-search" placeholder="Search by name or type..." oninput="filterMonsterBrowser()" style="flex:1; margin:0;" />' +
           '<select id="monster-cr-filter" onchange="filterMonsterBrowser()" style="margin:0; width:auto;">' +
@@ -286,6 +306,8 @@ function showMonsterBrowser() {
   }
 
   modal.style.display = 'flex';
+  var countEl = document.getElementById('monster-browser-count');
+  if (countEl) countEl.textContent = '(' + getMonsterList().length + ' monsters)';
   document.getElementById('monster-search').value = '';
   document.getElementById('monster-cr-filter').value = 'all';
   filterMonsterBrowser();
@@ -308,7 +330,7 @@ function filterMonsterBrowser() {
   const q      = (document.getElementById('monster-search').value || '').toLowerCase();
   const crFilter = document.getElementById('monster-cr-filter').value;
 
-  const filtered = MONSTERS.filter(function (m) {
+  const filtered = getMonsterList().filter(function (m) {
     const matchesSearch = !q || m.name.toLowerCase().includes(q) || (m.type || '').toLowerCase().includes(q);
     if (!matchesSearch) return false;
     if (crFilter === 'all') return true;

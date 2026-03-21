@@ -1,15 +1,35 @@
 // =============================================
-//   bestiary.js - Monster / Bestiary Reference page
+//   bestiary.js - Monster / Bestiary Reference (API-powered)
 // =============================================
 
+var allMonsters   = [];
 var activeCrRange = 'all';
 var activeMonType = 'all';
 
 (async function () {
-  const user = await requireAuth();
+  var user = await requireAuth();
   if (!user) return;
   renderNav(user);
-  renderBestiary(MONSTERS);
+
+  DndApi.showLoading('bestiary-list');
+
+  try {
+    allMonsters = await DndApi.fetchMonsters();
+    if (allMonsters.length === 0 && typeof MONSTERS !== 'undefined') {
+      allMonsters = MONSTERS;
+    }
+    renderBestiary(allMonsters);
+    document.querySelector('.subtitle').textContent =
+      'Monster stat blocks - ' + allMonsters.length + ' creatures. Search by name, filter by type and challenge rating.';
+  } catch (err) {
+    if (typeof MONSTERS !== 'undefined' && MONSTERS.length > 0) {
+      allMonsters = MONSTERS;
+      renderBestiary(allMonsters);
+      showToast('Using offline monster data (API unavailable)', 'info');
+    } else {
+      DndApi.showError('bestiary-list', err.message);
+    }
+  }
 })();
 
 function setCrRange(range, btn) {
@@ -39,8 +59,9 @@ function crToNumber(cr) {
 
 function filterBestiary() {
   var q = document.getElementById('bestiary-search').value.toLowerCase();
-  var filtered = MONSTERS.filter(function (m) {
-    var matchesSearch = !q || m.name.toLowerCase().includes(q);
+  var filtered = allMonsters.filter(function (m) {
+    var matchesSearch = !q || m.name.toLowerCase().includes(q) ||
+      (m.type && m.type.toLowerCase().includes(q));
 
     var matchesCr = true;
     if (activeCrRange !== 'all') {
@@ -62,6 +83,11 @@ function filterBestiary() {
   renderBestiary(filtered);
 }
 
+function abilityMod(score) {
+  var mod = Math.floor((score - 10) / 2);
+  return mod >= 0 ? '+' + mod : String(mod);
+}
+
 function renderBestiary(list) {
   var container = document.getElementById('bestiary-list');
   if (list.length === 0) {
@@ -77,6 +103,7 @@ function renderBestiary(list) {
       '<div class="spell-stats">' +
         '<span class="spell-badge">CR ' + escapeHtml(m.cr) + '</span>' +
         '<span class="spell-badge">' + escapeHtml(m.type) + '</span>' +
+        (m.size ? '<span class="spell-badge">' + escapeHtml(m.size) + '</span>' : '') +
       '</div>' +
       '<div class="spell-stats">' +
         '<span class="spell-stat"><i class="fi fi-rr-shield"></i> <span>AC ' + m.ac + '</span></span>' +
@@ -91,15 +118,46 @@ function openMonsterDetail(index) {
   var m = window._bestiaryDisplayList && window._bestiaryDisplayList[index];
   if (!m) return;
 
-  var body = 'CR ' + m.cr + '  |  ' + m.type + '\n' +
-    'AC ' + m.ac + '  |  HP ' + m.hp + '  |  Speed ' + m.speed + '\n\n' +
+  var body = (m.size ? m.size + ' ' : '') + m.type +
+    (m.alignment ? ', ' + m.alignment : '') + '\n' +
+    'CR ' + m.cr + '\n\n' +
+    'AC ' + m.ac + (m.acDesc ? ' (' + m.acDesc + ')' : '') +
+    '  |  HP ' + m.hp + (m.hitDice ? ' (' + m.hitDice + ')' : '') +
+    '  |  Speed ' + m.speed + '\n\n' +
     '--- Ability Scores ---\n' +
-    'STR ' + m.str + '  DEX ' + m.dex + '  CON ' + m.con + '\n' +
-    'INT ' + m.int + '  WIS ' + m.wis + '  CHA ' + m.cha + '\n\n' +
-    '--- Attacks ---\n' + m.attacks + '\n\n' +
-    '--- Abilities ---\n' + m.abilities + '\n\n' +
-    'Senses: ' + m.senses + '\n' +
-    'Languages: ' + m.languages;
+    'STR ' + m.str + ' (' + abilityMod(m.str) + ')  ' +
+    'DEX ' + m.dex + ' (' + abilityMod(m.dex) + ')  ' +
+    'CON ' + m.con + ' (' + abilityMod(m.con) + ')\n' +
+    'INT ' + m.int + ' (' + abilityMod(m.int) + ')  ' +
+    'WIS ' + m.wis + ' (' + abilityMod(m.wis) + ')  ' +
+    'CHA ' + m.cha + ' (' + abilityMod(m.cha) + ')\n';
+
+  if (m.saves)              body += '\nSaving Throws: ' + m.saves;
+  if (m.skills)             body += '\nSkills: ' + m.skills;
+  if (m.vulnerabilities)    body += '\nVulnerabilities: ' + m.vulnerabilities;
+  if (m.resistances)        body += '\nResistances: ' + m.resistances;
+  if (m.immunities)         body += '\nDamage Immunities: ' + m.immunities;
+  if (m.conditionImmunities) body += '\nCondition Immunities: ' + m.conditionImmunities;
+  if (m.senses)             body += '\nSenses: ' + m.senses;
+  if (m.languages)          body += '\nLanguages: ' + m.languages;
+
+  if (m.abilities) {
+    body += '\n\n--- Special Abilities ---\n' + m.abilities;
+  }
+  if (m.actions) {
+    body += '\n\n--- Actions ---\n' + m.actions;
+  }
+  if (m.bonusActions) {
+    body += '\n\n--- Bonus Actions ---\n' + m.bonusActions;
+  }
+  if (m.reactions) {
+    body += '\n\n--- Reactions ---\n' + m.reactions;
+  }
+  if (m.legendary) {
+    body += '\n\n--- Legendary Actions ---\n';
+    if (m.legendaryDesc) body += m.legendaryDesc + '\n\n';
+    body += m.legendary;
+  }
 
   showInfoModal({ title: m.name, body: body });
 }

@@ -1,14 +1,34 @@
 // =============================================
-//   items.js - Items & Equipment Reference page
+//   items.js - Items & Equipment Reference (API-powered)
 // =============================================
 
+var allItems      = [];
 var activeItemCat = 'all';
 
 (async function () {
-  const user = await requireAuth();
+  var user = await requireAuth();
   if (!user) return;
   renderNav(user);
-  renderItems(ITEMS);
+
+  DndApi.showLoading('item-list');
+
+  try {
+    allItems = await DndApi.fetchEquipment();
+    if (allItems.length === 0 && typeof ITEMS !== 'undefined') {
+      allItems = ITEMS;
+    }
+    renderItems(allItems);
+    document.querySelector('.subtitle').textContent =
+      'Items and equipment - ' + allItems.length + ' entries. Weapons, armor, gear, tools, and more.';
+  } catch (err) {
+    if (typeof ITEMS !== 'undefined' && ITEMS.length > 0) {
+      allItems = ITEMS;
+      renderItems(allItems);
+      showToast('Using offline item data (API unavailable)', 'info');
+    } else {
+      DndApi.showError('item-list', err.message);
+    }
+  }
 })();
 
 function setItemCat(cat, btn) {
@@ -22,10 +42,11 @@ function setItemCat(cat, btn) {
 
 function filterItems() {
   var q = document.getElementById('item-search').value.toLowerCase();
-  var filtered = ITEMS.filter(function (item) {
-    var matchesCat = activeItemCat === 'all' ||
-      item.category.toLowerCase() === activeItemCat.toLowerCase();
-    var matchesSearch = !q || item.name.toLowerCase().includes(q);
+  var filtered = allItems.filter(function (item) {
+    var cat = (item.category || '').toLowerCase();
+    var matchesCat = activeItemCat === 'all' || cat.includes(activeItemCat.toLowerCase());
+    var matchesSearch = !q || item.name.toLowerCase().includes(q) ||
+      (item.desc && item.desc.toLowerCase().includes(q));
     return matchesCat && matchesSearch;
   });
   renderItems(filtered);
@@ -45,8 +66,8 @@ function renderItems(list) {
     return '<div class="ref-card" onclick="openItemDetail(' + idx + ')" title="Click to expand">' +
       '<div class="ref-name">' + escapeHtml(item.name) + '</div>' +
       '<div class="spell-stats">' +
-        '<span class="spell-stat"><i class="fi fi-rr-coins"></i> <span>' + escapeHtml(item.cost) + '</span></span>' +
-        '<span class="spell-stat"><i class="fi fi-rr-weight-hanging"></i> <span>' + escapeHtml(item.weight) + '</span></span>' +
+        (item.cost ? '<span class="spell-stat"><i class="fi fi-rr-coins"></i> <span>' + escapeHtml(item.cost) + '</span></span>' : '') +
+        (item.weight ? '<span class="spell-stat"><i class="fi fi-rr-weight-hanging"></i> <span>' + escapeHtml(item.weight) + '</span></span>' : '') +
         '<span class="spell-badge">' + escapeHtml(item.category) + '</span>' +
       '</div>' +
       (props ? '<div class="ref-desc">' + props + '</div>' : '') +
@@ -58,15 +79,11 @@ function openItemDetail(index) {
   var item = window._itemDisplayList && window._itemDisplayList[index];
   if (!item) return;
 
-  var body = 'Category: ' + item.category + '\n' +
-    'Cost: ' + item.cost + '\n' +
-    'Weight: ' + item.weight + '\n';
-
-  if (item.properties) {
-    body += 'Properties: ' + item.properties + '\n';
-  }
-
-  body += '\n' + item.desc;
+  var body = 'Category: ' + item.category + '\n';
+  if (item.cost)   body += 'Cost: ' + item.cost + '\n';
+  if (item.weight) body += 'Weight: ' + item.weight + '\n';
+  if (item.properties) body += 'Properties: ' + item.properties + '\n';
+  body += '\n' + (item.desc || 'No description available.');
 
   showInfoModal({ title: item.name, body: body });
 }

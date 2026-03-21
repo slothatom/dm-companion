@@ -1,70 +1,105 @@
 // =============================================
-//   spells.js - Spell Reference page
+//   spells.js - Spell Reference page (API-powered)
 // =============================================
 
-let activeLevel  = 'all';
-let activeClass  = 'all';
-let filterConc   = false;
-let filterRitual = false;
+var allSpells    = [];
+var activeLevel  = 'all';
+var activeClass  = 'all';
+var filterConc   = false;
+var filterRitual = false;
 
 (async function () {
-  const user = await requireAuth();
+  var user = await requireAuth();
   if (!user) return;
   renderNav(user);
-  renderSpells(SPELLS);
+
+  DndApi.showLoading('spell-list');
+
+  try {
+    allSpells = await DndApi.fetchSpells();
+    // Fallback to static data if API returns empty
+    if (allSpells.length === 0 && typeof SPELLS !== 'undefined') {
+      allSpells = SPELLS;
+    }
+    renderSpells(allSpells);
+    document.querySelector('.subtitle').textContent =
+      'Full spell reference - ' + allSpells.length + ' spells. Search by name, school, or filter by level.';
+  } catch (err) {
+    // Fallback to static data
+    if (typeof SPELLS !== 'undefined' && SPELLS.length > 0) {
+      allSpells = SPELLS;
+      renderSpells(allSpells);
+      showToast('Using offline spell data (API unavailable)', 'info');
+    } else {
+      DndApi.showError('spell-list', err.message);
+    }
+  }
 })();
 
 function renderSpells(list) {
-  const container = document.getElementById('spell-list');
+  var container = document.getElementById('spell-list');
   if (list.length === 0) {
     container.innerHTML = '<p class="empty-state">No spells match your search.</p>';
     return;
   }
 
-  // Store for modal lookup
   window._spellDisplayList = list;
 
   container.innerHTML = list.map(function (s, idx) {
-    const levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
-    const concBadge  = s.conc   ? '<span class="spell-badge badge-conc">Concentration</span>'  : '';
-    const ritualBadge= s.ritual ? '<span class="spell-badge badge-ritual">Ritual</span>' : '';
-    return `
-          <div class="spell-card" onclick="openSpellDetail(${idx})" title="Click to expand">
-            <div class="spell-header">
-              <span class="spell-name">${s.name}</span>
-              <span class="spell-level">${levelLabel}</span>
-              <span class="spell-school">${s.school}</span>
-              ${concBadge}${ritualBadge}
-            </div>
-            <div class="spell-stats">
-              <span class="spell-stat"><i class="fi fi-rr-clock"></i> <span>${s.cast}</span></span>
-              <span class="spell-stat"><i class="fi fi-rr-map-marker"></i> <span>${s.range}</span></span>
-              <span class="spell-stat"><i class="fi fi-rr-hourglass-end"></i> <span>${s.duration}</span></span>
-              ${s.components ? '<span class="spell-stat"><i class="fi fi-rr-puzzle-piece"></i> <span>' + s.components + '</span></span>' : ''}
-            </div>
-            <div class="spell-desc">${s.desc}</div>
-          </div>`;
+    var levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
+    var concBadge  = s.conc   ? '<span class="spell-badge badge-conc">Concentration</span>'  : '';
+    var ritualBadge= s.ritual ? '<span class="spell-badge badge-ritual">Ritual</span>' : '';
+    return '<div class="spell-card" onclick="openSpellDetail(' + idx + ')" title="Click to expand">' +
+      '<div class="spell-header">' +
+        '<span class="spell-name">' + escapeHtml(s.name) + '</span>' +
+        '<span class="spell-level">' + levelLabel + '</span>' +
+        '<span class="spell-school">' + escapeHtml(s.school) + '</span>' +
+        concBadge + ritualBadge +
+      '</div>' +
+      '<div class="spell-stats">' +
+        '<span class="spell-stat"><i class="fi fi-rr-clock"></i> <span>' + escapeHtml(s.cast) + '</span></span>' +
+        '<span class="spell-stat"><i class="fi fi-rr-map-marker"></i> <span>' + escapeHtml(s.range) + '</span></span>' +
+        '<span class="spell-stat"><i class="fi fi-rr-hourglass-end"></i> <span>' + escapeHtml(s.duration) + '</span></span>' +
+        (s.components ? '<span class="spell-stat"><i class="fi fi-rr-puzzle-piece"></i> <span>' + escapeHtml(s.components) + '</span></span>' : '') +
+      '</div>' +
+      '<div class="spell-desc">' + escapeHtml(truncate(s.desc, 200)) + '</div>' +
+    '</div>';
   }).join('');
 }
 
+function truncate(str, len) {
+  if (!str) return '';
+  if (str.length <= len) return str;
+  return str.substring(0, len) + '...';
+}
+
 function openSpellDetail(index) {
-  const s = window._spellDisplayList && window._spellDisplayList[index];
+  var s = window._spellDisplayList && window._spellDisplayList[index];
   if (!s) return;
 
-  const levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
-  const tags = [levelLabel, s.school];
+  var levelLabel = s.level === 0 ? 'Cantrip' : 'Level ' + s.level;
+  var tags = [levelLabel, s.school];
   if (s.conc)   tags.push('Concentration');
   if (s.ritual) tags.push('Ritual');
 
-  var classes = SPELL_CLASSES[s.name] || [];
-  const body =
-    tags.join(' · ') + '\n' +
+  var classes = s.classes || [];
+  // Fallback to SPELL_CLASSES if available
+  if (classes.length === 0 && typeof SPELL_CLASSES !== 'undefined') {
+    classes = SPELL_CLASSES[s.name] || [];
+  }
+
+  var body =
+    tags.join(' . ') + '\n' +
     (classes.length ? 'Classes: ' + classes.join(', ') : '') + '\n\n' +
     'Cast: ' + s.cast + '\n' +
     'Range: ' + s.range + '\n' +
     'Duration: ' + s.duration +
     (s.components ? '\nComponents: ' + s.components : '') +
     '\n\n' + s.desc;
+
+  if (s.higherLevel) {
+    body += '\n\nAt Higher Levels: ' + s.higherLevel;
+  }
 
   showInfoModal({ title: s.name, body: body });
 }
@@ -91,15 +126,24 @@ function toggleFilter(type, btn) {
 }
 
 function filterSpells() {
-  const query = document.getElementById('spell-search').value.toLowerCase();
-  const filtered = SPELLS.filter(function (s) {
-    const matchesLevel  = activeLevel === 'all' || s.level === activeLevel;
-    const matchesSearch = s.name.toLowerCase().includes(query) ||
-                          s.desc.toLowerCase().includes(query) ||
-                          s.school.toLowerCase().includes(query);
-    const matchesConc   = !filterConc   || s.conc   === true;
-    const matchesRitual = !filterRitual || s.ritual === true;
-    const matchesClass  = activeClass === 'all' || (SPELL_CLASSES[s.name] && SPELL_CLASSES[s.name].indexOf(activeClass) !== -1);
+  var query = document.getElementById('spell-search').value.toLowerCase();
+  var filtered = allSpells.filter(function (s) {
+    var matchesLevel  = activeLevel === 'all' || s.level === activeLevel;
+    var matchesSearch = s.name.toLowerCase().includes(query) ||
+                        (s.desc && s.desc.toLowerCase().includes(query)) ||
+                        (s.school && s.school.toLowerCase().includes(query));
+    var matchesConc   = !filterConc   || s.conc   === true;
+    var matchesRitual = !filterRitual || s.ritual === true;
+
+    var matchesClass = true;
+    if (activeClass !== 'all') {
+      var classes = s.classes || [];
+      if (classes.length === 0 && typeof SPELL_CLASSES !== 'undefined') {
+        classes = SPELL_CLASSES[s.name] || [];
+      }
+      matchesClass = classes.indexOf(activeClass) !== -1;
+    }
+
     return matchesLevel && matchesSearch && matchesConc && matchesRitual && matchesClass;
   });
   renderSpells(filtered);

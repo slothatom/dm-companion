@@ -251,6 +251,8 @@ function renderNav(user) {
       { href: 'classes.html',       icon: '<i class="fi fi-rr-shield"></i>',         label: 'Classes'        },
       { href: 'feats.html',         icon: '<i class="fi fi-rr-star"></i>',           label: 'Feats'          },
       { href: 'items.html',         icon: '<i class="fi fi-rr-backpack"></i>',       label: 'Items'          },
+      { href: 'magic-items.html',  icon: '<i class="fi fi-rr-wand-sparkles"></i>',  label: 'Magic Items'    },
+      { href: 'conditions.html',   icon: '<i class="fi fi-rr-exclamation"></i>',    label: 'Conditions'     },
       { href: 'backgrounds.html',   icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Backgrounds'    },
       { href: 'languages.html',     icon: '<i class="fi fi-rr-comment"></i>',        label: 'Languages'      },
       { href: 'rules.html',         icon: '<i class="fi fi-rr-book"></i>',           label: 'Rules'          },

@@ -1,14 +1,46 @@
 // =============================================
-//   glossary-ref.js - Glossary Reference page
+//   glossary-ref.js - Glossary Reference (API-powered)
 // =============================================
 
+var allGlossary    = [];
 var activeGlossCat = 'all';
 
 (async function () {
-  const user = await requireAuth();
+  var user = await requireAuth();
   if (!user) return;
   renderNav(user);
-  renderGlossary(GLOSSARY);
+
+  DndApi.showLoading('glossary-list');
+
+  try {
+    // Fetch conditions from API and merge with static glossary if available
+    var conditions = await DndApi.fetchConditions();
+    var apiEntries = conditions.map(function (c) {
+      return { term: c.name, def: c.desc, category: 'Condition' };
+    });
+
+    // Merge with static glossary data for non-condition terms
+    if (typeof GLOSSARY !== 'undefined' && GLOSSARY.length > 0) {
+      var condNames = {};
+      apiEntries.forEach(function (e) { condNames[e.term.toLowerCase()] = true; });
+      GLOSSARY.forEach(function (g) {
+        if (!condNames[g.term.toLowerCase()]) {
+          apiEntries.push(g);
+        }
+      });
+    }
+
+    allGlossary = apiEntries.sort(function (a, b) { return a.term.localeCompare(b.term); });
+    renderGlossary(allGlossary);
+  } catch (err) {
+    if (typeof GLOSSARY !== 'undefined' && GLOSSARY.length > 0) {
+      allGlossary = GLOSSARY;
+      renderGlossary(allGlossary);
+      showToast('Using offline glossary data (API unavailable)', 'info');
+    } else {
+      DndApi.showError('glossary-list', err.message);
+    }
+  }
 })();
 
 function setGlossCat(cat, btn) {
@@ -22,7 +54,7 @@ function setGlossCat(cat, btn) {
 
 function filterGlossary() {
   var q = document.getElementById('glossary-search').value.toLowerCase();
-  var filtered = GLOSSARY.filter(function (g) {
+  var filtered = allGlossary.filter(function (g) {
     var matchesCat = activeGlossCat === 'all' ||
       g.category.toLowerCase() === activeGlossCat.toLowerCase();
     var matchesSearch = !q ||
@@ -31,11 +63,7 @@ function filterGlossary() {
     return matchesCat && matchesSearch;
   });
 
-  // Sort alphabetically by term
-  filtered.sort(function (a, b) {
-    return a.term.localeCompare(b.term);
-  });
-
+  filtered.sort(function (a, b) { return a.term.localeCompare(b.term); });
   renderGlossary(filtered);
 }
 
@@ -46,11 +74,7 @@ function renderGlossary(list) {
     return;
   }
 
-  // Sort alphabetically
-  list = list.slice().sort(function (a, b) {
-    return a.term.localeCompare(b.term);
-  });
-
+  list = list.slice().sort(function (a, b) { return a.term.localeCompare(b.term); });
   window._glossDisplayList = list;
 
   container.innerHTML = list.map(function (g, idx) {
@@ -70,6 +94,5 @@ function openGlossDetail(index) {
   if (!g) return;
 
   var body = 'Category: ' + g.category + '\n\n' + g.def;
-
   showInfoModal({ title: g.term, body: body });
 }

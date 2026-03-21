@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion - Magic Items</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-wand-sparkles"></i> Magic Items</h1>
+    <p class="subtitle">Enchanted gear, wondrous items, potions, and artifacts from the SRD and OGL sources.</p>
+
+    <div class="spell-search">
+      <input type="text" id="magic-search" placeholder="Search magic items..."
+        oninput="filterMagicItems()" style="margin-bottom:10px;" />
+    </div>
+
+    <div class="spell-filters" id="rarity-filters">
+      <button class="filter-btn active-filter" onclick="setRarity('all', this)">All</button>
+      <button class="filter-btn" onclick="setRarity('common', this)">Common</button>
+      <button class="filter-btn" onclick="setRarity('uncommon', this)">Uncommon</button>
+      <button class="filter-btn" onclick="setRarity('rare', this)">Rare</button>
+      <button class="filter-btn" onclick="setRarity('very rare', this)">Very Rare</button>
+      <button class="filter-btn" onclick="setRarity('legendary', this)">Legendary</button>
+      <button class="filter-btn" onclick="setRarity('artifact', this)">Artifact</button>
+    </div>
+
+    <div class="spell-filters" id="type-filters" style="margin-top:8px;">
+      <button class="filter-btn active-filter" onclick="setMagicType('all', this)">All Types</button>
+      <button class="filter-btn" onclick="setMagicType('Weapon', this)">Weapon</button>
+      <button class="filter-btn" onclick="setMagicType('Armor', this)">Armor</button>
+      <button class="filter-btn" onclick="setMagicType('Potion', this)">Potion</button>
+      <button class="filter-btn" onclick="setMagicType('Ring', this)">Ring</button>
+      <button class="filter-btn" onclick="setMagicType('Rod', this)">Rod</button>
+      <button class="filter-btn" onclick="setMagicType('Scroll', this)">Scroll</button>
+      <button class="filter-btn" onclick="setMagicType('Staff', this)">Staff</button>
+      <button class="filter-btn" onclick="setMagicType('Wand', this)">Wand</button>
+      <button class="filter-btn" onclick="setMagicType('Wondrous', this)">Wondrous</button>
+    </div>
+
+    <div id="magic-list"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'magic-items.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/lib/api.js"></script>
+  <script src="js/pages/magic-items.js"></script>
+</body>
+</html>

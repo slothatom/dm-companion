@@ -1,12 +1,31 @@
 // =============================================
-//   languages-ref.js - Languages Reference page
+//   languages-ref.js - Languages Reference (API-powered)
 // =============================================
 
+var allLanguages = [];
+
 (async function () {
-  const user = await requireAuth();
+  var user = await requireAuth();
   if (!user) return;
   renderNav(user);
-  renderLanguages(LANGUAGES);
+
+  DndApi.showLoading('languages-list');
+
+  try {
+    allLanguages = await DndApi.fetchLanguages();
+    if (allLanguages.length === 0 && typeof LANGUAGES !== 'undefined') {
+      allLanguages = LANGUAGES;
+    }
+    renderLanguages(allLanguages);
+  } catch (err) {
+    if (typeof LANGUAGES !== 'undefined' && LANGUAGES.length > 0) {
+      allLanguages = LANGUAGES;
+      renderLanguages(allLanguages);
+      showToast('Using offline language data (API unavailable)', 'info');
+    } else {
+      DndApi.showError('languages-list', err.message);
+    }
+  }
 })();
 
 function renderLanguages(list) {
@@ -41,9 +60,9 @@ function renderLanguages(list) {
       html += '<div class="ref-card" onclick="openLangDetail(' + lang._displayIdx + ')" title="Click to expand">' +
         '<div class="ref-name">' + escapeHtml(lang.name) + '</div>' +
         '<div class="spell-stats">' +
-          '<span class="spell-stat"><i class="fi fi-rr-pen-nib"></i> <span>' + escapeHtml(lang.script) + '</span></span>' +
+          '<span class="spell-stat"><i class="fi fi-rr-pen-nib"></i> <span>' + escapeHtml(lang.script || 'None') + '</span></span>' +
         '</div>' +
-        '<div class="ref-desc">' + escapeHtml(lang.speakers) + '</div>' +
+        '<div class="ref-desc">' + escapeHtml(lang.speakers || '') + '</div>' +
       '</div>';
     });
     html += '</div>';
@@ -56,9 +75,9 @@ function renderLanguages(list) {
       html += '<div class="ref-card" onclick="openLangDetail(' + lang._displayIdx + ')" title="Click to expand">' +
         '<div class="ref-name">' + escapeHtml(lang.name) + '</div>' +
         '<div class="spell-stats">' +
-          '<span class="spell-stat"><i class="fi fi-rr-pen-nib"></i> <span>' + escapeHtml(lang.script) + '</span></span>' +
+          '<span class="spell-stat"><i class="fi fi-rr-pen-nib"></i> <span>' + escapeHtml(lang.script || 'None') + '</span></span>' +
         '</div>' +
-        '<div class="ref-desc">' + escapeHtml(lang.speakers) + '</div>' +
+        '<div class="ref-desc">' + escapeHtml(lang.speakers || '') + '</div>' +
       '</div>';
     });
     html += '</div>';
@@ -71,10 +90,10 @@ function openLangDetail(index) {
   var lang = window._langDisplayList && window._langDisplayList[index];
   if (!lang) return;
 
-  var body = 'Type: ' + lang.type + '\n' +
-    'Script: ' + lang.script + '\n' +
-    'Typical Speakers: ' + lang.speakers + '\n\n' +
-    lang.desc;
+  var body = 'Type: ' + (lang.type || 'Standard') + '\n' +
+    'Script: ' + (lang.script || 'None') + '\n' +
+    'Typical Speakers: ' + (lang.speakers || 'Various') + '\n\n' +
+    (lang.desc || 'No additional details available.');
 
   showInfoModal({ title: lang.name, body: body });
 }

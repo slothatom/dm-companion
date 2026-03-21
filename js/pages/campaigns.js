@@ -183,14 +183,14 @@ function renderSessions() {
     return `
       <div class="session-card">
         <div class="session-header">
-          <div class="row-actions" style="align-items:flex-end;">
+          <div style="display:grid; grid-template-columns:70px 1fr auto auto; gap:10px; align-items:end;">
             <div>
               <label>Session #</label>
               <input type="number" value="${escapeHtml(String(s.sessionNumber ?? ''))}" min="1"
                 style="width:70px; margin:0;"
                 onchange="updateSession(${i}, 'sessionNumber', this.value)" />
             </div>
-            <div style="flex:1; min-width:160px;">
+            <div>
               <label>Title</label>
               <input type="text" value="${escapeHtml(s.title)}"
                 placeholder="e.g. The Fall of Thornmere"
@@ -203,10 +203,8 @@ function renderSessions() {
                 style="margin:0;"
                 onchange="updateSession(${i}, 'sessionDate', this.value)" />
             </div>
-            <div style="padding-bottom:1px;">
-              <button class="danger" style="padding:9px 10px; font-size:13px;"
-                onclick="removeSession(${i})">✕</button>
-            </div>
+            <button class="danger" style="padding:10px 10px; font-size:13px; margin:0; height:fit-content;"
+              onclick="removeSession(${i})">✕</button>
           </div>
         </div>
         <label style="margin-top:12px; display:block;">Session Recap</label>

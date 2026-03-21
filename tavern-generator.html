@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion - Tavern Generator</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-mug-hot-alt"></i> Tavern Generator</h1>
+    <p class="subtitle">Generate a full tavern with name, atmosphere, menu, drinks, and sleeping options.</p>
+
+    <div class="card" style="padding:14px;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <div>
+          <label for="tavern-quality">Quality</label>
+          <select id="tavern-quality" style="margin:0;">
+            <option value="squalid">Squalid</option>
+            <option value="poor">Poor</option>
+            <option value="modest" selected>Modest</option>
+            <option value="comfortable">Comfortable</option>
+            <option value="wealthy">Wealthy</option>
+            <option value="aristocratic">Aristocratic</option>
+          </select>
+        </div>
+        <button onclick="generateTavern()"><i class="fi fi-rr-dice-d20"></i> Generate Tavern</button>
+      </div>
+    </div>
+
+    <div id="tavern-output"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'tavern-generator.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/pages/tavern-generator.js"></script>
+</body>
+</html>

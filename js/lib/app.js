@@ -285,6 +285,22 @@ function renderNav(user) {
   const mainEl = document.querySelector('main');
   if (mainEl) mainEl.style.visibility = 'visible';
 
+  // Restore sidebar scroll position
+  var sidebarLinks = nav.querySelector('.sidebar-links');
+  if (sidebarLinks) {
+    var savedScroll = sessionStorage.getItem('sidebar-scroll');
+    if (savedScroll) {
+      sidebarLinks.scrollTop = parseInt(savedScroll, 10);
+    }
+    // Save scroll position before navigating away
+    nav.addEventListener('click', function (e) {
+      var link = e.target.closest('a.sidebar-link');
+      if (link && sidebarLinks) {
+        sessionStorage.setItem('sidebar-scroll', sidebarLinks.scrollTop);
+      }
+    });
+  }
+
   // Start loading timeout safety net
   setupLoadingTimeout();
 

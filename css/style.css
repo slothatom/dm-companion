@@ -290,15 +290,16 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   font-family: 'Cinzel', serif;
 }
 
-/* ---- Footer: profile + sign out ---- */
+/* ---- Footer: profile menu ---- */
 .sidebar-footer {
-  padding: 12px 10px 16px;
+  padding: 8px 10px 12px;
   border-top: 1px solid var(--border-dim);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  overflow: hidden;
+  gap: 0;
+  overflow: visible;
+  position: relative;
 }
 
 .sidebar-profile {
@@ -306,8 +307,12 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   align-items: center;
   gap: 10px;
   overflow: hidden;
-  padding: 2px 2px;
+  padding: 6px 4px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s;
 }
+.sidebar-profile:hover { background: var(--surface-hover, rgba(255,255,255,0.05)); }
 
 .profile-avatar-wrap {
   width: 32px;
@@ -342,14 +347,74 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 130px;
+  flex: 1;
   opacity: 1;
   transition: max-width 0.2s ease, opacity 0.15s ease;
 }
 #main-nav.collapsed .sidebar-profile-email { max-width: 0; opacity: 0; }
 
+.profile-chevron {
+  font-size: 11px;
+  color: var(--text-dim);
+  transition: transform 0.2s ease;
+  margin-left: auto;
+}
+.profile-chevron.rotated { transform: rotate(180deg); }
+#main-nav.collapsed .profile-chevron { display: none; }
+
+/* Profile menu (expandable) */
+.profile-menu {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 4px;
+}
+.profile-menu.open {
+  max-height: 300px;
+  opacity: 1;
+  padding: 8px 4px 4px;
+}
+
+.profile-menu-name {
+  font-size: 11px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 2px 4px;
+  border-bottom: 1px solid var(--border-dim);
+  margin-bottom: 2px;
+}
+
+.profile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 5px 6px;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+.profile-menu-link i { font-size: 13px; width: 16px; text-align: center; }
+.profile-menu-link:hover {
+  background: var(--surface-hover, rgba(255,255,255,0.05));
+  color: var(--text-muted);
+}
+
 .sidebar-signout {
   width: 100%;
-  max-height: 38px;
   background: transparent;
   border: 1px solid var(--border-dim);
   color: var(--text-dim);
@@ -360,28 +425,13 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   cursor: pointer;
   text-align: left;
   letter-spacing: 0.3px;
-  overflow: hidden;
-  opacity: 1;
-  transition: background 0.2s, color 0.2s, border-color 0.2s,
-              max-height 0.2s ease, opacity 0.15s ease, padding 0.2s;
+  margin-top: 4px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .sidebar-signout:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
-.sidebar-privacy {
-  display: block;
-  text-align: center;
-  font-size: 11px;
-  color: var(--text-dim);
-  text-decoration: none;
-  margin-top: 6px;
-  transition: color 0.15s;
-}
-.sidebar-privacy:hover { color: var(--text-muted); text-decoration: underline; }
-#main-nav.collapsed .sidebar-privacy { display: none; }
-#main-nav.collapsed .sidebar-signout {
-  max-height: 0; opacity: 0;
-  padding-top: 0; padding-bottom: 0;
-  border-color: transparent;
-}
+
+/* Collapsed sidebar: hide menu */
+#main-nav.collapsed .profile-menu { display: none; }
 
 /* ---- Mobile sidebar: slide-in overlay ---- */
 .sidebar-backdrop {
@@ -943,7 +993,8 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   #main-nav .sidebar-label,
   #main-nav .sidebar-logo-text,
   #main-nav .sidebar-profile-email { max-width: 160px !important; opacity: 1 !important; }
-  #main-nav .sidebar-signout { max-height: 38px !important; opacity: 1 !important; padding: 7px 10px !important; }
+  #main-nav .profile-chevron { display: inline-block !important; }
+  #main-nav .profile-menu { display: flex !important; }
 
   /* No left padding — sidebar is overlay */
   body.has-sidebar,
@@ -1358,11 +1409,7 @@ input[type="time"] {
   opacity: 1;
 }
 .theme-toggle:hover { border-color: var(--primary); color: var(--primary); background: transparent; }
-#main-nav.collapsed .theme-toggle {
-  max-height: 0; opacity: 0;
-  padding-top: 0; padding-bottom: 0;
-  border-color: transparent;
-}
+/* theme-toggle hidden via profile-menu collapse when sidebar collapsed */
 
 /* =============================================
    Responsive grid breakpoints

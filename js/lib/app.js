@@ -295,15 +295,21 @@ function renderNav(user) {
       : `<div class="profile-initials">${initials}</div>`;
 
     footerHtml = `
-      <div class="sidebar-profile">
+      <div class="sidebar-profile" onclick="toggleProfileMenu()" role="button" tabindex="0" aria-expanded="false" aria-label="Toggle profile menu">
         <div class="profile-avatar-wrap">${avatarHtml}</div>
         <span class="sidebar-profile-email">${email}</span>
+        <i class="fi fi-rr-angle-up profile-chevron"></i>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn"></button>
-      <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>
-      <a href="terms.html" class="sidebar-privacy">Terms &amp; Conditions</a>
-      <a href="privacy.html" class="sidebar-privacy">Privacy Policy</a>
-      <a href="cookies.html" class="sidebar-privacy">Cookie Policy</a>`;
+      <div class="profile-menu" id="profile-menu">
+        <span class="profile-menu-name">${email}</span>
+        <button class="theme-toggle" onclick="toggleTheme(); event.stopPropagation();" id="theme-toggle-btn"></button>
+        <div class="profile-menu-links">
+          <a href="terms.html" class="profile-menu-link"><i class="fi fi-rr-document-signed"></i> Terms &amp; Conditions</a>
+          <a href="privacy.html" class="profile-menu-link"><i class="fi fi-rr-shield"></i> Privacy Policy</a>
+          <a href="cookies.html" class="profile-menu-link"><i class="fi fi-rr-cookie"></i> Cookie Policy</a>
+        </div>
+        <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>
+      </div>`;
   }
 
   const nav = document.getElementById('main-nav');
@@ -412,6 +418,15 @@ function openMobileSidebar() {
 }
 
 // ── Theme toggle ────────────────────────────────────────
+function toggleProfileMenu() {
+  const menu = document.getElementById('profile-menu');
+  const profile = document.querySelector('.sidebar-profile');
+  if (!menu || !profile) return;
+  const isOpen = menu.classList.toggle('open');
+  profile.setAttribute('aria-expanded', isOpen);
+  profile.querySelector('.profile-chevron').classList.toggle('rotated', isOpen);
+}
+
 function toggleTheme() {
   const current = document.documentElement.dataset.theme;
   const next = current === 'light' ? '' : 'light';

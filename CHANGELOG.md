@@ -14,6 +14,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Terms & Conditions page (`terms.html`) covering acceptance, accounts, user content, D&D IP/OGL, acceptable use, disclaimers, liability, and termination
 - Terms & Conditions linked from sidebar navigation and login footer
 
+### Changed
+- Sidebar profile reorganised into expandable menu: click avatar/name to reveal theme toggle, Terms & Conditions, Privacy Policy, Cookie Policy, and Sign Out
+
 ---
 
 ## [0.5.0] - 2026-03-21

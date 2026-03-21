@@ -1412,6 +1412,77 @@ input[type="time"] {
 .notes-campaign-bar select  { margin-bottom: 0; }
 .notes-campaign-bar .row-actions { align-self: flex-end; padding-bottom: 0; }
 
+/* ── Rich notes sections ── */
+
+.notes-section { margin-bottom: 12px; }
+
+.notes-section-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  user-select: none;
+}
+
+.notes-section-toggle:hover { color: var(--primary); }
+
+.section-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--text-dim);
+  transition: transform 0.15s;
+}
+
+.notes-section-body {
+  margin-top: 14px;
+}
+
+.scene-block,
+.npc-note-block,
+.item-note-block {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.scene-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.scene-header input { margin: 0 !important; }
+
+.scene-block textarea,
+.npc-note-block textarea,
+.item-note-block textarea {
+  min-height: 60px;
+  margin-bottom: 8px;
+}
+
+.scene-block textarea:last-child,
+.npc-note-block textarea:last-child,
+.item-note-block textarea:last-child {
+  margin-bottom: 0;
+}
+
+.scene-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  flex: 1;
+}
+
+.scene-readaloud {
+  border-left: 3px solid var(--primary) !important;
+  padding-left: 12px !important;
+  font-style: italic;
+  min-height: 80px !important;
+}
+
 /* =============================================
    Spell Slots Tracker (Players page)
    ============================================= */

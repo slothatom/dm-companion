@@ -14,7 +14,7 @@
 
   <main>
     <h1><i class="fi fi-rr-scroll"></i> Session Notes</h1>
-    <p class="subtitle">Plan your session. Tie notes to a campaign or keep them standalone.</p>
+    <p class="subtitle">Full session prep: overview, scenes, NPCs, mechanics, and DM secrets.</p>
 
     <div id="notes-loading" class="loading-state">
       <span class="spinner"></span> Loading your notes...
@@ -22,7 +22,7 @@
 
     <div id="notes-form" style="display:none;">
 
-      <!-- Campaign selector + Reset / Delete -->
+      <!-- Campaign selector + actions -->
       <div class="notes-campaign-bar">
         <div class="campaign-select-wrap">
           <label for="notes-campaign">Campaign</label>
@@ -32,36 +32,135 @@
         </div>
         <div class="row-actions">
           <button class="secondary" style="padding:8px 16px; font-size:12px;" onclick="resetNotes()"><i class="fi fi-rr-refresh"></i> Reset</button>
-          <button class="danger"    style="padding:8px 16px; font-size:12px;" onclick="deleteNotes()"><i class="fi fi-rr-trash"></i> Delete</button>
+          <button class="danger" style="padding:8px 16px; font-size:12px;" onclick="deleteNotes()"><i class="fi fi-rr-trash"></i> Delete</button>
         </div>
       </div>
 
-      <label for="session-title">Session Title</label>
-      <input type="text" id="session-title" placeholder="e.g. The Curse of Strahd - Session 4"
-        oninput="markDirty()" />
+      <!-- 1. Overview -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('overview')">
+          <i class="fi fi-rr-info"></i> Overview
+          <span class="section-arrow" id="arrow-overview">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-overview">
+          <label for="session-title">Session / Adventure Title</label>
+          <input type="text" id="session-title" placeholder="e.g. The Night of a Thousand Mischiefs" oninput="markDirty()" />
+          <div class="stat-grid" style="margin-top:12px;">
+            <div>
+              <label for="note-players">Players</label>
+              <input type="text" id="note-players" placeholder="e.g. 3 (Level 5)" oninput="markExtraDirty()" />
+            </div>
+            <div>
+              <label for="note-playtime">Playtime</label>
+              <input type="text" id="note-playtime" placeholder="e.g. 4-5 hours" oninput="markExtraDirty()" />
+            </div>
+            <div>
+              <label for="note-tone">Tone</label>
+              <input type="text" id="note-tone" placeholder="e.g. Fast-paced, humor, danger" oninput="markExtraDirty()" />
+            </div>
+          </div>
+          <label for="note-goal" style="margin-top:12px;">Main Goal</label>
+          <input type="text" id="note-goal" placeholder="e.g. Seal the wild magic rift before dawn" oninput="markExtraDirty()" />
+        </div>
+      </div>
 
-      <h2><i class="fi fi-rr-book"></i> The Story</h2>
-      <label for="story">Overview &amp; plot hooks</label>
-      <textarea id="story" oninput="markDirty()"
-        placeholder="What's the main story? What are the key plot points? What do the players need to find out or do?"
-      ></textarea>
+      <!-- 2. Story & Plot -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('story')">
+          <i class="fi fi-rr-book"></i> Story & Plot Hooks
+          <span class="section-arrow" id="arrow-story">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-story">
+          <label for="story">Overview, plot hooks, key beats</label>
+          <textarea id="story" oninput="markDirty()"
+            placeholder="What's the main story? Key plot points? What do the players need to find out or do?"
+            style="min-height:140px;"></textarea>
+        </div>
+      </div>
 
-      <h2><i class="fi fi-rr-map-marker"></i> Key Locations</h2>
-      <label for="locations">Places the players will visit</label>
-      <textarea id="locations" oninput="markDirty()"
-        placeholder="Describe each location briefly. What's there? Any secrets? Any traps?"
-        style="min-height: 140px;"
-      ></textarea>
+      <!-- 3. Scenes -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('scenes')">
+          <i class="fi fi-rr-map-marker"></i> Scenes & Encounters
+          <span class="section-arrow" id="arrow-scenes">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-scenes">
+          <div id="scenes-list"></div>
+          <button onclick="addScene()" style="margin-top:8px;">+ Add Scene</button>
+        </div>
+      </div>
 
-      <h2><i class="fi fi-rr-pencil"></i> DM Notes</h2>
-      <label for="dm-notes">Your private notes, reminders, and ideas</label>
-      <textarea id="dm-notes" oninput="markDirty()"
-        placeholder="Anything you want to remember: pacing tips, improvised NPC names, contingencies if players go off-script..."
-        style="min-height: 160px;"
-      ></textarea>
+      <!-- 4. Key NPCs -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('npcs')">
+          <i class="fi fi-rr-mask-carnival"></i> Key NPCs
+          <span class="section-arrow" id="arrow-npcs">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-npcs">
+          <div id="npcs-list"></div>
+          <button onclick="addNpcNote()" style="margin-top:8px;">+ Add NPC</button>
+        </div>
+      </div>
 
-      <button id="save-btn" onclick="saveNotes()"><i class="fi fi-rr-disk"></i> Save Notes</button>
-      <span id="save-status" class="save-status"></span>
+      <!-- 5. Locations -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('locations')">
+          <i class="fi fi-rr-map"></i> Key Locations
+          <span class="section-arrow" id="arrow-locations">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-locations">
+          <label for="locations">Places the players will visit</label>
+          <textarea id="locations" oninput="markDirty()"
+            placeholder="Describe each location. What's there? Any secrets? Traps? Atmosphere?"
+            style="min-height:120px;"></textarea>
+        </div>
+      </div>
+
+      <!-- 6. Items & Rewards -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('items')">
+          <i class="fi fi-rr-treasure-chest"></i> Items & Rewards
+          <span class="section-arrow" id="arrow-items">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-items">
+          <div id="items-list"></div>
+          <button onclick="addItemNote()" style="margin-top:8px;">+ Add Item / Reward</button>
+        </div>
+      </div>
+
+      <!-- 7. Mechanics -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('mechanics')">
+          <i class="fi fi-rr-settings"></i> Custom Mechanics & Rules
+          <span class="section-arrow" id="arrow-mechanics">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-mechanics">
+          <label for="note-mechanics">Timers, point systems, house rules, special mechanics</label>
+          <textarea id="note-mechanics" oninput="markExtraDirty()"
+            placeholder="e.g. 12-tick clock, corruption points, custom save DCs..."
+            style="min-height:120px;"></textarea>
+        </div>
+      </div>
+
+      <!-- 8. DM Secret Notes -->
+      <div class="notes-section card">
+        <h3 class="notes-section-toggle" onclick="toggleSection('dm')">
+          <i class="fi fi-rr-eye-crossed"></i> DM Secret Notes
+          <span class="section-arrow" id="arrow-dm">&#9662;</span>
+        </h3>
+        <div class="notes-section-body" id="body-dm">
+          <label for="dm-notes">Behind-the-screen secrets, contingencies, pacing reminders</label>
+          <textarea id="dm-notes" oninput="markDirty()"
+            placeholder="What if the players go off-script? Secret villain motivations? Improvised NPC names to use? Pacing tips?"
+            style="min-height:160px;"></textarea>
+        </div>
+      </div>
+
+      <!-- Save -->
+      <div class="row-actions" style="margin-top:12px;">
+        <button id="save-btn" onclick="saveNotes()"><i class="fi fi-rr-disk"></i> Save Notes</button>
+        <span id="save-status" class="save-status"></span>
+      </div>
 
     </div>
   </main>

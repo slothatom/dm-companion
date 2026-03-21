@@ -34,36 +34,47 @@ var SIZE_HP = [
 // ── Common Objects ──────────────────────────────────────
 
 var COMMON_OBJECTS = [
-  { name: 'Barrel',              ac: 11, hp: 4,  material: 'Wood',  notes: 'Medium, fragile' },
-  { name: 'Cart/Wagon wheel',    ac: 15, hp: 18, material: 'Wood',  notes: 'Medium, resilient' },
-  { name: 'Chain (10 ft)',       ac: 19, hp: 5,  material: 'Iron',  notes: 'Tiny, resilient' },
-  { name: 'Chest (wooden)',      ac: 15, hp: 18, material: 'Wood',  notes: 'Medium, resilient' },
-  { name: 'Chest (iron)',        ac: 19, hp: 18, material: 'Iron',  notes: 'Medium, resilient' },
-  { name: 'Door (wooden)',       ac: 15, hp: 18, material: 'Wood',  notes: 'Large, resilient' },
-  { name: 'Door (stone)',        ac: 17, hp: 27, material: 'Stone', notes: 'Large, resilient' },
-  { name: 'Door (iron)',         ac: 19, hp: 27, material: 'Iron',  notes: 'Large, resilient' },
-  { name: 'Door (adamantine)',   ac: 23, hp: 36, material: 'Adamantine', notes: 'Large, resilient' },
-  { name: 'Glass bottle',        ac: 13, hp: 2,  material: 'Glass', notes: 'Tiny, fragile' },
-  { name: 'Lock (iron)',         ac: 19, hp: 5,  material: 'Iron',  notes: 'Tiny, resilient' },
-  { name: 'Manacles',            ac: 19, hp: 5,  material: 'Iron',  notes: 'Tiny, resilient' },
-  { name: 'Mirror (steel)',      ac: 19, hp: 5,  material: 'Steel', notes: 'Tiny, resilient' },
-  { name: 'Mirror (glass)',      ac: 13, hp: 2,  material: 'Glass', notes: 'Tiny, fragile' },
-  { name: 'Rope (hempen, 50 ft)', ac: 11, hp: 4, material: 'Rope', notes: 'Medium, fragile' },
-  { name: 'Rope (silk, 50 ft)',  ac: 11, hp: 5,  material: 'Rope',  notes: 'Medium, resilient' },
-  { name: 'Shield (wooden)',     ac: 15, hp: 10, material: 'Wood',  notes: 'Small, resilient' },
-  { name: 'Shield (steel)',      ac: 19, hp: 10, material: 'Steel', notes: 'Small, resilient' },
-  { name: 'Staff',               ac: 15, hp: 4,  material: 'Wood',  notes: 'Medium, fragile' },
-  { name: 'Table (wooden)',      ac: 15, hp: 18, material: 'Wood',  notes: 'Large, resilient' },
-  { name: 'Wagon',               ac: 15, hp: 27, material: 'Wood',  notes: 'Huge, resilient' },
-  { name: 'Wall (brick, 1 ft)',  ac: 17, hp: 27, material: 'Stone', notes: 'Large, resilient (per 10-ft section)' },
-  { name: 'Wall (stone, 1 ft)',  ac: 17, hp: 36, material: 'Stone', notes: 'Huge, resilient (per 10-ft section)' },
-  { name: 'Wall (iron, 1 inch)', ac: 19, hp: 27, material: 'Iron',  notes: 'Large, resilient (per 10-ft section)' },
-  { name: 'Wall (force)',        ac: 19, hp: 50, material: 'Magic', notes: 'Per Wall of Force spell; immune to most damage' },
-  { name: 'Window (glass)',      ac: 13, hp: 2,  material: 'Glass', notes: 'Small, fragile' },
-  { name: 'Pillar (stone)',      ac: 17, hp: 36, material: 'Stone', notes: 'Huge, resilient' },
-  { name: 'Portcullis (iron)',   ac: 19, hp: 27, material: 'Iron',  notes: 'Large, resilient' },
-  { name: 'Statue (stone, medium)', ac: 17, hp: 18, material: 'Stone', notes: 'Medium, resilient' },
-  { name: 'Throne (stone)',      ac: 17, hp: 27, material: 'Stone', notes: 'Large, resilient' }
+  { name: 'Barrel',              ac: 11, hp: 4,  material: 'Wood',  notes: 'Medium, fragile', category: 'container' },
+  { name: 'Cart/Wagon wheel',    ac: 15, hp: 18, material: 'Wood',  notes: 'Medium, resilient', category: 'container' },
+  { name: 'Chain (10 ft)',       ac: 19, hp: 5,  material: 'Iron',  notes: 'Tiny, resilient', category: 'misc' },
+  { name: 'Chest (wooden)',      ac: 15, hp: 18, material: 'Wood',  notes: 'Medium, resilient', category: 'container' },
+  { name: 'Chest (iron)',        ac: 19, hp: 18, material: 'Iron',  notes: 'Medium, resilient', category: 'container' },
+  { name: 'Door (wooden)',       ac: 15, hp: 18, material: 'Wood',  notes: 'Large, resilient', category: 'structure' },
+  { name: 'Door (stone)',        ac: 17, hp: 27, material: 'Stone', notes: 'Large, resilient', category: 'structure' },
+  { name: 'Door (iron)',         ac: 19, hp: 27, material: 'Iron',  notes: 'Large, resilient', category: 'structure' },
+  { name: 'Door (adamantine)',   ac: 23, hp: 36, material: 'Adamantine', notes: 'Large, resilient', category: 'structure' },
+  { name: 'Glass bottle',        ac: 13, hp: 2,  material: 'Glass', notes: 'Tiny, fragile', category: 'misc' },
+  { name: 'Lock (iron)',         ac: 19, hp: 5,  material: 'Iron',  notes: 'Tiny, resilient', category: 'misc' },
+  { name: 'Manacles',            ac: 19, hp: 5,  material: 'Iron',  notes: 'Tiny, resilient', category: 'misc' },
+  { name: 'Mirror (steel)',      ac: 19, hp: 5,  material: 'Steel', notes: 'Tiny, resilient', category: 'misc' },
+  { name: 'Mirror (glass)',      ac: 13, hp: 2,  material: 'Glass', notes: 'Tiny, fragile', category: 'misc' },
+  { name: 'Rope (hempen, 50 ft)', ac: 11, hp: 4, material: 'Rope', notes: 'Medium, fragile', category: 'misc' },
+  { name: 'Rope (silk, 50 ft)',  ac: 11, hp: 5,  material: 'Rope',  notes: 'Medium, resilient', category: 'misc' },
+  { name: 'Shield (wooden)',     ac: 15, hp: 10, material: 'Wood',  notes: 'Small, resilient', category: 'armor' },
+  { name: 'Shield (steel)',      ac: 19, hp: 10, material: 'Steel', notes: 'Small, resilient', category: 'armor' },
+  { name: 'Staff',               ac: 15, hp: 4,  material: 'Wood',  notes: 'Medium, fragile', category: 'armor' },
+  { name: 'Table (wooden)',      ac: 15, hp: 18, material: 'Wood',  notes: 'Large, resilient', category: 'furniture' },
+  { name: 'Wagon',               ac: 15, hp: 27, material: 'Wood',  notes: 'Huge, resilient', category: 'furniture' },
+  { name: 'Wall (brick, 1 ft)',  ac: 17, hp: 27, material: 'Stone', notes: 'Large, resilient (per 10-ft section)', category: 'structure' },
+  { name: 'Wall (stone, 1 ft)',  ac: 17, hp: 36, material: 'Stone', notes: 'Huge, resilient (per 10-ft section)', category: 'structure' },
+  { name: 'Wall (iron, 1 inch)', ac: 19, hp: 27, material: 'Iron',  notes: 'Large, resilient (per 10-ft section)', category: 'structure' },
+  { name: 'Wall (force)',        ac: 19, hp: 50, material: 'Magic', notes: 'Per Wall of Force spell; immune to most damage', category: 'structure' },
+  { name: 'Window (glass)',      ac: 13, hp: 2,  material: 'Glass', notes: 'Small, fragile', category: 'structure' },
+  { name: 'Pillar (stone)',      ac: 17, hp: 36, material: 'Stone', notes: 'Huge, resilient', category: 'structure' },
+  { name: 'Portcullis (iron)',   ac: 19, hp: 27, material: 'Iron',  notes: 'Large, resilient', category: 'structure' },
+  { name: 'Statue (stone, medium)', ac: 17, hp: 18, material: 'Stone', notes: 'Medium, resilient', category: 'furniture' },
+  { name: 'Throne (stone)',      ac: 17, hp: 27, material: 'Stone', notes: 'Large, resilient', category: 'furniture' },
+  // Armor & Equipment
+  { name: 'Leather armor',       ac: 11, hp: 5,  material: 'Leather', notes: 'Small, fragile; worn AC 11+DEX', category: 'armor' },
+  { name: 'Studded leather',     ac: 11, hp: 8,  material: 'Leather/Metal', notes: 'Small, resilient; worn AC 12+DEX', category: 'armor' },
+  { name: 'Chain shirt',         ac: 19, hp: 10, material: 'Iron', notes: 'Small, resilient; worn AC 13+DEX(max 2)', category: 'armor' },
+  { name: 'Chain mail',          ac: 19, hp: 15, material: 'Iron', notes: 'Medium, resilient; worn AC 16, STR 13 req', category: 'armor' },
+  { name: 'Scale mail',          ac: 19, hp: 15, material: 'Iron', notes: 'Medium, resilient; worn AC 14+DEX(max 2)', category: 'armor' },
+  { name: 'Breastplate',         ac: 19, hp: 18, material: 'Steel', notes: 'Medium, resilient; worn AC 14+DEX(max 2)', category: 'armor' },
+  { name: 'Half plate',          ac: 19, hp: 20, material: 'Steel', notes: 'Medium, resilient; worn AC 15+DEX(max 2)', category: 'armor' },
+  { name: 'Plate armor',         ac: 19, hp: 27, material: 'Steel', notes: 'Large, resilient; worn AC 18, STR 15 req', category: 'armor' },
+  { name: 'Mithral armor',       ac: 21, hp: 36, material: 'Mithral', notes: 'Large, resilient; no STR req, no stealth disadv', category: 'armor' },
+  { name: 'Adamantine armor',    ac: 23, hp: 50, material: 'Adamantine', notes: 'Large, resilient; critical hits become normal', category: 'armor' }
 ];
 
 // ── Siege Rules ─────────────────────────────────────────
@@ -81,6 +92,55 @@ var SIEGE_RULES = {
     'A damaged object can be repaired with appropriate tools and materials'
   ]
 };
+
+// ── Category Filter ─────────────────────────────────────
+
+var activeObjCat = 'all';
+
+function setObjCat(cat, btn) {
+  activeObjCat = cat;
+  document.querySelectorAll('#obj-cat-filters .filter-btn').forEach(function (b) {
+    b.classList.remove('active-filter');
+  });
+  btn.classList.add('active-filter');
+  renderObjects();
+}
+
+// ── Random Object Generator ─────────────────────────────
+
+function generateRandomObject() {
+  var catFilter = document.getElementById('obj-gen-cat').value;
+  var matFilter = document.getElementById('obj-gen-material').value;
+
+  var candidates = COMMON_OBJECTS.filter(function (o) {
+    var matchesCat = catFilter === 'any' || o.category === catFilter;
+    var matchesMat = matFilter === 'any' ||
+      o.material.toLowerCase().indexOf(matFilter.toLowerCase()) !== -1;
+    return matchesCat && matchesMat;
+  });
+
+  var output = document.getElementById('obj-gen-output');
+  if (candidates.length === 0) {
+    output.innerHTML = '<p class="empty-state">No objects match those filters. Try broadening your selection.</p>';
+    showToast('No matching objects found', 'info');
+    return;
+  }
+
+  var obj = candidates[Math.floor(Math.random() * candidates.length)];
+  output.innerHTML =
+    '<div class="card" style="padding:18px; margin-bottom:16px;">' +
+      '<h3 style="margin:0 0 8px; color:var(--accent);">' + escapeHtml(obj.name) + '</h3>' +
+      '<div class="spell-stats" style="margin-bottom:8px;">' +
+        '<span class="spell-stat"><strong>AC</strong> ' + obj.ac + '</span>' +
+        '<span class="spell-stat"><strong>HP</strong> ' + obj.hp + '</span>' +
+        '<span class="spell-badge">' + escapeHtml(obj.material) + '</span>' +
+        (obj.category ? '<span class="spell-badge">' + escapeHtml(obj.category) + '</span>' : '') +
+      '</div>' +
+      '<p style="margin:0; color:var(--text-muted); font-size:14px;">' + escapeHtml(obj.notes) + '</p>' +
+    '</div>';
+
+  showToast('Generated: ' + obj.name, 'info');
+}
 
 // ── Rendering ───────────────────────────────────────────
 
@@ -127,10 +187,12 @@ function renderObjects() {
 
   // Common Objects
   var filteredObjects = COMMON_OBJECTS.filter(function (o) {
-    if (!filter) return true;
-    return o.name.toLowerCase().indexOf(filter) !== -1 ||
-           o.material.toLowerCase().indexOf(filter) !== -1 ||
-           o.notes.toLowerCase().indexOf(filter) !== -1;
+    var matchesCat = activeObjCat === 'all' || o.category === activeObjCat;
+    var matchesSearch = !filter ||
+      o.name.toLowerCase().indexOf(filter) !== -1 ||
+      o.material.toLowerCase().indexOf(filter) !== -1 ||
+      o.notes.toLowerCase().indexOf(filter) !== -1;
+    return matchesCat && matchesSearch;
   });
 
   htmlStr += '<div class="card" style="padding:18px; margin-bottom:16px;">';

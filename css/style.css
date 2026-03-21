@@ -1396,7 +1396,44 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   white-space: nowrap;
 }
 .cond-chip:hover { border-color: var(--border); color: var(--text-muted); }
+.cond-chip i { font-size: 10px; margin-right: 2px; }
 .cond-chip.cond-active { background: var(--cond-active-bg, #3a1e1e); border-color: var(--cond-active-border, #7a3030); color: var(--cond-active-text, #c48080); }
+
+/* Condition info below active combatant */
+.cond-info-list {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cond-info-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+  padding: 4px 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+.cond-info-name {
+  color: var(--accent);
+  white-space: nowrap;
+  font-size: 11px;
+}
+.cond-info-name i { font-size: 10px; margin-right: 2px; }
+.cond-info-effect {
+  color: var(--text-muted);
+  flex: 1;
+  min-width: 0;
+}
+.cond-info-save {
+  color: var(--primary);
+  white-space: nowrap;
+  font-weight: 500;
+}
+.cond-info-save i { font-size: 10px; margin-right: 2px; }
 
 .init-row.hp-zero .init-name { opacity: 0.45; text-decoration: line-through; }
 

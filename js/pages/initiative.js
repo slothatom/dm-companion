@@ -2,7 +2,104 @@
 //   initiative.js - Initiative Tracker page
 // =============================================
 
-const CONDITIONS = ['Prone','Stunned','Poisoned','Blinded','Frightened','Incapacitated','Paralyzed','Restrained'];
+const CONDITIONS = [
+  {
+    name: 'Blinded',
+    effect: 'Can\'t see. Auto-fail sight checks. Attack rolls have disadvantage. Attacks against have advantage.',
+    save: '—',
+    icon: 'fi-rr-eye-crossed'
+  },
+  {
+    name: 'Charmed',
+    effect: 'Can\'t attack the charmer. Charmer has advantage on social checks against the creature.',
+    save: 'WIS save (varies)',
+    icon: 'fi-rr-heart'
+  },
+  {
+    name: 'Deafened',
+    effect: 'Can\'t hear. Auto-fail hearing checks.',
+    save: '—',
+    icon: 'fi-rr-volume-mute'
+  },
+  {
+    name: 'Frightened',
+    effect: 'Disadvantage on ability checks and attack rolls while source of fear is in line of sight. Can\'t willingly move closer to the source.',
+    save: 'WIS save (varies)',
+    icon: 'fi-rr-exclamation'
+  },
+  {
+    name: 'Grappled',
+    effect: 'Speed becomes 0. Can\'t benefit from bonus to speed. Ends if grappler is incapacitated or forced apart.',
+    save: 'Athletics/Acrobatics vs Athletics',
+    icon: 'fi-rr-hand'
+  },
+  {
+    name: 'Incapacitated',
+    effect: 'Can\'t take actions or reactions.',
+    save: '—',
+    icon: 'fi-rr-ban'
+  },
+  {
+    name: 'Invisible',
+    effect: 'Impossible to see without magic/special sense. Heavily obscured. Attack rolls have advantage. Attacks against have disadvantage.',
+    save: '—',
+    icon: 'fi-rr-eye'
+  },
+  {
+    name: 'Paralyzed',
+    effect: 'Incapacitated. Can\'t move or speak. Auto-fail STR and DEX saves. Attacks have advantage. Melee hits within 5 ft are auto-crits.',
+    save: 'CON save (varies)',
+    icon: 'fi-rr-bolt'
+  },
+  {
+    name: 'Petrified',
+    effect: 'Transformed to stone. Weight ×10. Incapacitated. Unaware. Resistance to all damage. Immune to poison/disease.',
+    save: 'CON save (varies)',
+    icon: 'fi-rr-shield'
+  },
+  {
+    name: 'Poisoned',
+    effect: 'Disadvantage on attack rolls and ability checks.',
+    save: 'CON save (varies)',
+    icon: 'fi-rr-flask-potion'
+  },
+  {
+    name: 'Prone',
+    effect: 'Disadvantage on attack rolls. Attacks within 5 ft have advantage; ranged attacks have disadvantage. Must use half movement to stand.',
+    save: '—',
+    icon: 'fi-rr-arrow-down'
+  },
+  {
+    name: 'Restrained',
+    effect: 'Speed becomes 0. Attack rolls have disadvantage. Attacks against have advantage. Disadvantage on DEX saves.',
+    save: 'STR save/check (varies)',
+    icon: 'fi-rr-lock'
+  },
+  {
+    name: 'Stunned',
+    effect: 'Incapacitated. Can\'t move. Can speak only falteringly. Auto-fail STR and DEX saves. Attacks against have advantage.',
+    save: 'CON save (varies)',
+    icon: 'fi-rr-star'
+  },
+  {
+    name: 'Unconscious',
+    effect: 'Incapacitated. Can\'t move or speak. Unaware. Drop what held and fall prone. Auto-fail STR/DEX saves. Attacks have advantage. Melee within 5 ft = auto-crit.',
+    save: '—',
+    icon: 'fi-rr-moon'
+  },
+  {
+    name: 'Exhaustion',
+    effect: 'Lvl 1: Disadv ability checks. Lvl 2: Speed halved. Lvl 3: Disadv attacks/saves. Lvl 4: HP max halved. Lvl 5: Speed 0. Lvl 6: Death.',
+    save: 'Long rest removes 1 level',
+    icon: 'fi-rr-tired'
+  },
+  {
+    name: 'Concentration',
+    effect: 'Maintaining a spell. CON save on damage (DC = 10 or half damage, whichever is higher). Broken by incapacitation or casting another concentration spell.',
+    save: 'CON save (DC 10 or half dmg)',
+    icon: 'fi-rr-brain'
+  }
+];
 
 let combatants    = [];
 let currentTurn   = 0;
@@ -285,9 +382,28 @@ function renderList() {
     const isZeroHp  = parseInt(c.hp) === 0;
     const conds     = c.conditions || [];
     const condChips = CONDITIONS.map(function (cond) {
-      return '<span class="cond-chip' + (conds.includes(cond) ? ' cond-active' : '') + '"' +
-        ' onclick="toggleCondition(' + i + ', \'' + cond + '\')">' + cond + '</span>';
+      var isActive = conds.includes(cond.name);
+      return '<span class="cond-chip' + (isActive ? ' cond-active' : '') + '"' +
+        ' onclick="toggleCondition(' + i + ', \'' + cond.name + '\')"' +
+        ' title="' + escapeHtml(cond.effect + (cond.save !== '—' ? ' | Save: ' + cond.save : '')) + '"' +
+        '><i class="fi ' + cond.icon + '"></i> ' + cond.name + '</span>';
     }).join('');
+
+    var activeCondInfo = '';
+    if (conds.length > 0) {
+      activeCondInfo = '<div class="cond-info-list">';
+      conds.forEach(function (condName) {
+        var condObj = CONDITIONS.find(function (c) { return c.name === condName; });
+        if (condObj) {
+          activeCondInfo += '<div class="cond-info-row">' +
+            '<strong class="cond-info-name"><i class="fi ' + condObj.icon + '"></i> ' + escapeHtml(condObj.name) + '</strong>' +
+            '<span class="cond-info-effect">' + escapeHtml(condObj.effect) + '</span>' +
+            (condObj.save !== '—' ? '<span class="cond-info-save"><i class="fi fi-rr-dice-d20"></i> ' + escapeHtml(condObj.save) + '</span>' : '') +
+            '</div>';
+        }
+      });
+      activeCondInfo += '</div>';
+    }
 
     return `
           <div class="init-row ${isActive ? 'active-turn' : ''}${isZeroHp ? ' hp-zero' : ''}">
@@ -313,6 +429,7 @@ function renderList() {
                 <button onclick="applyHeal(${i})"   style="padding:4px 10px; font-size:13px;" class="secondary"><i class="fi fi-rr-heart"></i> Heal</button>
               </div>
               <div class="cond-row">${condChips}</div>
+              ${activeCondInfo}
             </div>
           </div>`;
   }).join('');

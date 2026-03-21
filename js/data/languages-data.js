@@ -128,5 +128,89 @@ var LANGUAGES = [
     script: "\u2014",
     speakers: "Rogues, criminals",
     desc: "Thieves' Cant is a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves' cant understands such messages. It takes four times longer to convey such a message than it does to speak the same idea plainly."
+  },
+  {
+    name: "Aarakocra",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Aarakocra",
+    desc: "The language of the bird-folk of the Elemental Plane of Air. Aarakocra speak in a complex series of clicks, whistles, and chirps that is extremely difficult for non-avian creatures to replicate. Written forms are rare."
+  },
+  {
+    name: "Gith",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Githyanki, githzerai",
+    desc: "The shared ancestral language of the githyanki and githzerai. Though the two peoples have diverged greatly, they still share this ancient tongue. It uses no common script and is typically written in a unique cipher known only to gith scholars."
+  },
+  {
+    name: "Gnoll",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Gnolls",
+    desc: "A harsh, barking language spoken by gnolls. It has no written form, as gnolls rarely engage in literacy. Communication relies heavily on body language, snarls, and hyena-like vocalizations alongside spoken words."
+  },
+  {
+    name: "Ignan",
+    type: "Exotic",
+    script: "Dwarvish",
+    speakers: "Fire elementals, efreet, salamanders",
+    desc: "A dialect of Primordial associated with the Elemental Plane of Fire. Ignan sounds like crackling flames, with sharp, popping consonants and hissing vowels. Creatures that speak Primordial can understand Ignan."
+  },
+  {
+    name: "Aquan",
+    type: "Exotic",
+    script: "Elvish",
+    speakers: "Water elementals, marids, tritons",
+    desc: "A dialect of Primordial associated with the Elemental Plane of Water. Aquan flows like water, with gurgling consonants and long, rolling vowels. Creatures that speak Primordial can understand Aquan."
+  },
+  {
+    name: "Auran",
+    type: "Exotic",
+    script: "Dwarvish",
+    speakers: "Air elementals, djinn, aarakocra",
+    desc: "A dialect of Primordial associated with the Elemental Plane of Air. Auran is breathy and whispered, with sighing vowels and soft consonants. Creatures that speak Primordial can understand Auran."
+  },
+  {
+    name: "Terran",
+    type: "Exotic",
+    script: "Dwarvish",
+    speakers: "Earth elementals, dao, xorn",
+    desc: "A dialect of Primordial associated with the Elemental Plane of Earth. Terran is deep and rumbling, with grinding consonants and resonant tones. Creatures that speak Primordial can understand Terran."
+  },
+  {
+    name: "Kraul",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Insectoid races, thri-kreen",
+    desc: "A clicking, buzzing language used by insectoid beings. It relies heavily on mandible clicks and antennae movements that are nearly impossible for humanoids to reproduce accurately. Most communication with non-speakers requires magic."
+  },
+  {
+    name: "Modron",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Modrons",
+    desc: "The language of the modrons of Mechanus. It is a highly structured, mathematical language with precise syntax and no ambiguity. Each concept has exactly one expression, making poetry and metaphor impossible."
+  },
+  {
+    name: "Slaad",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Slaadi",
+    desc: "The chaotic tongue of the slaadi from Limbo. It has no consistent grammar or syntax \u2014 rules change seemingly at random. Despite this, slaadi understand each other perfectly, suggesting an underlying order invisible to outsiders."
+  },
+  {
+    name: "Sphinx",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Sphinxes",
+    desc: "An ancient, riddling language known only to sphinxes and a handful of scholars. It is said to contain inherent magical power \u2014 certain phrases spoken in Sphinx can trigger ancient wards and unlock sealed vaults."
+  },
+  {
+    name: "Vegepygmy",
+    type: "Exotic",
+    script: "\u2014",
+    speakers: "Vegepygmies, myconids",
+    desc: "A rudimentary language of spore-based communication used by plant creatures. It conveys emotion and intent through chemical signals rather than sound. Most humanoids cannot perceive it without magical aid."
   }
 ];

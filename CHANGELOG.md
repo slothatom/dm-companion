@@ -6,6 +6,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ---
 
+## [0.8.0] - 2026-03-21
+
+### Added
+- **Stats Generator**: Character Builder mode — generate recommended ability scores by class (12 classes), species (9 races with SRD racial bonuses), and level; auto-assigns highest rolls to class priority abilities
+- **Stats Generator**: Monster/NPC Stats mode — generate ability scores by CR (0–30) with DMG reference table showing prof bonus, suggested AC, HP range, attack bonus, and save DC
+- **Treasure**: Encounter Treasure generator — roll loot for defeated encounters by average CR and monster count, using DMG individual treasure tables
+- **Treasure**: Custom Currency Names — rename PP/GP/EP/SP/CP for custom settings; persists in localStorage and applies to all treasure outputs
+- **Market Generator**: Settlement tier system (Village, Town, City, Metropolis) with price multipliers, inventory size scaling, shop availability restrictions, and tier-specific rare items
+- **Market Generator**: Random shop type option
+- **Initiative Tracker**: Full condition reference — 16 conditions (Blinded, Charmed, Deafened, Frightened, Grappled, Incapacitated, Invisible, Paralyzed, Petrified, Poisoned, Prone, Restrained, Stunned, Unconscious, Exhaustion, Concentration) with effects, saving throws, and icons
+- **Initiative Tracker**: Condition info panel — active conditions show effect description and save info below each combatant
+- **Objects**: Category filter (Containers, Structures, Furniture, Armor & Shields) and search input
+- **Objects**: 10 armor items with HP (Leather through Adamantine) for object damage tracking in combat
+- **Objects**: Random Object Generator by category and material
+- **Languages**: 12 new exotic languages (Aarakocra, Gith, Gnoll, Ignan, Aquan, Auran, Terran, Kraul, Modron, Slaad, Sphinx, Vegepygmy) — total now 29
+
+### Fixed
+- Items & Equipment category filters now match API data (lowercase `weapon`/`armor`); removed non-functional Gear/Tools/Mounts/Magic filter buttons
+
+---
+
 ## [0.7.0] - 2026-03-21
 
 ### Added

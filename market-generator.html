@@ -22,16 +22,28 @@
     <p class="subtitle">Generate random shop inventories - stock a store in seconds.</p>
 
     <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
-      <label for="shop-type">Shop Type</label>
-      <select id="shop-type">
-        <option value="General Store">General Store</option>
-        <option value="Blacksmith">Blacksmith</option>
-        <option value="Alchemist">Alchemist</option>
-        <option value="Magic Shop">Magic Shop</option>
-        <option value="Tavern">Tavern</option>
-        <option value="Jeweler">Jeweler</option>
-        <option value="Exotic Goods">Exotic Goods</option>
-      </select>
+      <div>
+        <label for="settlement-tier">Settlement</label>
+        <select id="settlement-tier" style="margin:0;">
+          <option value="village">Village</option>
+          <option value="town" selected>Town</option>
+          <option value="city">City</option>
+          <option value="metropolis">Metropolis</option>
+        </select>
+      </div>
+      <div>
+        <label for="shop-type">Shop Type</label>
+        <select id="shop-type" style="margin:0;">
+          <option value="random">Random</option>
+          <option value="General Store">General Store</option>
+          <option value="Blacksmith">Blacksmith</option>
+          <option value="Alchemist">Alchemist</option>
+          <option value="Magic Shop">Magic Shop</option>
+          <option value="Tavern">Tavern</option>
+          <option value="Jeweler">Jeweler</option>
+          <option value="Exotic Goods">Exotic Goods</option>
+        </select>
+      </div>
       <button onclick="generateShop()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
     </div>
 

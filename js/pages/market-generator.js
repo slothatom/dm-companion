@@ -234,12 +234,81 @@ var SHOP_INVENTORY = {
 
 var SHOP_TYPES = Object.keys(SHOP_INVENTORY);
 
+// ── Settlement Tier Configuration ───────────────────────
+
+var SETTLEMENT_TIERS = {
+  village: {
+    label: 'Village',
+    allowedShops: ['General Store', 'Blacksmith', 'Tavern'],
+    priceMultiplier: 1.2,
+    itemRange: [4, 8],
+    addRareItems: false
+  },
+  town: {
+    label: 'Town',
+    allowedShops: SHOP_TYPES,
+    priceMultiplier: 1.0,
+    itemRange: [6, 12],
+    addRareItems: false
+  },
+  city: {
+    label: 'City',
+    allowedShops: SHOP_TYPES,
+    priceMultiplier: 0.9,
+    itemRange: [8, 14],
+    addRareItems: true
+  },
+  metropolis: {
+    label: 'Metropolis',
+    allowedShops: SHOP_TYPES,
+    priceMultiplier: 0.8,
+    itemRange: [10, 16],
+    addRareItems: true
+  }
+};
+
+// ── Tier-Specific Rare Items ────────────────────────────
+
+var RARE_ITEMS = {
+  'Blacksmith': [
+    { name: 'Mithral chain shirt', desc: 'No STR requirement, no Stealth disadvantage, AC 13 + Dex (max 2)', base: 2000 },
+    { name: 'Adamantine plate', desc: 'AC 18, critical hits become normal hits', base: 3000 }
+  ],
+  'Alchemist': [
+    { name: 'Potion of Greater Healing', desc: 'Restores 4d4+4 hit points', base: 150 },
+    { name: 'Potion of Invisibility', desc: 'Invisible for 1 hour or until you attack/cast', base: 300 }
+  ],
+  'Exotic Goods': [
+    { name: 'Portable Hole', desc: '6-ft diameter, 10-ft deep extradimensional space', base: 800 },
+    { name: 'Bag of Holding', desc: 'Interior is 64 cubic feet, weighs 15 lbs', base: 500 }
+  ]
+};
+
+// Extra high-value items for Magic Shop at city/metropolis
+var MAGIC_SHOP_EXTRAS = [
+  { name: 'Staff of Defense', desc: 'AC +1, can cast Shield and Mage Armor (attunement)', base: 4000 },
+  { name: 'Amulet of Health', desc: 'CON score becomes 19 (attunement)', base: 5000 },
+  { name: 'Ring of Spell Storing', desc: 'Store up to 5 levels of spells (attunement)', base: 6000 },
+  { name: 'Flame Tongue Longsword', desc: '+2d6 fire damage when ignited (attunement)', base: 5000 },
+  { name: 'Wand of Fireballs', desc: '7 charges, cast Fireball (attunement)', base: 8000 }
+];
+
 // ── Generation ──────────────────────────────────────────
 
 function generateShop() {
   var shopType = document.getElementById('shop-type').value;
+  var tierKey = document.getElementById('settlement-tier').value;
+  var tier = SETTLEMENT_TIERS[tierKey] || SETTLEMENT_TIERS.town;
+
+  // Handle random shop type, constrained by tier
   if (shopType === 'random') {
-    shopType = pick(SHOP_TYPES);
+    shopType = pick(tier.allowedShops);
+  }
+
+  // Validate shop type is allowed for this tier
+  if (tier.allowedShops.indexOf(shopType) === -1) {
+    showToast('A ' + tier.label.toLowerCase() + ' doesn\'t have a ' + shopType + '. Try: ' + tier.allowedShops.join(', ') + '.', 'error');
+    return;
   }
 
   var shopName = pick(SHOP_PREFIXES) + ' ' + pick(SHOP_SUFFIXES[shopType] || SHOP_SUFFIXES['General Store']);
@@ -247,28 +316,45 @@ function generateShop() {
   var keeperRace = pick(KEEPER_RACES);
   var keeperPersonality = pick(KEEPER_PERSONALITIES);
 
-  var inventory = SHOP_INVENTORY[shopType] || SHOP_INVENTORY['General Store'];
-  // Select a random subset (6-14 items)
+  var inventory = (SHOP_INVENTORY[shopType] || SHOP_INVENTORY['General Store']).slice();
+
+  // Add rare items for city/metropolis tiers
+  if (tier.addRareItems && RARE_ITEMS[shopType]) {
+    inventory = inventory.concat(RARE_ITEMS[shopType]);
+  }
+
+  // Add extra magic shop items for city/metropolis
+  if (tier.addRareItems && shopType === 'Magic Shop') {
+    // Add 1-3 random extras from the high-value list
+    var extras = MAGIC_SHOP_EXTRAS.slice().sort(function () { return Math.random() - 0.5; });
+    var numExtras = tierKey === 'metropolis' ? 3 : 1 + Math.floor(Math.random() * 2);
+    inventory = inventory.concat(extras.slice(0, numExtras));
+  }
+
+  // Select a random subset based on tier item range
+  var minItems = tier.itemRange[0];
+  var maxItems = tier.itemRange[1];
   var shuffled = inventory.slice().sort(function () { return Math.random() - 0.5; });
-  var numItems = Math.min(shuffled.length, 6 + Math.floor(Math.random() * 9));
+  var numItems = Math.min(shuffled.length, minItems + Math.floor(Math.random() * (maxItems - minItems + 1)));
   var items = shuffled.slice(0, numItems).map(function (item) {
     return {
       name: item.name,
       desc: item.desc,
-      price: randPrice(item.base)
+      price: Math.round(randPrice(item.base) * tier.priceMultiplier * 100) / 100
     };
   });
 
-  renderShop(shopName, shopType, keeperName, keeperRace, keeperPersonality, items);
+  renderShop(shopName, shopType, tier.label, keeperName, keeperRace, keeperPersonality, items);
 }
 
-function renderShop(shopName, shopType, keeperName, keeperRace, keeperPersonality, items) {
+function renderShop(shopName, shopType, tierLabel, keeperName, keeperRace, keeperPersonality, items) {
   var output = document.getElementById('shop-output');
   var htmlStr = '';
 
   htmlStr += '<div class="card" style="padding:18px;">';
   htmlStr += '<h3 style="margin:0 0 4px; color:var(--accent);">' + escapeHtml(shopName) + '</h3>';
-  htmlStr += '<span class="npc-tag">' + escapeHtml(shopType) + '</span>';
+  htmlStr += '<span class="npc-tag">' + escapeHtml(shopType) + '</span> ';
+  htmlStr += '<span class="npc-tag" style="background:var(--accent); color:var(--card-bg);">' + escapeHtml(tierLabel) + '</span>';
   htmlStr += '<div style="margin-top:14px; margin-bottom:14px; padding:12px; background:var(--card-inner-bg, rgba(255,255,255,0.03)); border-radius:8px;">';
   htmlStr += '<strong>Shopkeeper:</strong> ' + escapeHtml(keeperName) + ' <span style="color:var(--text-dim);">(' + escapeHtml(keeperRace) + ')</span><br/>';
   htmlStr += '<em style="color:var(--text-muted);">' + escapeHtml(keeperPersonality) + '</em>';

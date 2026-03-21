@@ -21,7 +21,40 @@
     <h1><i class="fi fi-rr-box"></i> Objects</h1>
     <p class="subtitle">Object statistics - AC, hit points, and damage thresholds for common objects.</p>
 
+    <div class="spell-search">
+      <input type="text" id="object-search" placeholder="Search objects..." aria-label="Search objects"
+        oninput="renderObjects()" style="margin-bottom:10px;" />
+    </div>
+    <div class="spell-filters" id="obj-cat-filters" style="margin-bottom:16px;">
+      <button class="filter-btn active-filter" onclick="setObjCat('all', this)">All</button>
+      <button class="filter-btn" onclick="setObjCat('container', this)">Containers</button>
+      <button class="filter-btn" onclick="setObjCat('structure', this)">Structures</button>
+      <button class="filter-btn" onclick="setObjCat('furniture', this)">Furniture</button>
+      <button class="filter-btn" onclick="setObjCat('armor', this)">Armor &amp; Shields</button>
+    </div>
+
     <div id="objects-content"></div>
+
+    <hr />
+    <h2><i class="fi fi-rr-dice-d20"></i> Random Object Generator</h2>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
+      <select id="obj-gen-cat" style="margin:0;">
+        <option value="any">Any Category</option>
+        <option value="container">Container</option>
+        <option value="structure">Structure</option>
+        <option value="furniture">Furniture</option>
+        <option value="armor">Armor &amp; Shield</option>
+      </select>
+      <select id="obj-gen-material" style="margin:0;">
+        <option value="any">Any Material</option>
+        <option value="Wood">Wood</option>
+        <option value="Stone">Stone</option>
+        <option value="Iron">Iron / Steel</option>
+        <option value="Glass">Glass</option>
+      </select>
+      <button onclick="generateRandomObject()"><i class="fi fi-rr-dice-d20"></i> Generate</button>
+    </div>
+    <div id="obj-gen-output"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

@@ -184,6 +184,7 @@ function showInfoModal(opts) {
     modal.className = 'dm-modal-overlay';
     modal.innerHTML =
       '<div class="dm-modal dm-info-modal-inner" role="dialog" aria-modal="true">' +
+        '<div id="dm-info-header"></div>' +
         '<h3 class="dm-modal-title" id="dm-info-title"></h3>' +
         '<div class="dm-info-body" id="dm-info-body"></div>' +
         '<div class="dm-modal-actions" style="justify-content:center;">' +
@@ -196,6 +197,7 @@ function showInfoModal(opts) {
     });
     document.body.appendChild(modal);
   }
+  document.getElementById('dm-info-header').innerHTML = opts.headerHtml || '';
   document.getElementById('dm-info-title').textContent = opts.title || '';
   // Use innerText to preserve \n as line breaks (works with white-space: pre-line)
   document.getElementById('dm-info-body').innerText = opts.body || '';

@@ -73,31 +73,110 @@ function addCombatant() {
   renderList();
 }
 
-async function importPlayers() {
+async function showImportPicker(importType) {
+  // Fetch campaigns to show picker
+  const { data: campaigns } = await db
+    .from('campaigns')
+    .select('id, name')
+    .eq('user_id', currentUserId)
+    .order('created_at');
+
+  var typeMap = {};
+  try { typeMap = JSON.parse(localStorage.getItem('campaign-type-map-' + currentUserId)) || {}; } catch (e) {}
+
+  if (!campaigns || campaigns.length === 0) {
+    // No campaigns — import all directly
+    if (importType === 'players') importPlayers('');
+    else importCreatures('');
+    return;
+  }
+
+  // Build picker HTML
+  var label = importType === 'players' ? 'Players' : 'Creatures';
+  var options = '<option value="">All ' + label + ' (no filter)</option>';
+  campaigns.forEach(function (c) {
+    var suffix = typeMap[c.id] === 'oneshot' ? ' (one-shot)' : '';
+    options += '<option value="' + escapeHtml(c.id) + '">' + escapeHtml(c.name) + suffix + '</option>';
+  });
+
+  // Use a confirm-style modal with a dropdown
+  var overlay = document.createElement('div');
+  overlay.className = 'dm-modal-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML =
+    '<div class="dm-modal" role="dialog" aria-modal="true">' +
+      '<h3 class="dm-modal-title">Import ' + label + '</h3>' +
+      '<p style="color:var(--text-muted); margin-bottom:12px;">Choose which campaign to import from:</p>' +
+      '<select id="import-campaign-pick" style="width:100%; margin-bottom:16px;">' + options + '</select>' +
+      '<div class="dm-modal-actions">' +
+        '<button class="secondary" id="import-cancel-btn">Cancel</button>' +
+        '<button id="import-confirm-btn"><i class="fi fi-rr-download"></i> Import</button>' +
+      '</div>' +
+    '</div>';
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) { overlay.remove(); } });
+
+  document.getElementById('import-cancel-btn').onclick = function () { overlay.remove(); };
+  document.getElementById('import-confirm-btn').onclick = function () {
+    var campaignId = document.getElementById('import-campaign-pick').value;
+    overlay.remove();
+    if (importType === 'players') importPlayers(campaignId);
+    else importCreatures(campaignId);
+  };
+}
+
+async function importPlayers(campaignId) {
   const { data, error } = await db
     .from('players').select('*').eq('user_id', currentUserId).order('created_at');
   if (error || !data || data.length === 0) {
     showToast('No players found - add them on the Players page first.', 'info'); return;
   }
-  data.forEach(function (p) {
+
+  var filtered = data;
+  if (campaignId) {
+    var map = {};
+    try { map = JSON.parse(localStorage.getItem('player-campaign-map-' + currentUserId)) || {}; } catch (e) {}
+    filtered = data.filter(function (p) {
+      return map[p.id] === campaignId;
+    });
+    if (filtered.length === 0) {
+      showToast('No players assigned to that campaign.', 'info'); return;
+    }
+  }
+
+  filtered.forEach(function (p) {
     combatants.push({ name: p.char_name || p.player_name || 'Unknown',
       init: 0, hp: p.hp || '-', maxHp: p.hp || '-', type: 'player', conditions: [] });
   });
-  showToast('Imported ' + data.length + ' player(s).', 'success');
+  showToast('Imported ' + filtered.length + ' player(s).', 'success');
   renderList();
 }
 
-async function importCreatures() {
+async function importCreatures(campaignId) {
   const { data, error } = await db
     .from('creatures').select('*').eq('user_id', currentUserId).order('created_at');
   if (error || !data || data.length === 0) {
     showToast('No creatures found - add them on the Characters page first.', 'info'); return;
   }
-  data.forEach(function (c) {
+
+  var filtered = data;
+  if (campaignId) {
+    var map = {};
+    try { map = JSON.parse(localStorage.getItem('char-campaign-map-' + currentUserId)) || {}; } catch (e) {}
+    filtered = data.filter(function (c) {
+      return map['creature:' + c.id] === campaignId;
+    });
+    if (filtered.length === 0) {
+      showToast('No creatures assigned to that campaign.', 'info'); return;
+    }
+  }
+
+  filtered.forEach(function (c) {
     combatants.push({ name: c.name || 'Unknown Creature',
       init: 0, hp: c.hp || '-', maxHp: c.hp || '-', type: 'creature', conditions: [] });
   });
-  showToast('Imported ' + data.length + ' creature(s).', 'success');
+  showToast('Imported ' + filtered.length + ' creature(s).', 'success');
   renderList();
 }
 

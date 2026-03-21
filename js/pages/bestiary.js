@@ -98,17 +98,23 @@ function renderBestiary(list) {
   _dl.bestiary = list;
 
   container.innerHTML = list.map(function (m, idx) {
-    return '<div class="ref-card" onclick="openMonsterDetail(' + idx + ')" title="Click to expand">' +
-      '<div class="ref-name">' + escapeHtml(m.name) + '</div>' +
-      '<div class="spell-stats">' +
-        '<span class="spell-badge">CR ' + escapeHtml(m.cr) + '</span>' +
-        '<span class="spell-badge">' + escapeHtml(m.type) + '</span>' +
-        (m.size ? '<span class="spell-badge">' + escapeHtml(m.size) + '</span>' : '') +
-      '</div>' +
-      '<div class="spell-stats">' +
-        '<span class="spell-stat"><i class="fi fi-rr-shield"></i> <span>AC ' + m.ac + '</span></span>' +
-        '<span class="spell-stat"><i class="fi fi-rr-heart"></i> <span>HP ' + m.hp + '</span></span>' +
-        '<span class="spell-stat"><i class="fi fi-rr-running"></i> <span>' + escapeHtml(m.speed) + '</span></span>' +
+    var imgHtml = m.image
+      ? '<div class="bestiary-thumb"><img src="' + escapeHtml(m.image) + '" alt="' + escapeHtml(m.name) + '" onerror="this.parentElement.style.display=\'none\'" /></div>'
+      : '';
+    return '<div class="ref-card bestiary-card" onclick="openMonsterDetail(' + idx + ')" title="Click to expand">' +
+      imgHtml +
+      '<div class="bestiary-card-body">' +
+        '<div class="ref-name">' + escapeHtml(m.name) + '</div>' +
+        '<div class="spell-stats">' +
+          '<span class="spell-badge">CR ' + escapeHtml(m.cr) + '</span>' +
+          '<span class="spell-badge">' + escapeHtml(m.type) + '</span>' +
+          (m.size ? '<span class="spell-badge">' + escapeHtml(m.size) + '</span>' : '') +
+        '</div>' +
+        '<div class="spell-stats">' +
+          '<span class="spell-stat"><i class="fi fi-rr-shield"></i> <span>AC ' + m.ac + '</span></span>' +
+          '<span class="spell-stat"><i class="fi fi-rr-heart"></i> <span>HP ' + m.hp + '</span></span>' +
+          '<span class="spell-stat"><i class="fi fi-rr-running"></i> <span>' + escapeHtml(m.speed) + '</span></span>' +
+        '</div>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -159,5 +165,8 @@ function openMonsterDetail(index) {
     body += m.legendary;
   }
 
-  showInfoModal({ title: m.name, body: body });
+  var imgHtml = m.image
+    ? '<img src="' + escapeHtml(m.image) + '" alt="' + escapeHtml(m.name) + '" class="bestiary-detail-img" onerror="this.style.display=\'none\'" />'
+    : '';
+  showInfoModal({ title: m.name, body: body, headerHtml: imgHtml });
 }

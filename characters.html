@@ -36,12 +36,18 @@
 
     <div id="panel-npc">
       <div id="npc-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
-      <button onclick="addNPC()">+ Add NPC</button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+        <button onclick="addNPC()"><i class="fi fi-rr-plus"></i> Add NPC</button>
+        <a href="npc-generator.html" class="btn-link"><i class="fi fi-rr-magic-wand"></i> Generate NPC</a>
+      </div>
     </div>
 
     <div id="panel-creature" style="display:none;">
       <div id="creature-list"><p class="loading-state"><span class="spinner"></span> Loading…</p></div>
-      <button onclick="addCreature()">+ Add Creature</button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+        <button onclick="addCreature()"><i class="fi fi-rr-plus"></i> Add Creature</button>
+        <a href="npc-generator.html" class="btn-link"><i class="fi fi-rr-magic-wand"></i> Generate Creature</a>
+      </div>
     </div>
 
     <br />

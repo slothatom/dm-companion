@@ -265,6 +265,7 @@ var DndApi = (function () {
           acDesc:     m.armor_desc || '',
           hp:         m.hit_points || 0,
           hitDice:    m.hit_dice || '',
+          image:      m.img_main || '',
           speed:      m.speed ? formatSpeed(m.speed) : '30 ft',
           str:        m.strength || 10,
           dex:        m.dexterity || 10,

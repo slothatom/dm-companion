@@ -16,6 +16,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Cookie consent banner on all pages (including login) with Accept / Decline buttons, slides up from bottom, remembers choice in localStorage
 - Custom display name in profile menu — saved per user in localStorage, shown in sidebar and home welcome message
 - Release Notes page (`release-notes.html`) — fetches and renders `CHANGELOG.md` with version badges, section icons, and formatted lists; linked from profile menu
+- Bestiary creature images — thumbnails on cards and full images in detail modal, sourced from Open5e API `img_main` field
+- Characters ↔ NPC Generator connection — "Generate NPC/Creature" buttons on Characters page link to generator; "View in Characters" link appears after saving from generator
+- Initiative tracker campaign picker — Import Players / Import Creatures now shows a campaign/one-shot dropdown to filter which characters to import
 
 ### Changed
 - Sidebar profile reorganised into expandable menu: click avatar/name to reveal theme toggle, Terms & Conditions, Privacy Policy, Cookie Policy, and Sign Out

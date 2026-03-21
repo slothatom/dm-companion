@@ -234,6 +234,17 @@ async function saveToCharacters() {
   renderSessionList();
   const campaignNote = campaignId ? ' (linked to campaign)' : '';
   showToast(currentEntry.name + ' saved to Characters!' + campaignNote, 'success');
+
+  // Show "View in Characters" link in output
+  var viewLink = document.getElementById('gen-view-link');
+  if (!viewLink) {
+    viewLink = document.createElement('a');
+    viewLink.id = 'gen-view-link';
+    viewLink.href = 'characters.html';
+    viewLink.className = 'btn-link gen-view-chars';
+    viewLink.innerHTML = '<i class="fi fi-rr-arrow-right"></i> View in Characters';
+    document.getElementById('gen-output').appendChild(viewLink);
+  }
 }
 
 function renderSessionList() {

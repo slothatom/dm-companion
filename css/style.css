@@ -1002,6 +1002,53 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 .privacy-list li { margin-bottom: 8px; }
 .privacy-list strong { color: var(--text); }
 
+/* Release notes page */
+.release-version {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.release-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.release-badge-dev {
+  background: var(--accent);
+}
+.release-section {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.release-section i { font-size: 13px; }
+.release-list {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 4px 0 8px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 13px;
+}
+.release-list li { margin-bottom: 4px; }
+.release-list strong { color: var(--text); }
+.release-list code {
+  background: var(--surface);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
 /* =============================================
    Responsive — Desktop baseline
    ============================================= */

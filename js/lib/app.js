@@ -317,6 +317,7 @@ function renderNav(user) {
           <a href="terms.html" class="profile-menu-link"><i class="fi fi-rr-document-signed"></i> Terms &amp; Conditions</a>
           <a href="privacy.html" class="profile-menu-link"><i class="fi fi-rr-shield"></i> Privacy Policy</a>
           <a href="cookies.html" class="profile-menu-link"><i class="fi fi-rr-cookie"></i> Cookie Policy</a>
+          <a href="release-notes.html" class="profile-menu-link"><i class="fi fi-rr-time-past"></i> Release Notes</a>
         </div>
         <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>
       </div>`;

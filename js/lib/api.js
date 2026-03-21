@@ -14,11 +14,11 @@ var DndApi = (function () {
   const OPEN5E   = 'https://api.open5e.com';
   const DND5EAPI = 'https://www.dnd5eapi.co/api';
 
-  // In-memory cache (survives page navigation via sessionStorage)
+  // In-memory cache + localStorage for persistence across tabs/sessions
   let _memCache = {};
 
-  // Cache TTL: 1 hour for API data
-  const CACHE_TTL = 60 * 60 * 1000;
+  // Cache TTL: 4 hours for API data (reduces cold-load fetches)
+  const CACHE_TTL = 4 * 60 * 60 * 1000;
 
   // ── Helpers ─────────────────────────────────────────────
 
@@ -31,14 +31,28 @@ var DndApi = (function () {
     if (_memCache[url] && Date.now() - _memCache[url].ts < CACHE_TTL) {
       return _memCache[url].data;
     }
-    // sessionStorage fallback
+    // localStorage fallback (persists across sessions)
     try {
-      var raw = sessionStorage.getItem(cacheKey(url));
+      var raw = localStorage.getItem(cacheKey(url));
       if (raw) {
         var parsed = JSON.parse(raw);
         if (Date.now() - parsed.ts < CACHE_TTL) {
           _memCache[url] = parsed;
           return parsed.data;
+        }
+        localStorage.removeItem(cacheKey(url));
+      }
+    } catch (e) {}
+    // Legacy: check sessionStorage and migrate
+    try {
+      var legacy = sessionStorage.getItem(cacheKey(url));
+      if (legacy) {
+        var parsed2 = JSON.parse(legacy);
+        if (Date.now() - parsed2.ts < CACHE_TTL) {
+          _memCache[url] = parsed2;
+          try { localStorage.setItem(cacheKey(url), legacy); } catch (e2) {}
+          sessionStorage.removeItem(cacheKey(url));
+          return parsed2.data;
         }
         sessionStorage.removeItem(cacheKey(url));
       }
@@ -50,9 +64,9 @@ var DndApi = (function () {
     var entry = { data: data, ts: Date.now() };
     _memCache[url] = entry;
     try {
-      sessionStorage.setItem(cacheKey(url), JSON.stringify(entry));
+      localStorage.setItem(cacheKey(url), JSON.stringify(entry));
     } catch (e) {
-      // sessionStorage full - just use memory cache
+      // localStorage full - just use memory cache
     }
   }
 
@@ -102,22 +116,48 @@ var DndApi = (function () {
     });
   }
 
+  // Parallel pagination: fetch page 1, then calculate remaining pages
+  // and fetch them all concurrently instead of sequentially
   function fetchAllPages(url) {
-    var allResults = [];
-    function fetchPage(pageUrl) {
-      return fetchWithTimeout(pageUrl, 30000).then(function (data) {
-        if (data.results) {
-          allResults = allResults.concat(data.results);
-        } else if (Array.isArray(data)) {
-          allResults = allResults.concat(data);
-        }
-        if (data.next) {
-          return fetchPage(data.next);
-        }
+    return fetchWithTimeout(url, 30000).then(function (firstPage) {
+      var allResults = [];
+      if (firstPage.results) {
+        allResults = allResults.concat(firstPage.results);
+      } else if (Array.isArray(firstPage)) {
+        return firstPage;
+      }
+
+      // No more pages — done
+      if (!firstPage.next || !firstPage.count) {
+        return allResults;
+      }
+
+      // Calculate how many pages remain and fetch in parallel
+      var pageSize = firstPage.results.length;
+      if (pageSize <= 0) return allResults;
+      var totalPages = Math.ceil(firstPage.count / pageSize);
+
+      if (totalPages <= 1) return allResults;
+
+      // Build URLs for pages 2..N
+      var pagePromises = [];
+      for (var p = 2; p <= totalPages; p++) {
+        var sep = url.indexOf('?') === -1 ? '?' : '&';
+        var pageUrl = url + sep + 'page=' + p;
+        pagePromises.push(
+          fetchWithTimeout(pageUrl, 30000).then(function (data) {
+            return data.results || [];
+          }).catch(function () { return []; })
+        );
+      }
+
+      return Promise.all(pagePromises).then(function (pages) {
+        pages.forEach(function (results) {
+          allResults = allResults.concat(results);
+        });
         return allResults;
       });
-    }
-    return fetchPage(url);
+    });
   }
 
   // ── Single-resource Open5e fetch ────────────────────────
@@ -543,14 +583,17 @@ var DndApi = (function () {
     fetchDnd5eApi:      fetchDnd5eApi,
     clearCache: function () {
       _memCache = {};
-      try {
-        var keys = [];
-        for (var i = 0; i < sessionStorage.length; i++) {
-          var k = sessionStorage.key(i);
-          if (k && k.indexOf('dnd-api-') === 0) keys.push(k);
-        }
-        keys.forEach(function (k) { sessionStorage.removeItem(k); });
-      } catch (e) {}
+      // Clear from both localStorage and legacy sessionStorage
+      [localStorage, sessionStorage].forEach(function (store) {
+        try {
+          var keys = [];
+          for (var i = 0; i < store.length; i++) {
+            var k = store.key(i);
+            if (k && k.indexOf('dnd-api-') === 0) keys.push(k);
+          }
+          keys.forEach(function (k) { store.removeItem(k); });
+        } catch (e) {}
+      });
     }
   };
 

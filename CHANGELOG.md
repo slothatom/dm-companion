@@ -15,12 +15,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Terms & Conditions linked from sidebar navigation and login footer
 - Cookie consent banner on all pages (including login) with Accept / Decline buttons, slides up from bottom, remembers choice in localStorage
 - Custom display name in profile menu — saved per user in localStorage, shown in sidebar and home welcome message
+- Release Notes page (`release-notes.html`) — fetches and renders `CHANGELOG.md` with version badges, section icons, and formatted lists; linked from profile menu
 
 ### Changed
 - Sidebar profile reorganised into expandable menu: click avatar/name to reveal theme toggle, Terms & Conditions, Privacy Policy, Cookie Policy, and Sign Out
 
 ### Fixed
 - Magic Items icon missing — `fi-rr-wand-sparkles` replaced with valid `fi-rr-wand-magic-sparkles` in sidebar nav and page header
+- API first-load performance: pagination now fetches all pages in parallel instead of sequentially; cache upgraded from sessionStorage to localStorage with 4-hour TTL so data persists across tabs and sessions
 
 ---
 

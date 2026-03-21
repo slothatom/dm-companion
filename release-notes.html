@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https://www.transparenttextures.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
+  <title>DM Companion - Release Notes</title>
+  <meta name="description" content="DM Companion release notes and version history." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav id="main-nav" aria-label="Main navigation"></nav>
+
+  <main id="main-content">
+    <h1><i class="fi fi-rr-time-past"></i> Release Notes</h1>
+    <p class="subtitle">Version history and what's new in DM Companion.</p>
+
+    <div id="release-loading" class="loading-state">
+      <span class="spinner"></span> Loading release notes...
+    </div>
+
+    <div id="release-content" style="display:none;"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'release-notes.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script>
+    (async function () {
+      var user = await requireAuth();
+      if (!user) return;
+      renderNav(user);
+
+      try {
+        var res = await fetch('CHANGELOG.md');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var md = await res.text();
+        document.getElementById('release-content').innerHTML = renderChangelog(md);
+      } catch (err) {
+        document.getElementById('release-content').innerHTML =
+          '<div class="card"><p style="color:var(--text-muted);">Could not load release notes. <a href="CHANGELOG.md" style="color:var(--accent);">View raw CHANGELOG</a></p></div>';
+      }
+
+      document.getElementById('release-loading').style.display = 'none';
+      document.getElementById('release-content').style.display = 'block';
+    })();
+
+    function renderChangelog(md) {
+      var lines = md.split('\n');
+      var html = '';
+      var inList = false;
+
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+
+        // Skip top-level title and description lines
+        if (/^# /.test(line)) continue;
+        if (/^All notable/.test(line)) continue;
+        if (/^Format follows/.test(line)) continue;
+        if (/^---$/.test(line)) continue;
+        if (line.trim() === '') {
+          if (inList) { html += '</ul>'; inList = false; }
+          continue;
+        }
+
+        // Version heading: ## [x.y.z] - date
+        var versionMatch = line.match(/^## \[(.+?)\](.*)/);
+        if (versionMatch) {
+          if (inList) { html += '</ul>'; inList = false; }
+          var version = escapeHtml(versionMatch[1]);
+          var datePart = versionMatch[2] ? escapeHtml(versionMatch[2].replace(/^\s*-?\s*/, '')) : '';
+          var badge = version === 'Unreleased'
+            ? '<span class="release-badge release-badge-dev">dev</span>'
+            : '<span class="release-badge">v' + version + '</span>';
+          html += '<div class="card" style="margin-bottom:16px;">';
+          html += '<h3 class="release-version">' + badge + ' ' + (datePart || version) + '</h3>';
+          continue;
+        }
+
+        // Section heading: ### Added / Fixed / Changed
+        var sectionMatch = line.match(/^### (.+)/);
+        if (sectionMatch) {
+          if (inList) { html += '</ul>'; inList = false; }
+          var sectionName = escapeHtml(sectionMatch[1]);
+          var iconMap = {
+            'Added': 'fi-rr-plus',
+            'Fixed': 'fi-rr-wrench',
+            'Changed': 'fi-rr-refresh',
+            'Removed': 'fi-rr-trash',
+            'Deprecated': 'fi-rr-time-past',
+            'Security': 'fi-rr-shield'
+          };
+          var icon = iconMap[sectionMatch[1]] || 'fi-rr-list';
+          html += '<h4 class="release-section"><i class="fi ' + icon + '"></i> ' + sectionName + '</h4>';
+          continue;
+        }
+
+        // List item: - text
+        var itemMatch = line.match(/^- (.+)/);
+        if (itemMatch) {
+          if (!inList) { html += '<ul class="release-list">'; inList = true; }
+          var text = escapeHtml(itemMatch[1]);
+          // Bold **text**
+          text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+          // Inline code `text`
+          text = text.replace(/`(.+?)`/g, '<code>$1</code>');
+          // Links [text](url)
+          text = text.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" style="color:var(--accent);">$1</a>');
+          html += '<li>' + text + '</li>';
+          continue;
+        }
+
+        // Close card at end of version block (detected by next version or EOF)
+      }
+
+      if (inList) html += '</ul>';
+      // Close last card
+      html += '</div>';
+
+      return html;
+    }
+  </script>
+</body>
+</html>

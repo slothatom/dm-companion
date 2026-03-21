@@ -183,11 +183,11 @@ function renderSessions() {
     return `
       <div class="session-card">
         <div class="session-header">
-          <div style="display:grid; grid-template-columns:70px 1fr auto auto; gap:10px; align-items:end;">
+          <div style="display:grid; grid-template-columns:70px 1fr auto auto; gap:10px;">
             <div>
               <label>Session #</label>
               <input type="number" value="${escapeHtml(String(s.sessionNumber ?? ''))}" min="1"
-                style="width:70px; margin:0;"
+                style="margin:0;"
                 onchange="updateSession(${i}, 'sessionNumber', this.value)" />
             </div>
             <div>
@@ -203,8 +203,11 @@ function renderSessions() {
                 style="margin:0;"
                 onchange="updateSession(${i}, 'sessionDate', this.value)" />
             </div>
-            <button class="danger" style="padding:10px 10px; font-size:13px; margin:0; height:fit-content;"
-              onclick="removeSession(${i})">✕</button>
+            <div>
+              <label style="visibility:hidden;">&nbsp;</label>
+              <button class="danger" style="padding:10px; font-size:13px; width:100%;"
+                onclick="removeSession(${i})">✕</button>
+            </div>
           </div>
         </div>
         <label style="margin-top:12px; display:block;">Session Recap</label>

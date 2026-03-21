@@ -220,13 +220,17 @@ function markDirty() {
 function addNPC() {
   npcs.push({ name: '', hp: '', ac: '', notes: '' });
   renderAll();
-  markDirty();
+  // Don't trigger autosave for blank entries - they'd be filtered out
+  isDirty = true;
+  markUnsaved();
 }
 
 function addCreature() {
   creatures.push({ name: '', hp: '', ac: '', cr: '', notes: '' });
   renderAll();
-  markDirty();
+  // Don't trigger autosave for blank entries - they'd be filtered out
+  isDirty = true;
+  markUnsaved();
 }
 
 function updateField(type, index, field, value) {

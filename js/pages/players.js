@@ -229,7 +229,9 @@ function markDirty() {
 function addPlayer() {
   players.push({ playerName: '', charName: '', charClass: '', race: '', level: '', hp: '', ac: '', passivePerception: '', notes: '' });
   renderPlayers();
-  markDirty();
+  // Don't trigger autosave for blank entries - they'd be filtered out
+  isDirty = true;
+  markUnsaved();
 }
 
 function updatePlayer(index, field, value) {

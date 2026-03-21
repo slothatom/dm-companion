@@ -120,6 +120,58 @@ function closeModal() {
 }
 
 // =============================================
+//   Prompt Modal (text input, replaces native prompt)
+// =============================================
+
+// opts: { title, message, placeholder, confirmText, onConfirm(value) }
+function showPrompt(opts) {
+  var modal = document.getElementById('dm-prompt-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'dm-prompt-modal';
+    modal.className = 'dm-modal-overlay';
+    modal.innerHTML =
+      '<div class="dm-modal" role="dialog" aria-modal="true">' +
+        '<h3 class="dm-modal-title" id="dm-prompt-title"></h3>' +
+        '<p class="dm-modal-message" id="dm-prompt-message"></p>' +
+        '<input type="text" id="dm-prompt-input" style="margin:8px 0 16px; width:100%;" />' +
+        '<div class="dm-modal-actions">' +
+          '<button class="secondary" onclick="closePromptModal()">Cancel</button>' +
+          '<button id="dm-prompt-confirm"></button>' +
+        '</div>' +
+      '</div>';
+    modal.addEventListener('click', function (e) { if (e.target === modal) closePromptModal(); });
+    document.body.appendChild(modal);
+  }
+  document.getElementById('dm-prompt-title').textContent = opts.title || 'Input';
+  var msgEl = document.getElementById('dm-prompt-message');
+  if (opts.message) { msgEl.textContent = opts.message; msgEl.style.display = ''; }
+  else { msgEl.style.display = 'none'; }
+  var input = document.getElementById('dm-prompt-input');
+  input.value = opts.defaultValue || '';
+  input.placeholder = opts.placeholder || '';
+  var btn = document.getElementById('dm-prompt-confirm');
+  btn.textContent = opts.confirmText || 'OK';
+  btn.className = '';
+  btn.onclick = function () {
+    var val = input.value;
+    closePromptModal();
+    if (opts.onConfirm) opts.onConfirm(val);
+  };
+  input.onkeydown = function (e) {
+    if (e.key === 'Enter') { btn.click(); }
+    if (e.key === 'Escape') { closePromptModal(); }
+  };
+  modal.style.display = 'flex';
+  setTimeout(function () { input.focus(); }, 50);
+}
+
+function closePromptModal() {
+  var modal = document.getElementById('dm-prompt-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+// =============================================
 //   Info / Detail Modal (read-only, single Close button)
 // =============================================
 

@@ -373,23 +373,30 @@ function saveEncounter() {
     showToast('Add some monsters before saving.', 'error');
     return;
   }
-  const name = prompt('Name this encounter:');
-  if (!name || !name.trim()) return;
+  showPrompt({
+    title: 'Save Encounter',
+    message: 'Name this encounter:',
+    placeholder: 'e.g. Goblin Ambush',
+    confirmText: 'Save',
+    onConfirm: function (name) {
+      if (!name || !name.trim()) return;
 
-  const partySize  = parseInt(document.getElementById('party-size').value) || 4;
-  const partyLevel = parseInt(document.getElementById('party-level').value) || 4;
+      const partySize  = parseInt(document.getElementById('party-size').value) || 4;
+      const partyLevel = parseInt(document.getElementById('party-level').value) || 4;
 
-  const saved = getSavedEncounters();
-  saved.push({
-    name:       name.trim(),
-    creatures:  JSON.parse(JSON.stringify(creatures)),
-    partySize:  partySize,
-    partyLevel: partyLevel,
-    savedAt:    new Date().toISOString(),
+      const saved = getSavedEncounters();
+      saved.push({
+        name:       name.trim(),
+        creatures:  JSON.parse(JSON.stringify(creatures)),
+        partySize:  partySize,
+        partyLevel: partyLevel,
+        savedAt:    new Date().toISOString(),
+      });
+      setSavedEncounters(saved);
+      loadSavedEncounters();
+      showToast('Encounter "' + name.trim() + '" saved.', 'success');
+    }
   });
-  setSavedEncounters(saved);
-  loadSavedEncounters();
-  showToast('Encounter "' + name.trim() + '" saved.', 'success');
 }
 
 function computeDifficultyLabel(encounter) {

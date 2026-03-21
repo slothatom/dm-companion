@@ -37,52 +37,7 @@
       Continue with GitHub
     </button>
 
-    <div class="auth-divider"><span>or sign in with email</span></div>
-
-    <!-- Email / Password form -->
-    <form id="auth-form" onsubmit="handleEmail(event)">
-      <label for="auth-email">Email</label>
-      <input type="email" id="auth-email" placeholder="you@example.com" required autocomplete="email" />
-
-      <label for="auth-password">Password</label>
-      <input type="password" id="auth-password" placeholder="••••••••" required autocomplete="current-password" />
-
-      <div style="text-align:right; margin-top:-4px; margin-bottom:12px;">
-        <a href="#" onclick="showForgotPassword(event)" style="font-size:13px; color:var(--text-muted); text-decoration:none;">
-          Forgot password?
-        </a>
-      </div>
-
-      <button type="submit" id="auth-submit">Sign In</button>
-    </form>
-
-    <!-- Forgot password view -->
-    <div id="forgot-section" style="display:none;">
-      <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px; text-align:center;">
-        Enter your email and we'll send you a reset link.
-      </p>
-      <label for="reset-email">Email</label>
-      <input type="email" id="reset-email" placeholder="you@example.com" autocomplete="email" />
-      <button onclick="sendPasswordReset()" style="margin-top:8px;">Send Reset Link</button>
-      <p style="text-align:center; margin-top:12px;">
-        <a href="#" onclick="showSignIn(event)" style="font-size:13px; color:var(--text-muted); text-decoration:none;">← Back to sign in</a>
-      </p>
-    </div>
-
-    <!-- New-password view (shown after clicking reset link in email) -->
-    <div id="new-password-section" style="display:none;">
-      <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px; text-align:center;">
-        Choose a new password for your account.
-      </p>
-      <label for="new-password">New Password</label>
-      <input type="password" id="new-password" placeholder="••••••••" autocomplete="new-password" />
-      <button onclick="updatePassword()" style="margin-top:8px;">Set New Password</button>
-    </div>
-
     <p class="auth-error" id="auth-error"></p>
-    <p class="auth-toggle" id="auth-toggle">
-      Don't have an account? <a href="#" onclick="toggleMode(event)">Sign Up</a>
-    </p>
 
     <p class="auth-footer">
       By signing in, you agree to our <a href="terms.html">Terms &amp; Conditions</a>, <a href="privacy.html">Privacy Policy</a>, and <a href="cookies.html">Cookie Policy</a>.

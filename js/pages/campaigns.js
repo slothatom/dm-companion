@@ -205,7 +205,7 @@ function renderSessions() {
             </div>
             <div>
               <label style="visibility:hidden;">&nbsp;</label>
-              <button class="danger" style="padding:10px; font-size:13px; width:100%;"
+              <button class="danger btn-x" style="width:100%;"
                 onclick="removeSession(${i})">✕</button>
             </div>
           </div>

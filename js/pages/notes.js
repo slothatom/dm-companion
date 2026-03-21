@@ -304,7 +304,7 @@ function renderScenes() {
     return '<div class="scene-block">' +
       '<div class="scene-header">' +
         '<input type="text" class="scene-name" value="' + escapeHtml(s.name) + '" placeholder="Scene ' + (i+1) + ' name (e.g. Dormitory Vignettes)" oninput="markExtraDirty()" />' +
-        '<button class="danger" onclick="removeScene(' + i + ')" style="padding:4px 10px; font-size:12px;">x</button>' +
+        '<button class="danger btn-x" onclick="removeScene(' + i + ')">✕</button>' +
       '</div>' +
       '<label>Read-Aloud Text <span style="color:var(--text-dim); font-size:11px;">(narrate to players)</span></label>' +
       '<textarea class="scene-readaloud" oninput="markExtraDirty()" placeholder="The crimson glow flickers... Describe what the players see, hear, and feel.">' + escapeHtml(s.readAloud) + '</textarea>' +
@@ -360,7 +360,7 @@ function renderNpcs() {
       '<div class="scene-header">' +
         '<input type="text" class="npc-note-name" value="' + escapeHtml(n.name) + '" placeholder="NPC name (e.g. Dumbledore)" oninput="markExtraDirty()" style="flex:1;" />' +
         '<input type="text" class="npc-note-role" value="' + escapeHtml(n.role) + '" placeholder="Role (e.g. Quest giver)" oninput="markExtraDirty()" style="flex:1;" />' +
-        '<button class="danger" onclick="removeNpcNote(' + i + ')" style="padding:4px 10px; font-size:12px;">x</button>' +
+        '<button class="danger btn-x" onclick="removeNpcNote(' + i + ')">✕</button>' +
       '</div>' +
       '<textarea class="npc-note-notes" oninput="markExtraDirty()" placeholder="Personality, key info, what they know, how they react...">' + escapeHtml(n.notes) + '</textarea>' +
     '</div>';
@@ -406,7 +406,7 @@ function renderItems() {
     return '<div class="item-note-block">' +
       '<div class="scene-header">' +
         '<input type="text" class="item-note-name" value="' + escapeHtml(item.name) + '" placeholder="Item name (e.g. Clue Token: Unity)" oninput="markExtraDirty()" style="flex:1;" />' +
-        '<button class="danger" onclick="removeItemNote(' + i + ')" style="padding:4px 10px; font-size:12px;">x</button>' +
+        '<button class="danger btn-x" onclick="removeItemNote(' + i + ')">✕</button>' +
       '</div>' +
       '<textarea class="item-note-desc" oninput="markExtraDirty()" placeholder="Description, effect, who gets it, when to hand it out...">' + escapeHtml(item.desc) + '</textarea>' +
     '</div>';

@@ -419,7 +419,7 @@ function renderList() {
                   title="Current HP" />
                 <span style="color:#5a4a30;">/ ${c.maxHp}</span>
               </span>
-              <button class="danger" style="padding:5px 10px; font-size:14px;"
+              <button class="danger btn-x"
                 onclick="removeCombatant(${i})">✕</button>
             </div>
             <div class="init-row-sub">

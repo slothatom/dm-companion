@@ -45,6 +45,7 @@ setupDirtyGuard(function () { return isDirty; });
     renderAbilities();
     renderSaves();
     renderSkills();
+    renderSpellSlots({});
 
     // If opened with ?player=ID, auto-select or create sheet
     var params = new URLSearchParams(window.location.search);
@@ -227,6 +228,13 @@ function loadSheet(id) {
   // Attacks
   renderAttacks(d.attacks || []);
 
+  // Spell Slots
+  document.getElementById('cs-spell-ability').value = d.spellAbility || '';
+  document.getElementById('cs-spell-dc').value      = d.spellDC || '';
+  document.getElementById('cs-spell-atk').value     = d.spellAtk || '';
+  renderSpellSlots(d.spellSlots || {});
+  document.getElementById('cs-spells-known').value  = d.spellsKnown || '';
+
   // Equipment
   document.getElementById('cs-cp').value        = d.cp || 0;
   document.getElementById('cs-sp').value        = d.sp || 0;
@@ -290,6 +298,12 @@ function gatherSheetData() {
 
   d.attacks = gatherAttacks();
 
+  d.spellAbility = document.getElementById('cs-spell-ability').value;
+  d.spellDC      = document.getElementById('cs-spell-dc').value;
+  d.spellAtk     = document.getElementById('cs-spell-atk').value;
+  d.spellSlots   = gatherSpellSlots();
+  d.spellsKnown  = document.getElementById('cs-spells-known').value;
+
   d.cp        = document.getElementById('cs-cp').value;
   d.sp        = document.getElementById('cs-sp').value;
   d.gp        = document.getElementById('cs-gp').value;
@@ -307,7 +321,7 @@ function gatherSheetData() {
   return d;
 }
 
-function saveSheet() {
+function saveSheet(silent) {
   if (!activeSheetId) return;
   clearTimeout(autosaveTimer);
 
@@ -316,19 +330,22 @@ function saveSheet() {
 
   sheet.data = gatherSheetData();
   persistSheets();
-  renderSheetSelect();
-  document.getElementById('sheet-select').value = activeSheetId;
+
+  // Update dropdown option text without full rebuild (avoids focus jump)
+  var sel = document.getElementById('sheet-select');
+  var opt = sel.querySelector('option[value="' + activeSheetId + '"]');
+  if (opt) opt.textContent = sheet.data.name || 'Unnamed Character';
 
   isDirty = false;
   showSaved();
-  showToast('Sheet saved.', 'success');
+  if (!silent) showToast('Sheet saved.', 'success');
 }
 
 function sheetDirty() {
   isDirty = true;
   markUnsaved();
   clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(saveSheet, 3000);
+  autosaveTimer = setTimeout(function () { saveSheet(true); }, 3000);
 }
 
 function emptySheetData() {
@@ -341,6 +358,9 @@ function emptySheetData() {
     ac: '', initiative: '', speed: '', hpMax: '', hpCurrent: '', hpTemp: '',
     hitDice: '', profBonus: '',
     attacks: [],
+    spellAbility: '', spellDC: '', spellAtk: '',
+    spellSlots: {},  // { '1': { total: 0, used: 0 }, ... '9': ... }
+    spellsKnown: '',
     cp: 0, sp: 0, gp: 0, pp: 0, equipment: '',
     proficiencies: '', features: '',
     personality: '', ideals: '', bonds: '', flaws: '', backstory: ''
@@ -413,7 +433,7 @@ function renderAttacks(attacks) {
         'onchange="updateAttack(' + i + ', \'bonus\', this.value)" style="flex:1; max-width:60px;" />' +
       '<input type="text" value="' + escapeHtml(a.damage || '') + '" placeholder="1d8+3 slashing" ' +
         'onchange="updateAttack(' + i + ', \'damage\', this.value)" style="flex:2;" />' +
-      '<button class="danger" onclick="removeAttack(' + i + ')" style="padding:5px 10px;">x</button>' +
+      '<button class="danger btn-x" onclick="removeAttack(' + i + ')">✕</button>' +
     '</div>';
   }).join('');
 }
@@ -440,6 +460,93 @@ function removeAttack(index) {
   sheet.data = d;
   renderAttacks(d.attacks);
   sheetDirty();
+}
+
+// ── Spell Slots ────────────────────────────────────────
+
+function renderSpellSlots(slots) {
+  var el = document.getElementById('cs-spell-slots');
+  var html = '<div class="cs-spell-grid">';
+  for (var lvl = 1; lvl <= 9; lvl++) {
+    var s = (slots && slots[lvl]) || { total: 0, used: 0 };
+    var total = parseInt(s.total, 10) || 0;
+    var used  = parseInt(s.used, 10) || 0;
+    html += '<div class="cs-slot-row">' +
+      '<span class="cs-slot-level">Lv ' + lvl + '</span>' +
+      '<div class="cs-slot-pips" id="cs-slot-pips-' + lvl + '">' + renderSlotPips(lvl, total, used) + '</div>' +
+      '<input type="number" min="0" max="9" value="' + total + '" ' +
+        'id="cs-slot-total-' + lvl + '" class="cs-slot-input" ' +
+        'oninput="updateSlotTotal(' + lvl + ', this.value)" placeholder="0" title="Total slots" />' +
+    '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderSlotPips(lvl, total, used) {
+  if (total === 0) return '<span style="color:var(--text-dim); font-size:12px;">—</span>';
+  var html = '';
+  for (var i = 0; i < total; i++) {
+    var filled = i < used;
+    html += '<span class="cs-slot-pip' + (filled ? ' used' : '') + '" ' +
+      'onclick="toggleSlotPip(' + lvl + ',' + i + ')" title="' + (filled ? 'Restore' : 'Use') + ' slot">' +
+      (filled ? '●' : '○') + '</span>';
+  }
+  return html;
+}
+
+function toggleSlotPip(lvl, index) {
+  var totalEl = document.getElementById('cs-slot-total-' + lvl);
+  var total = parseInt(totalEl.value, 10) || 0;
+  var sheet = sheets.find(function (s) { return s.id === activeSheetId; });
+  if (!sheet) return;
+  var slots = sheet.data.spellSlots || {};
+  var s = slots[lvl] || { total: total, used: 0 };
+  var used = parseInt(s.used, 10) || 0;
+
+  // Clicking pip at index: if index < used, restore (set used to index), else use (set used to index+1)
+  if (index < used) {
+    s.used = index;
+  } else {
+    s.used = index + 1;
+  }
+  s.total = total;
+  slots[lvl] = s;
+  sheet.data.spellSlots = slots;
+
+  document.getElementById('cs-slot-pips-' + lvl).innerHTML = renderSlotPips(lvl, total, s.used);
+  sheetDirty();
+}
+
+function updateSlotTotal(lvl, val) {
+  var total = parseInt(val, 10) || 0;
+  var sheet = sheets.find(function (s) { return s.id === activeSheetId; });
+  if (!sheet) return;
+  var slots = sheet.data.spellSlots || {};
+  var s = slots[lvl] || { total: 0, used: 0 };
+  var used = Math.min(parseInt(s.used, 10) || 0, total);
+  slots[lvl] = { total: total, used: used };
+  sheet.data.spellSlots = slots;
+
+  document.getElementById('cs-slot-pips-' + lvl).innerHTML = renderSlotPips(lvl, total, used);
+  sheetDirty();
+}
+
+function gatherSpellSlots() {
+  var slots = {};
+  for (var lvl = 1; lvl <= 9; lvl++) {
+    var totalEl = document.getElementById('cs-slot-total-' + lvl);
+    var total = totalEl ? parseInt(totalEl.value, 10) || 0 : 0;
+    var sheet = sheets.find(function (s) { return s.id === activeSheetId; });
+    var used = 0;
+    if (sheet && sheet.data.spellSlots && sheet.data.spellSlots[lvl]) {
+      used = parseInt(sheet.data.spellSlots[lvl].used, 10) || 0;
+    }
+    if (total > 0 || used > 0) {
+      slots[lvl] = { total: total, used: Math.min(used, total) };
+    }
+  }
+  return slots;
 }
 
 function gatherAttacks() {

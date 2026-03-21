@@ -125,6 +125,19 @@
         <button onclick="addAttack()" style="margin-top:8px;">+ Add Attack</button>
       </div>
 
+      <!-- Spell Slots -->
+      <div class="card">
+        <h3><i class="fi fi-rr-book-spells"></i> Spell Slots</h3>
+        <div class="stat-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:12px;">
+          <div><label>Spellcasting Ability</label><input type="text" id="cs-spell-ability" oninput="sheetDirty()" placeholder="e.g. WIS" style="margin:0;" /></div>
+          <div><label>Spell Save DC</label><input type="number" id="cs-spell-dc" oninput="sheetDirty()" placeholder="13" style="margin:0;" /></div>
+          <div><label>Spell Attack Bonus</label><input type="text" id="cs-spell-atk" oninput="sheetDirty()" placeholder="+5" style="margin:0;" /></div>
+        </div>
+        <div id="cs-spell-slots"></div>
+        <label style="margin-top:12px;">Cantrips & Known Spells</label>
+        <textarea id="cs-spells-known" oninput="sheetDirty()" placeholder="Cantrips: Fire Bolt, Mage Hand, Prestidigitation&#10;1st: Shield, Magic Missile, Detect Magic&#10;2nd: Misty Step, Hold Person&#10;3rd: Fireball, Counterspell" style="min-height:120px;"></textarea>
+      </div>
+
       <!-- Equipment -->
       <div class="card">
         <h3><i class="fi fi-rr-backpack"></i> Equipment</h3>

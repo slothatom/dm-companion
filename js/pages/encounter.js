@@ -178,7 +178,7 @@ function renderCreatures() {
                 title="XP Value" />
               <span style="color:var(--text-dim); font-size:12px;"> XP</span>
             </span>
-            <button class="danger" style="padding:5px 10px; font-size:13px;"
+            <button class="danger btn-x"
               onclick="removeCreature(${i})">✕</button>
           </div>`;
   }).join('');

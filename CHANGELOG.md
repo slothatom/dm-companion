@@ -24,7 +24,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Sidebar profile reorganised into expandable menu: click avatar/name to reveal theme toggle, Terms & Conditions, Privacy Policy, Cookie Policy, and Sign Out
 
 ### Fixed
-- Magic Items icon missing — `fi-rr-wand-sparkles` replaced with valid `fi-rr-wand-magic-sparkles` in sidebar nav and page header
+- Magic Items icon missing — replaced with `fi-rr-sparkles` (verified in Flaticon CSS) in sidebar nav and page header
 - API first-load performance: pagination now fetches all pages in parallel instead of sequentially; cache upgraded from sessionStorage to localStorage with 4-hour TTL so data persists across tabs and sessions
 
 ---

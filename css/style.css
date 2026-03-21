@@ -379,15 +379,42 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   padding: 8px 4px 4px;
 }
 
-.profile-menu-name {
+.profile-menu-name-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 2px 6px;
+  border-bottom: 1px solid var(--border-dim);
+  margin-bottom: 2px;
+}
+.profile-menu-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.profile-name-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.profile-name-input:focus { border-color: var(--accent); }
+.profile-name-input::placeholder { color: var(--text-dim); opacity: 0.7; }
+
+.profile-menu-email {
   font-size: 11px;
   color: var(--text-dim);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   padding: 0 2px 4px;
-  border-bottom: 1px solid var(--border-dim);
-  margin-bottom: 2px;
 }
 
 .profile-menu-links {

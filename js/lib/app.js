@@ -222,6 +222,7 @@ function confirmSignOut() {
 // =============================================
 
 function renderNav(user) {
+  if (user) window._currentUserId = user.id;
   const navSections = [
     { heading: '', pages: [
       { href: 'home.html',          icon: '<i class="fi fi-rr-home"></i>',           label: 'Home'       },
@@ -255,7 +256,7 @@ function renderNav(user) {
       { href: 'classes.html',       icon: '<i class="fi fi-rr-shield"></i>',         label: 'Classes'        },
       { href: 'feats.html',         icon: '<i class="fi fi-rr-star"></i>',           label: 'Feats'          },
       { href: 'items.html',         icon: '<i class="fi fi-rr-backpack"></i>',       label: 'Items'          },
-      { href: 'magic-items.html',  icon: '<i class="fi fi-rr-wand-sparkles"></i>',  label: 'Magic Items'    },
+      { href: 'magic-items.html',  icon: '<i class="fi fi-rr-wand-magic-sparkles"></i>',  label: 'Magic Items'    },
       { href: 'conditions.html',   icon: '<i class="fi fi-rr-exclamation"></i>',    label: 'Conditions'     },
       { href: 'backgrounds.html',   icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Backgrounds'    },
       { href: 'languages.html',     icon: '<i class="fi fi-rr-comment"></i>',        label: 'Languages'      },
@@ -289,7 +290,9 @@ function renderNav(user) {
   if (user) {
     const email    = user.email || 'Adventurer';
     const avatar   = user.user_metadata?.avatar_url;
-    const initials = email.charAt(0).toUpperCase();
+    const displayName = localStorage.getItem('dm-display-name-' + user.id) || '';
+    const shownName = displayName || email;
+    const initials = shownName.charAt(0).toUpperCase();
     const avatarHtml = avatar
       ? `<img src="${avatar}" class="profile-avatar" alt="" />`
       : `<div class="profile-initials">${initials}</div>`;
@@ -297,11 +300,18 @@ function renderNav(user) {
     footerHtml = `
       <div class="sidebar-profile" onclick="toggleProfileMenu()" role="button" tabindex="0" aria-expanded="false" aria-label="Toggle profile menu">
         <div class="profile-avatar-wrap">${avatarHtml}</div>
-        <span class="sidebar-profile-email">${email}</span>
+        <span class="sidebar-profile-email">${escapeHtml(shownName)}</span>
         <i class="fi fi-rr-angle-up profile-chevron"></i>
       </div>
       <div class="profile-menu" id="profile-menu">
-        <span class="profile-menu-name">${email}</span>
+        <div class="profile-menu-name-row">
+          <label class="profile-menu-label">Display Name</label>
+          <input type="text" class="profile-name-input" id="profile-name-input"
+            value="${escapeHtml(displayName)}" placeholder="${escapeHtml(email)}"
+            onchange="saveDisplayName(this.value)"
+            onclick="event.stopPropagation()" />
+        </div>
+        <span class="profile-menu-email">${escapeHtml(email)}</span>
         <button class="theme-toggle" onclick="toggleTheme(); event.stopPropagation();" id="theme-toggle-btn"></button>
         <div class="profile-menu-links">
           <a href="terms.html" class="profile-menu-link"><i class="fi fi-rr-document-signed"></i> Terms &amp; Conditions</a>
@@ -425,6 +435,23 @@ function toggleProfileMenu() {
   const isOpen = menu.classList.toggle('open');
   profile.setAttribute('aria-expanded', isOpen);
   profile.querySelector('.profile-chevron').classList.toggle('rotated', isOpen);
+}
+
+function saveDisplayName(value) {
+  const name = value.trim();
+  const key = 'dm-display-name-' + (window._currentUserId || '');
+  if (!key || key === 'dm-display-name-') return;
+  if (name) {
+    localStorage.setItem(key, name);
+  } else {
+    localStorage.removeItem(key);
+  }
+  // Update sidebar label live
+  const label = document.querySelector('.sidebar-profile-email');
+  if (label) {
+    label.textContent = name || (document.getElementById('profile-name-input')?.placeholder || 'Adventurer');
+  }
+  showToast(name ? 'Display name updated!' : 'Display name cleared — showing email.', 'success');
 }
 
 function toggleTheme() {

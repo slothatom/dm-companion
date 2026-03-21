@@ -14,9 +14,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Terms & Conditions page (`terms.html`) covering acceptance, accounts, user content, D&D IP/OGL, acceptable use, disclaimers, liability, and termination
 - Terms & Conditions linked from sidebar navigation and login footer
 - Cookie consent banner on all pages (including login) with Accept / Decline buttons, slides up from bottom, remembers choice in localStorage
+- Custom display name in profile menu — saved per user in localStorage, shown in sidebar and home welcome message
 
 ### Changed
 - Sidebar profile reorganised into expandable menu: click avatar/name to reveal theme toggle, Terms & Conditions, Privacy Policy, Cookie Policy, and Sign Out
+
+### Fixed
+- Magic Items icon missing — `fi-rr-wand-sparkles` replaced with valid `fi-rr-wand-magic-sparkles` in sidebar nav and page header
 
 ---
 

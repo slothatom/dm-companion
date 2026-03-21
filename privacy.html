@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion - Privacy Policy</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-shield"></i> Privacy Policy</h1>
+    <p class="subtitle">How DM Companion handles your data.</p>
+
+    <div id="privacy-loading" class="loading-state">
+      <span class="spinner"></span> Loading...
+    </div>
+
+    <div id="privacy-content" style="display:none;">
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Last Updated</h3>
+        <p style="color:var(--text-muted);">March 21, 2026</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>What We Collect</h3>
+        <p>DM Companion collects and stores the following data to provide its services:</p>
+        <ul class="privacy-list">
+          <li><strong>Account information</strong> - Your email address (used for authentication). If you sign in with Google or GitHub, we receive your email and profile avatar from those services.</li>
+          <li><strong>Campaign data</strong> - Campaign names, session notes, world notes, and other content you create within the app.</li>
+          <li><strong>Player and character data</strong> - Player names, NPC names, creature stat blocks, and character sheet information you enter.</li>
+          <li><strong>Application preferences</strong> - Theme selection, sidebar state, and other UI settings stored in your browser's local storage.</li>
+        </ul>
+        <p style="margin-top:12px;">We do <strong>not</strong> collect analytics, tracking data, or advertising identifiers.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>How We Store Your Data</h3>
+        <ul class="privacy-list">
+          <li><strong>Server-side</strong> - Campaign data, session notes, players, NPCs, and creatures are stored in a <a href="https://supabase.com" target="_blank" rel="noopener" style="color:var(--accent);">Supabase</a> PostgreSQL database. All data is protected by Row-Level Security (RLS), ensuring only you can access your own data. Data is encrypted in transit via HTTPS.</li>
+          <li><strong>Browser storage</strong> - UI preferences (theme, sidebar state), character sheet data, campaign-to-player mappings, and API response caches are stored in your browser's localStorage and sessionStorage. This data never leaves your device.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Third-Party Services</h3>
+        <p>DM Companion uses the following third-party services:</p>
+        <ul class="privacy-list">
+          <li><strong>Supabase</strong> (supabase.com) - Database hosting and authentication. <a href="https://supabase.com/privacy" target="_blank" rel="noopener" style="color:var(--accent);">Their privacy policy</a>.</li>
+          <li><strong>Google OAuth</strong> (optional) - If you choose to sign in with Google. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--accent);">Google's privacy policy</a>.</li>
+          <li><strong>GitHub OAuth</strong> (optional) - If you choose to sign in with GitHub. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener" style="color:var(--accent);">GitHub's privacy statement</a>.</li>
+          <li><strong>Open5e API</strong> (open5e.com) - Provides D&D 5e reference data (spells, monsters, items). No personal data is sent to this service.</li>
+          <li><strong>D&D 5e API</strong> (dnd5eapi.co) - Provides D&D 5e reference data. No personal data is sent to this service.</li>
+          <li><strong>GitHub Pages</strong> - Hosts the static web application files. No user data is processed by GitHub Pages.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Cookies and Tracking</h3>
+        <p>DM Companion does <strong>not</strong> use cookies for tracking or advertising. The only cookies set are by Supabase for authentication session management. We do not use any analytics services (no Google Analytics, no tracking pixels, no fingerprinting).</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Data Retention</h3>
+        <p>Your data is stored for as long as your account exists. If you wish to delete your data, see "Your Rights" below.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Your Rights</h3>
+        <p>Under GDPR and similar privacy regulations, you have the right to:</p>
+        <ul class="privacy-list">
+          <li><strong>Access</strong> - Request a copy of all data we store about you.</li>
+          <li><strong>Rectification</strong> - Update or correct your data at any time through the app.</li>
+          <li><strong>Deletion</strong> - Request permanent deletion of your account and all associated data. To delete your account, contact us at the email below.</li>
+          <li><strong>Portability</strong> - Request your data in a machine-readable format.</li>
+          <li><strong>Restriction</strong> - Request that we limit processing of your data.</li>
+        </ul>
+        <p style="margin-top:12px;">To exercise any of these rights, contact: <strong style="color:var(--accent);">arany.mak@gmail.com</strong></p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Data Security</h3>
+        <ul class="privacy-list">
+          <li>All connections use HTTPS encryption.</li>
+          <li>Database access is protected by Row-Level Security - users can only access their own data.</li>
+          <li>Passwords are hashed by Supabase (never stored in plain text).</li>
+          <li>Only the public anonymous API key is used in the client - the service key is never exposed.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Children's Privacy</h3>
+        <p>DM Companion is not intended for children under 13. We do not knowingly collect data from children under 13. If you believe a child has provided us with personal data, please contact us to have it removed.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Changes to This Policy</h3>
+        <p>We may update this privacy policy from time to time. Changes will be posted on this page with an updated "Last Updated" date. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'privacy.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script>
+    (async function () {
+      var user = await requireAuth();
+      if (!user) return;
+      renderNav(user);
+      document.getElementById('privacy-loading').style.display = 'none';
+      document.getElementById('privacy-content').style.display = 'block';
+    })();
+  </script>
+</body>
+</html>

@@ -185,16 +185,20 @@ function showInfoModal(opts) {
     modal.innerHTML =
       '<div class="dm-modal dm-info-modal-inner" role="dialog" aria-modal="true">' +
         '<h3 class="dm-modal-title" id="dm-info-title"></h3>' +
-        '<p class="dm-info-body" id="dm-info-body"></p>' +
+        '<div class="dm-info-body" id="dm-info-body"></div>' +
         '<div class="dm-modal-actions" style="justify-content:center;">' +
           '<button onclick="closeInfoModal()">Close</button>' +
         '</div>' +
       '</div>';
     modal.addEventListener('click', function (e) { if (e.target === modal) closeInfoModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.style.display === 'flex') closeInfoModal();
+    });
     document.body.appendChild(modal);
   }
   document.getElementById('dm-info-title').textContent = opts.title || '';
-  document.getElementById('dm-info-body').textContent  = opts.body  || '';
+  // Use innerText to preserve \n as line breaks (works with white-space: pre-line)
+  document.getElementById('dm-info-body').innerText = opts.body || '';
   modal.style.display = 'flex';
 }
 
@@ -296,7 +300,8 @@ function renderNav(user) {
         <span class="sidebar-profile-email">${email}</span>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn"></button>
-      <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>`;
+      <button class="sidebar-signout" onclick="confirmSignOut()"><i class="fi fi-rr-sign-out-alt"></i> Sign Out</button>
+      <a href="privacy.html" class="sidebar-privacy">Privacy Policy</a>`;
   }
 
   const nav = document.getElementById('main-nav');

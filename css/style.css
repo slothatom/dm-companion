@@ -29,6 +29,8 @@
   --gold:    #E6C07B;
   --success: #6D9F71;
   --info:    #5a8abf;
+  --card-bg: #3A2A24;
+  --heading: #E6C07B;
 }
 
 [data-theme="light"] {
@@ -50,6 +52,8 @@
   --gold:        #b8860b;
   --success:     #4a8a4e;
   --info:        #3a6a9f;
+  --card-bg:     #fff;
+  --heading:     #5a4020;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -325,6 +329,17 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
               max-height 0.2s ease, opacity 0.15s ease, padding 0.2s;
 }
 .sidebar-signout:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
+.sidebar-privacy {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-decoration: none;
+  margin-top: 6px;
+  transition: color 0.15s;
+}
+.sidebar-privacy:hover { color: var(--text-muted); text-decoration: underline; }
+#main-nav.collapsed .sidebar-privacy { display: none; }
 #main-nav.collapsed .sidebar-signout {
   max-height: 0; opacity: 0;
   padding-top: 0; padding-bottom: 0;
@@ -823,6 +838,14 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 .auth-toggle { text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 16px; }
 .auth-toggle a { color: var(--primary); text-decoration: none; }
 .auth-toggle a:hover { text-decoration: underline; }
+.auth-footer { text-align: center; margin-top: 20px; font-size: 12px; color: var(--text-dim); }
+.auth-footer a { color: var(--text-muted); text-decoration: none; }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* Privacy page */
+.privacy-list { list-style: disc; padding-left: 20px; margin-top: 8px; color: var(--text-muted); line-height: 1.8; }
+.privacy-list li { margin-bottom: 8px; }
+.privacy-list strong { color: var(--text); }
 
 /* =============================================
    Responsive — Desktop baseline
@@ -1356,7 +1379,12 @@ input[type="time"] {
    Info / Detail Modal (read-only)
    ============================================= */
 
-.dm-info-modal-inner { max-width: 580px; }
+.dm-info-modal-inner {
+  max-width: 620px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
 
 .dm-info-body {
   font-size: 15px;
@@ -1364,6 +1392,9 @@ input[type="time"] {
   color: var(--text);
   margin-bottom: 24px;
   white-space: pre-line;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 /* =============================================

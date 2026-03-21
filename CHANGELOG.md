@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ---
 
+## [Unreleased]
+
+### Added
+- Dedicated Cookie Policy page (`cookies.html`) with full breakdown of authentication cookies, localStorage keys, and sessionStorage usage
+- Cookie Policy linked from sidebar navigation, login footer, and Privacy Policy page
+
+---
+
 ## [0.5.0] - 2026-03-21
 
 ### Fixed

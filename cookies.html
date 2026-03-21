@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https://www.transparenttextures.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
+  <title>DM Companion - Cookie Policy</title>
+  <meta name="description" content="DM Companion cookie policy - what cookies and browser storage we use." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav id="main-nav" aria-label="Main navigation"></nav>
+
+  <main id="main-content">
+    <h1><i class="fi fi-rr-cookie"></i> Cookie Policy</h1>
+    <p class="subtitle">What cookies and browser storage DM Companion uses and why.</p>
+
+    <div id="cookie-loading" class="loading-state">
+      <span class="spinner"></span> Loading...
+    </div>
+
+    <div id="cookie-content" style="display:none;">
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Last Updated</h3>
+        <p style="color:var(--text-muted);">March 21, 2026</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Overview</h3>
+        <p>DM Companion is committed to transparency about data stored in your browser. This policy explains what cookies, localStorage, and sessionStorage we use, their purpose, and how to manage them.</p>
+        <p style="margin-top:12px;"><strong>We do not use any cookies for tracking, advertising, or analytics.</strong></p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3><i class="fi fi-rr-lock"></i> Authentication Cookies</h3>
+        <p>These cookies are set by our authentication provider, <a href="https://supabase.com" target="_blank" rel="noopener" style="color:var(--accent);">Supabase</a>, and are essential for the app to function.</p>
+        <div style="overflow-x:auto; margin-top:12px;">
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border); text-align:left;">
+                <th style="padding:8px;">Cookie</th>
+                <th style="padding:8px;">Purpose</th>
+                <th style="padding:8px;">Duration</th>
+                <th style="padding:8px;">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>sb-access-token</code></td>
+                <td style="padding:8px;">Keeps you signed in (JWT access token)</td>
+                <td style="padding:8px;">1 hour</td>
+                <td style="padding:8px;">Essential</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>sb-refresh-token</code></td>
+                <td style="padding:8px;">Refreshes your session without re-login</td>
+                <td style="padding:8px;">7 days</td>
+                <td style="padding:8px;">Essential</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px; color:var(--text-muted); font-size:13px;">These cookies are <strong>strictly necessary</strong> for the app to work. Without them, you cannot stay signed in.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3><i class="fi fi-rr-database"></i> Local Storage</h3>
+        <p>DM Companion uses your browser's <code>localStorage</code> to save your data and preferences locally. This data <strong>never leaves your device</strong>.</p>
+        <div style="overflow-x:auto; margin-top:12px;">
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border); text-align:left;">
+                <th style="padding:8px;">Key Pattern</th>
+                <th style="padding:8px;">Purpose</th>
+                <th style="padding:8px;">Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-theme</code></td>
+                <td style="padding:8px;">Your selected colour theme (dark/light)</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>sidebar-pinned</code></td>
+                <td style="padding:8px;">Whether the sidebar is pinned open</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-notes-*</code></td>
+                <td style="padding:8px;">Your session notes and DM prep</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-players-*</code></td>
+                <td style="padding:8px;">Player character data</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-characters-*</code></td>
+                <td style="padding:8px;">NPC and creature data</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-campaigns-*</code></td>
+                <td style="padding:8px;">Campaign names and settings</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-maps-*</code></td>
+                <td style="padding:8px;">Map notes and image URLs</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>dm-charsheet-*</code></td>
+                <td style="padding:8px;">Character sheet ability scores and skills</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>campaign-type-map-*</code></td>
+                <td style="padding:8px;">Campaign type assignments (campaign vs one-shot)</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>encounter-*</code></td>
+                <td style="padding:8px;">Saved encounter builder data</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>initiative-*</code></td>
+                <td style="padding:8px;">Saved initiative tracker state</td>
+                <td style="padding:8px;">Persistent</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px; color:var(--text-muted); font-size:13px;">The <code>*</code> represents your unique user ID, so each account's data is kept separate.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3><i class="fi fi-rr-time-past"></i> Session Storage</h3>
+        <p>Temporary data stored only while your browser tab is open. Cleared automatically when you close the tab.</p>
+        <div style="overflow-x:auto; margin-top:12px;">
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--border); text-align:left;">
+                <th style="padding:8px;">Key Pattern</th>
+                <th style="padding:8px;">Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>api-cache-*</code></td>
+                <td style="padding:8px;">Cached API responses from Open5e and dnd5eapi.co (1-hour TTL) to reduce network requests</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px;"><code>sidebar-scroll</code></td>
+                <td style="padding:8px;">Sidebar scroll position so it stays in place when navigating</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3><i class="fi fi-rr-ban"></i> What We Don't Use</h3>
+        <ul class="privacy-list">
+          <li>No advertising or marketing cookies</li>
+          <li>No analytics cookies (no Google Analytics, Mixpanel, etc.)</li>
+          <li>No tracking pixels or web beacons</li>
+          <li>No browser fingerprinting</li>
+          <li>No third-party social media tracking cookies</li>
+          <li>No cross-site tracking of any kind</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3><i class="fi fi-rr-settings"></i> Managing Cookies and Storage</h3>
+        <p>You can manage or delete cookies and browser storage at any time:</p>
+        <ul class="privacy-list">
+          <li><strong>Browser settings</strong> — Most browsers let you view and delete cookies in Settings &gt; Privacy &gt; Cookies. Deleting authentication cookies will sign you out.</li>
+          <li><strong>Clear localStorage</strong> — In your browser's Developer Tools (F12), go to Application &gt; Local Storage and delete entries starting with <code>dm-</code>. This will erase your saved campaign data on this device.</li>
+          <li><strong>Clear sessionStorage</strong> — Close the browser tab. All session storage is automatically cleared.</li>
+        </ul>
+        <p style="margin-top:12px; color:var(--text-muted); font-size:13px;">Note: Blocking essential authentication cookies will prevent you from signing in.</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Contact</h3>
+        <p>If you have questions about this cookie policy, contact: <strong style="color:var(--accent);">arany.mak@gmail.com</strong></p>
+        <p style="margin-top:8px;">See also our <a href="privacy.html" style="color:var(--accent);">Privacy Policy</a> for full details on how we handle your data.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'cookies.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script>
+    (async function () {
+      var user = await requireAuth();
+      if (!user) return;
+      renderNav(user);
+      document.getElementById('cookie-loading').style.display = 'none';
+      document.getElementById('cookie-content').style.display = 'block';
+    })();
+  </script>
+</body>
+</html>

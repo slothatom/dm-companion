@@ -65,6 +65,47 @@
     <!-- Campaign detail (shown when a campaign is selected) -->
     <div id="campaign-detail" style="display:none;">
 
+      <!-- Party Overview -->
+      <div class="card" id="campaign-overview-card">
+        <h3><i class="fi fi-rr-users-alt"></i> Party Overview</h3>
+        <div id="campaign-overview-loading"><p class="loading-state"><span class="spinner"></span> Loading...</p></div>
+        <div id="campaign-overview" style="display:none;">
+
+          <!-- Players -->
+          <div style="margin-bottom:16px;">
+            <h4 style="margin:0 0 8px; font-size:14px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px;">
+              <i class="fi fi-rr-user"></i> Players
+            </h4>
+            <div id="overview-players" class="overview-grid"></div>
+          </div>
+
+          <!-- NPCs -->
+          <div style="margin-bottom:16px;">
+            <h4 style="margin:0 0 8px; font-size:14px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px;">
+              <i class="fi fi-rr-mask-carnival"></i> NPCs
+            </h4>
+            <div id="overview-npcs" class="overview-grid"></div>
+          </div>
+
+          <!-- Creatures -->
+          <div style="margin-bottom:16px;">
+            <h4 style="margin:0 0 8px; font-size:14px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px;">
+              <i class="fi fi-rr-paw"></i> Creatures
+            </h4>
+            <div id="overview-creatures" class="overview-grid"></div>
+          </div>
+
+          <!-- Session Notes summary -->
+          <div>
+            <h4 style="margin:0 0 8px; font-size:14px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px;">
+              <i class="fi fi-rr-notebook"></i> Session Notes
+            </h4>
+            <div id="overview-notes"></div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- World Notes -->
       <div class="card">
         <h3><i class="fi fi-rr-world"></i> World Notes</h3>

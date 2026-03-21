@@ -141,7 +141,7 @@ async function loadCampaignDetail(id) {
     if (el) { el.textContent = ''; el.classList.remove('visible', 'unsaved'); }
   });
 
-  await loadSessions(id);
+  await Promise.all([loadSessions(id), loadCampaignOverview(id)]);
 }
 
 async function loadSessions(campaignId) {
@@ -390,4 +390,126 @@ async function saveSessions() {
   await loadSessions(activeCampaignId);
   setButtonLoading(btn, false);
   showSavedFor('sessions-save-status');
+}
+
+// ── Campaign Overview (Party, NPCs, Notes) ──────────────
+
+async function loadCampaignOverview(campaignId) {
+  var loadingEl = document.getElementById('campaign-overview-loading');
+  var contentEl = document.getElementById('campaign-overview');
+  loadingEl.style.display = '';
+  contentEl.style.display = 'none';
+
+  // Fetch players, NPCs, creatures, and notes in parallel
+  var results = await Promise.all([
+    db.from('players').select('*').eq('user_id', currentUserId),
+    db.from('npcs').select('*').eq('user_id', currentUserId),
+    db.from('creatures').select('*').eq('user_id', currentUserId),
+    db.from('session_notes').select('*').eq('user_id', currentUserId).eq('campaign_id', campaignId).maybeSingle()
+  ]);
+
+  loadingEl.style.display = 'none';
+  contentEl.style.display = '';
+
+  var allPlayers  = (results[0].data || []);
+  var allNpcs     = (results[1].data || []);
+  var allCreatures = (results[2].data || []);
+  var noteData    = results[3].data;
+
+  // Filter by campaign using localStorage maps
+  var playerMap = {};
+  try { playerMap = JSON.parse(localStorage.getItem('player-campaign-map-' + currentUserId)) || {}; } catch (e) {}
+  var charMap = {};
+  try { charMap = JSON.parse(localStorage.getItem('char-campaign-map-' + currentUserId)) || {}; } catch (e) {}
+
+  var campaignPlayers = allPlayers.filter(function (p) { return playerMap[p.id] === campaignId; });
+  var campaignNpcs = allNpcs.filter(function (n) { return charMap['npc:' + n.id] === campaignId; });
+  var campaignCreatures = allCreatures.filter(function (c) { return charMap['creature:' + c.id] === campaignId; });
+
+  // Render players
+  renderOverviewPlayers(campaignPlayers);
+  renderOverviewNpcs(campaignNpcs);
+  renderOverviewCreatures(campaignCreatures);
+  renderOverviewNotes(noteData);
+}
+
+function renderOverviewPlayers(list) {
+  var el = document.getElementById('overview-players');
+  if (list.length === 0) {
+    el.innerHTML = '<p class="overview-empty">No players assigned to this campaign.</p>' +
+      '<a href="players.html" class="overview-link">Go to Players to assign them</a>';
+    return;
+  }
+  el.innerHTML = list.map(function (p) {
+    return '<div class="overview-chip">' +
+      '<span class="chip-name">' + escapeHtml(p.char_name || 'Unnamed') + '</span>' +
+      '<span class="chip-sub">' + escapeHtml(p.player_name || '') + '</span>' +
+      '<span class="chip-sub">' + escapeHtml((p.race || '') + ' ' + (p.char_class || '')) + '</span>' +
+      '<div class="chip-stats">' +
+        '<span>Lvl ' + escapeHtml(String(p.level || '?')) + '</span>' +
+        '<span>HP ' + escapeHtml(String(p.hp || '?')) + '</span>' +
+        '<span>AC ' + escapeHtml(String(p.ac || '?')) + '</span>' +
+        '<span>PP ' + escapeHtml(String(p.passive_perception || '?')) + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('') +
+  '<a href="players.html" class="overview-link">Manage Players</a>';
+}
+
+function renderOverviewNpcs(list) {
+  var el = document.getElementById('overview-npcs');
+  if (list.length === 0) {
+    el.innerHTML = '<p class="overview-empty">No NPCs assigned to this campaign.</p>' +
+      '<a href="characters.html" class="overview-link">Go to Characters to assign them</a>';
+    return;
+  }
+  el.innerHTML = list.map(function (n) {
+    return '<div class="overview-chip">' +
+      '<span class="chip-name">' + escapeHtml(n.name || 'Unnamed NPC') + '</span>' +
+      '<div class="chip-stats">' +
+        '<span>HP ' + escapeHtml(String(n.hp || '?')) + '</span>' +
+        '<span>AC ' + escapeHtml(String(n.ac || '?')) + '</span>' +
+      '</div>' +
+      (n.notes ? '<span class="chip-sub" style="margin-top:4px;">' + escapeHtml(n.notes.substring(0, 60)) + (n.notes.length > 60 ? '...' : '') + '</span>' : '') +
+    '</div>';
+  }).join('') +
+  '<a href="characters.html" class="overview-link">Manage NPCs</a>';
+}
+
+function renderOverviewCreatures(list) {
+  var el = document.getElementById('overview-creatures');
+  if (list.length === 0) {
+    el.innerHTML = '<p class="overview-empty">No creatures assigned to this campaign.</p>' +
+      '<a href="characters.html" class="overview-link">Go to Characters to assign them</a>';
+    return;
+  }
+  el.innerHTML = list.map(function (c) {
+    return '<div class="overview-chip">' +
+      '<span class="chip-name">' + escapeHtml(c.name || 'Unnamed Creature') + '</span>' +
+      '<div class="chip-stats">' +
+        '<span>CR ' + escapeHtml(String(c.cr || '?')) + '</span>' +
+        '<span>HP ' + escapeHtml(String(c.hp || '?')) + '</span>' +
+        '<span>AC ' + escapeHtml(String(c.ac || '?')) + '</span>' +
+      '</div>' +
+      (c.notes ? '<span class="chip-sub" style="margin-top:4px;">' + escapeHtml(c.notes.substring(0, 60)) + (c.notes.length > 60 ? '...' : '') + '</span>' : '') +
+    '</div>';
+  }).join('') +
+  '<a href="characters.html" class="overview-link">Manage Creatures</a>';
+}
+
+function renderOverviewNotes(note) {
+  var el = document.getElementById('overview-notes');
+  if (!note) {
+    el.innerHTML = '<p class="overview-empty">No session notes for this campaign yet.</p>' +
+      '<a href="notes.html" class="overview-link">Go to Notes to start writing</a>';
+    return;
+  }
+  var parts = [];
+  if (note.title) parts.push('<div class="note-title">' + escapeHtml(note.title) + '</div>');
+  if (note.story) parts.push('<div class="note-snippet"><strong>Story:</strong> ' + escapeHtml(note.story.substring(0, 120)) + (note.story.length > 120 ? '...' : '') + '</div>');
+  if (note.locations) parts.push('<div class="note-snippet"><strong>Locations:</strong> ' + escapeHtml(note.locations.substring(0, 80)) + (note.locations.length > 80 ? '...' : '') + '</div>');
+  if (note.dm_notes) parts.push('<div class="note-snippet"><strong>DM Notes:</strong> ' + escapeHtml(note.dm_notes.substring(0, 80)) + (note.dm_notes.length > 80 ? '...' : '') + '</div>');
+
+  el.innerHTML = '<div class="overview-notes-preview">' + parts.join('') + '</div>' +
+    '<a href="notes.html" class="overview-link">Open Full Notes</a>';
 }

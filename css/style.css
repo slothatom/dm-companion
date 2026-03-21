@@ -1509,7 +1509,93 @@ input[type="time"] {
 }
 
 /* =============================================
-   Uicons — Integration Helpers
+   Campaign Overview - Party & Notes summary
+   ============================================= */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.overview-chip {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.overview-chip .chip-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--heading);
+}
+
+.overview-chip .chip-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.overview-chip .chip-stats {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  display: flex;
+  gap: 10px;
+}
+
+.overview-chip .chip-stats span {
+  background: rgba(255,255,255,0.04);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.overview-empty {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 4px 0;
+}
+
+.overview-notes-preview {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.overview-notes-preview .note-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--heading);
+  margin-bottom: 4px;
+}
+
+.overview-notes-preview .note-snippet {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.overview-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--primary);
+  text-decoration: none;
+}
+.overview-link:hover { text-decoration: underline; }
+
+/* =============================================
+   Uicons - Integration Helpers
    ============================================= */
 
 /* Inline icon inside buttons / headings */

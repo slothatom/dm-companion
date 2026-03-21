@@ -21,6 +21,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Items/Equipment cost and weight display — v2 API returns nested objects for `cost` and `damage_type`; normalizers now handle both string and object formats
 - Loot Generator magic items no longer show `[Table X]` references
 - Generator page layout — controls (dropdown, buttons, autosave) now properly aligned with flexbox `.gen-controls` / `.gen-controls-row`
+- Profile menu overflow — increased `max-height` from 300px to 500px so theme toggle + sign out are always visible
+- Light theme flash on refresh — inline `<script>` in `<head>` of all 39 HTML pages applies saved theme before CSS renders, eliminating the dark-background flash
 
 ---
 

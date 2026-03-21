@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <script>/* theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;})()</script>
 </head>
 <body>
 
@@ -31,19 +32,34 @@
       <p class="empty-state" id="gen-placeholder">Hit "Generate NPC" to bring someone to life.</p>
     </div>
 
-    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
-      <button id="gen-btn" onclick="generate()"><i class="fi fi-rr-dice-d20"></i> Generate NPC</button>
-      <button class="secondary" onclick="copyEntry()"><i class="fi fi-rr-copy"></i> Copy</button>
-      <button class="secondary" id="save-chars-btn" onclick="saveToCharacters()"><i class="fi fi-rr-disk"></i> Save to Characters</button>
-    </div>
-    <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:32px;">
-      <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0; font-size:14px;">
-        <input type="checkbox" id="gen-autosave" onchange="toggleAutosave()" />
-        Auto-save on generate
-      </label>
-      <select id="gen-campaign-select" style="margin:0; min-width:160px;">
-        <option value=""><i class="fi fi-rr-world"></i> No Campaign</option>
-      </select>
+    <div class="gen-controls">
+      <div class="gen-controls-row">
+        <select id="gen-archetype" style="margin:0; min-width:140px;">
+          <option value="any">Any Type</option>
+          <option value="commoner">Commoner</option>
+          <option value="merchant">Merchant / Trader</option>
+          <option value="guard">Guard / Military</option>
+          <option value="noble">Noble / Official</option>
+          <option value="criminal">Criminal / Rogue</option>
+          <option value="magic">Magic User</option>
+          <option value="adventurer">Adventurer</option>
+          <option value="religious">Religious</option>
+        </select>
+        <button id="gen-btn" onclick="generate()"><i class="fi fi-rr-dice-d20"></i> Generate NPC</button>
+      </div>
+      <div class="gen-controls-row">
+        <button class="secondary" onclick="copyEntry()"><i class="fi fi-rr-copy"></i> Copy</button>
+        <button class="secondary" id="save-chars-btn" onclick="saveToCharacters()"><i class="fi fi-rr-disk"></i> Save to Characters</button>
+      </div>
+      <div class="gen-controls-row">
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0; font-size:14px;">
+          <input type="checkbox" id="gen-autosave" onchange="toggleAutosave()" />
+          Auto-save on generate
+        </label>
+        <select id="gen-campaign-select" style="margin:0; min-width:160px;">
+          <option value="">No Campaign</option>
+        </select>
+      </div>
     </div>
 
     <hr />

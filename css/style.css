@@ -374,7 +374,7 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   padding: 0 4px;
 }
 .profile-menu.open {
-  max-height: 300px;
+  max-height: 500px;
   opacity: 1;
   padding: 8px 4px 4px;
 }

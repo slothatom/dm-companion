@@ -200,11 +200,13 @@ function renderSessions() {
             <div>
               <label>Date</label>
               <input type="date" value="${escapeHtml(s.sessionDate)}"
-                style="margin:0; width:auto;"
+                style="margin:0;"
                 onchange="updateSession(${i}, 'sessionDate', this.value)" />
             </div>
-            <button class="danger" style="padding:5px 10px; font-size:13px;"
-              onclick="removeSession(${i})">✕</button>
+            <div style="padding-bottom:1px;">
+              <button class="danger" style="padding:9px 10px; font-size:13px;"
+                onclick="removeSession(${i})">✕</button>
+            </div>
           </div>
         </div>
         <label style="margin-top:12px; display:block;">Session Recap</label>

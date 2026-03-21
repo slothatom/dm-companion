@@ -456,6 +456,56 @@ function setupLoadingTimeout() {
   }, 15000);
 }
 
+// ── Cookie consent banner ────────────────────────────────
+function showCookieConsent() {
+  if (localStorage.getItem('dm-cookie-consent')) return;
+  const bar = document.createElement('div');
+  bar.className = 'cookie-bar';
+  bar.innerHTML =
+    '<div class="cookie-bar-inner">' +
+      '<p class="cookie-bar-text">' +
+        '<i class="fi fi-rr-cookie"></i> ' +
+        'This site uses essential cookies for authentication. No tracking or advertising cookies are used. ' +
+        '<a href="cookies.html">Cookie Policy</a>' +
+      '</p>' +
+      '<div class="cookie-bar-actions">' +
+        '<button class="cookie-btn-accept" onclick="acceptCookies()">Accept</button>' +
+        '<button class="cookie-btn-decline" onclick="declineCookies()">Decline Non-Essential</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(bar);
+  // Trigger animation on next frame
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      bar.classList.add('visible');
+    });
+  });
+}
+
+function acceptCookies() {
+  localStorage.setItem('dm-cookie-consent', 'accepted');
+  dismissCookieBar();
+}
+
+function declineCookies() {
+  localStorage.setItem('dm-cookie-consent', 'essential-only');
+  dismissCookieBar();
+}
+
+function dismissCookieBar() {
+  const bar = document.querySelector('.cookie-bar');
+  if (!bar) return;
+  bar.classList.remove('visible');
+  bar.addEventListener('transitionend', function () { bar.remove(); });
+}
+
+// Show on every page load (including login)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', showCookieConsent);
+} else {
+  showCookieConsent();
+}
+
 // ── Tagged template literal helper for safe HTML ─────────
 // Auto-escapes all interpolated values to prevent XSS.
 // Usage: html`<div>${userInput}</div>` - each ${} value is escaped.

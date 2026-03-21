@@ -13,6 +13,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 - Cookie Policy linked from sidebar navigation, login footer, and Privacy Policy page
 - Terms & Conditions page (`terms.html`) covering acceptance, accounts, user content, D&D IP/OGL, acceptable use, disclaimers, liability, and termination
 - Terms & Conditions linked from sidebar navigation and login footer
+- Cookie consent banner on all pages (including login) with Accept / Decline buttons, slides up from bottom, remembers choice in localStorage
 
 ### Changed
 - Sidebar profile reorganised into expandable menu: click avatar/name to reveal theme toggle, Terms & Conditions, Privacy Policy, Cookie Policy, and Sign Out

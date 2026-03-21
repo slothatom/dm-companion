@@ -1045,6 +1045,101 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
 @keyframes toast-out { from { opacity: 1; transform: translateY(0);     } to { opacity: 0; transform: translateY(-8px); } }
 
 /* =============================================
+   Cookie Consent Bar
+   ============================================= */
+
+.cookie-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-toast);
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.3s ease;
+}
+.cookie-bar.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.cookie-bar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cookie-bar-text {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  min-width: 200px;
+}
+.cookie-bar-text i { margin-right: 4px; color: var(--accent); }
+.cookie-bar-text a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.cookie-bar-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cookie-btn-accept {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.cookie-btn-accept:hover { background: var(--primary-hover, var(--primary)); }
+.cookie-btn-accept:active { transform: scale(0.97); }
+
+.cookie-btn-decline {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-dim);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.cookie-btn-decline:hover {
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+}
+.cookie-btn-decline:active { transform: scale(0.97); }
+
+@media (max-width: 640px) {
+  .cookie-bar-inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .cookie-bar-actions { width: 100%; justify-content: center; }
+}
+
+/* =============================================
    Confirmation Modal
    ============================================= */
 

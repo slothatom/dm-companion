@@ -309,12 +309,18 @@ function renderNav(user) {
         <div class="profile-menu-name-row">
           <label class="profile-menu-label">Display Name</label>
           <input type="text" class="profile-name-input" id="profile-name-input"
-            value="${escapeHtml(displayName)}" placeholder="${escapeHtml(email)}"
+            value="${escapeHtml(displayName)}" placeholder="Enter a display name"
             onchange="saveDisplayName(this.value)"
             onclick="event.stopPropagation()" />
         </div>
-        <span class="profile-menu-email">${escapeHtml(email)}</span>
-        <button class="theme-toggle" onclick="toggleTheme(); event.stopPropagation();" id="theme-toggle-btn"></button>
+        <span class="profile-menu-email"><i class="fi fi-rr-envelope" style="font-size:11px; margin-right:4px;"></i> ${escapeHtml(email)}</span>
+        <div class="theme-toggle-row" onclick="event.stopPropagation();">
+          <span class="theme-toggle-label"><i class="fi fi-rr-palette"></i> Theme</span>
+          <div class="theme-switch" id="theme-toggle-btn">
+            <button class="theme-opt theme-opt-dark" onclick="setThemeMode('')" title="Dark theme"><i class="fi fi-rr-moon"></i> Dark</button>
+            <button class="theme-opt theme-opt-light" onclick="setThemeMode('light')" title="Light theme"><i class="fi fi-rr-sun"></i> Light</button>
+          </div>
+        </div>
         <div class="profile-menu-links">
           <a href="terms.html" class="profile-menu-link"><i class="fi fi-rr-document-signed"></i> Terms &amp; Conditions</a>
           <a href="privacy.html" class="profile-menu-link"><i class="fi fi-rr-shield"></i> Privacy Policy</a>
@@ -457,19 +463,23 @@ function saveDisplayName(value) {
   showToast(name ? 'Display name updated!' : 'Display name cleared — showing email.', 'success');
 }
 
-function toggleTheme() {
-  const current = document.documentElement.dataset.theme;
-  const next = current === 'light' ? '' : 'light';
-  document.documentElement.dataset.theme = next;
-  localStorage.setItem('theme', next);
+function setThemeMode(mode) {
+  document.documentElement.dataset.theme = mode;
+  localStorage.setItem('theme', mode);
   updateThemeButton();
 }
 
+function toggleTheme() {
+  const current = document.documentElement.dataset.theme;
+  setThemeMode(current === 'light' ? '' : 'light');
+}
+
 function updateThemeButton() {
-  const btn = document.getElementById('theme-toggle-btn');
-  if (!btn) return;
   const isLight = document.documentElement.dataset.theme === 'light';
-  btn.innerHTML = isLight ? '<i class="fi fi-rr-sun"></i> Light' : '<i class="fi fi-rr-moon"></i> Dark';
+  var darkBtn = document.querySelector('.theme-opt-dark');
+  var lightBtn = document.querySelector('.theme-opt-light');
+  if (darkBtn) darkBtn.classList.toggle('active', !isLight);
+  if (lightBtn) lightBtn.classList.toggle('active', isLight);
 }
 
 // ── Loading timeout safety net ────────────────────────────

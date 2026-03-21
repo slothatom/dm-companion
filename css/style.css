@@ -414,7 +414,11 @@ body.has-sidebar.sidebar-collapsed { padding-left: var(--sidebar-w-col); }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0 2px 4px;
+  padding: 4px 2px 6px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-dim);
+  margin-bottom: 2px;
 }
 
 .profile-menu-links {
@@ -1592,27 +1596,49 @@ input[type="time"] {
   background-image: none;
 }
 
-/* Theme toggle button */
-.theme-toggle {
-  background: transparent;
+/* Theme toggle switch */
+.theme-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+}
+.theme-toggle-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.theme-toggle-label i { font-size: 13px; }
+.theme-switch {
+  display: flex;
   border: 1px solid var(--border-dim);
-  border-radius: 4px;
-  width: 100%;
-  max-height: 38px;
-  padding: 7px 10px;
-  font-size: 14px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.theme-opt {
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: 'Cinzel', serif;
   color: var(--text-dim);
   cursor: pointer;
-  text-align: left;
-  font-family: 'Cinzel', serif;
-  font-size: 12px;
-  letter-spacing: 0.3px;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-  overflow: hidden;
-  opacity: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s, color 0.15s;
 }
-.theme-toggle:hover { border-color: var(--primary); color: var(--primary); background: transparent; }
-/* theme-toggle hidden via profile-menu collapse when sidebar collapsed */
+.theme-opt:hover { color: var(--text-muted); }
+.theme-opt.active {
+  background: var(--primary);
+  color: #fff;
+}
+.theme-opt + .theme-opt {
+  border-left: 1px solid var(--border-dim);
+}
 
 /* =============================================
    Responsive grid breakpoints

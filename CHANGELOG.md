@@ -6,7 +6,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ---
 
-## [Unreleased]
+## [0.6.0] - 2026-03-21
 
 ### Added
 - Dedicated Cookie Policy page (`cookies.html`) with full breakdown of authentication cookies, localStorage keys, and sessionStorage usage
@@ -25,11 +25,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this
 
 ### Fixed
 - Magic Items icon missing — replaced with `fi-rr-sparkles` (verified in Flaticon CSS) in sidebar nav and page header
-- Release notes page: fixed "devUnreleased" display — cards now close properly between versions, Unreleased section shows "Upcoming Changes" label
+- Release notes page rendering — cards now close properly between versions
 - API first-load performance: pagination now fetches all pages in parallel instead of sequentially; cache upgraded from sessionStorage to localStorage with 4-hour TTL so data persists across tabs and sessions
-- Profile menu: display name placeholder changed from email to "Enter a display name"
-- Profile menu: email now visible with envelope icon, separated from theme with a border
-- Theme toggle replaced with segmented Dark/Light switch showing active state clearly
+- Profile menu: display name placeholder, email visibility, and segmented Dark/Light theme switch
 
 ---
 

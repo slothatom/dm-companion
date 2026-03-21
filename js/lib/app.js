@@ -172,7 +172,7 @@ function renderNav(user) {
     ]},
     { heading: 'Campaign', pages: [
       { href: 'campaigns.html',     icon: '<i class="fi fi-rr-map"></i>',            label: 'Campaigns'  },
-      { href: 'index.html',         icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Notes'      },
+      { href: 'notes.html',         icon: '<i class="fi fi-rr-scroll"></i>',         label: 'Notes'      },
       { href: 'players.html',       icon: '<i class="fi fi-rr-users"></i>',          label: 'Players'    },
       { href: 'characters.html',    icon: '<i class="fi fi-rr-skull"></i>',          label: 'NPCs'       },
     ]},

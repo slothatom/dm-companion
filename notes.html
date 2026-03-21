@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DM Companion - Session Notes</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <nav id="main-nav"></nav>
+
+  <main>
+    <h1><i class="fi fi-rr-scroll"></i> Session Notes</h1>
+    <p class="subtitle">Plan your session. Tie notes to a campaign or keep them standalone.</p>
+
+    <div id="notes-loading" class="loading-state">
+      <span class="spinner"></span> Loading your notes...
+    </div>
+
+    <div id="notes-form" style="display:none;">
+
+      <!-- Campaign selector + Reset / Delete -->
+      <div class="notes-campaign-bar">
+        <div class="campaign-select-wrap">
+          <label for="notes-campaign">Campaign</label>
+          <select id="notes-campaign" onchange="switchCampaign()">
+            <option value="">General Notes</option>
+          </select>
+        </div>
+        <div class="row-actions">
+          <button class="secondary" style="padding:8px 16px; font-size:12px;" onclick="resetNotes()"><i class="fi fi-rr-refresh"></i> Reset</button>
+          <button class="danger"    style="padding:8px 16px; font-size:12px;" onclick="deleteNotes()"><i class="fi fi-rr-trash"></i> Delete</button>
+        </div>
+      </div>
+
+      <label for="session-title">Session Title</label>
+      <input type="text" id="session-title" placeholder="e.g. The Curse of Strahd - Session 4"
+        oninput="markDirty()" />
+
+      <h2><i class="fi fi-rr-book"></i> The Story</h2>
+      <label for="story">Overview &amp; plot hooks</label>
+      <textarea id="story" oninput="markDirty()"
+        placeholder="What's the main story? What are the key plot points? What do the players need to find out or do?"
+      ></textarea>
+
+      <h2><i class="fi fi-rr-map-marker"></i> Key Locations</h2>
+      <label for="locations">Places the players will visit</label>
+      <textarea id="locations" oninput="markDirty()"
+        placeholder="Describe each location briefly. What's there? Any secrets? Any traps?"
+        style="min-height: 140px;"
+      ></textarea>
+
+      <h2><i class="fi fi-rr-pencil"></i> DM Notes</h2>
+      <label for="dm-notes">Your private notes, reminders, and ideas</label>
+      <textarea id="dm-notes" oninput="markDirty()"
+        placeholder="Anything you want to remember: pacing tips, improvised NPC names, contingencies if players go off-script..."
+        style="min-height: 160px;"
+      ></textarea>
+
+      <button id="save-btn" onclick="saveNotes()"><i class="fi fi-rr-disk"></i> Save Notes</button>
+      <span id="save-status" class="save-status"></span>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>window.ACTIVE_PAGE = 'notes.html';</script>
+  <script src="js/lib/supabase.js"></script>
+  <script src="js/lib/auth.js"></script>
+  <script src="js/lib/app.js"></script>
+  <script src="js/pages/notes.js"></script>
+</body>
+</html>

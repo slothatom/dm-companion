@@ -58,6 +58,34 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Accessibility - focus-visible outlines */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Skip-to-content link (hidden until focused) */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 0 0 6px 6px;
+  z-index: 100000;
+  font-size: 14px;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 body {
   background-color: var(--bg);
   background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
@@ -906,8 +934,8 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   animation: toast-in 0.25s ease;
 }
 
-.toast-success { background: #1c3320; color: #8fc98f; border: 1px solid #3a6040; }
-.toast-error   { background: #3a1c1c; color: #c48080; border: 1px solid #6a2e2e; }
+.toast-success { background: var(--toast-success-bg, #1c3320); color: var(--toast-success-text, #8fc98f); border: 1px solid var(--toast-success-border, #3a6040); }
+.toast-error   { background: var(--toast-error-bg, #3a1c1c); color: var(--toast-error-text, #c48080); border: 1px solid var(--toast-error-border, #6a2e2e); }
 .toast-info    { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
 
 .toast-out { animation: toast-out 0.25s ease forwards; }
@@ -1051,7 +1079,7 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   white-space: nowrap;
 }
 .cond-chip:hover { border-color: var(--border); color: var(--text-muted); }
-.cond-chip.cond-active { background: #3a1e1e; border-color: #7a3030; color: #c48080; }
+.cond-chip.cond-active { background: var(--cond-active-bg, #3a1e1e); border-color: var(--cond-active-border, #7a3030); color: var(--cond-active-text, #c48080); }
 
 .init-row.hp-zero .init-name { opacity: 0.45; text-decoration: line-through; }
 
@@ -1069,16 +1097,16 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   white-space: nowrap;
   vertical-align: middle;
 }
-.badge-conc   { background: #1a2a40; color: #7aaad4; border: 1px solid #3a5a80; }
-.badge-ritual { background: #2a1a3a; color: #b07ad4; border: 1px solid #5a3a80; }
+.badge-conc   { background: var(--badge-conc-bg, #1a2a40); color: var(--badge-conc-text, #7aaad4); border: 1px solid var(--badge-conc-border, #3a5a80); }
+.badge-ritual { background: var(--badge-ritual-bg, #2a1a3a); color: var(--badge-ritual-text, #b07ad4); border: 1px solid var(--badge-ritual-border, #5a3a80); }
 
 /* Magic item rarity badges */
-.badge-common    { background: #2a2a2a; color: #b0b0b0; border: 1px solid #555; }
-.badge-uncommon  { background: #1a2a1a; color: #6D9F71; border: 1px solid #3a6a3a; }
-.badge-rare      { background: #1a1a3a; color: #6a8ade; border: 1px solid #3a3a80; }
-.badge-veryrare  { background: #2a1a3a; color: #b07ad4; border: 1px solid #5a3a80; }
-.badge-legendary { background: #3a2a0a; color: #E6C07B; border: 1px solid #8a7a30; }
-.badge-artifact  { background: #3a1a1a; color: #d47a7a; border: 1px solid #8a3a3a; }
+.badge-common    { background: var(--badge-common-bg, #2a2a2a); color: var(--badge-common-text, #b0b0b0); border: 1px solid var(--badge-common-border, #555); }
+.badge-uncommon  { background: var(--badge-uncommon-bg, #1a2a1a); color: var(--badge-uncommon-text, #6D9F71); border: 1px solid var(--badge-uncommon-border, #3a6a3a); }
+.badge-rare      { background: var(--badge-rare-bg, #1a1a3a); color: var(--badge-rare-text, #6a8ade); border: 1px solid var(--badge-rare-border, #3a3a80); }
+.badge-veryrare  { background: var(--badge-veryrare-bg, #2a1a3a); color: var(--badge-veryrare-text, #b07ad4); border: 1px solid var(--badge-veryrare-border, #5a3a80); }
+.badge-legendary { background: var(--badge-legendary-bg, #3a2a0a); color: var(--badge-legendary-text, #E6C07B); border: 1px solid var(--badge-legendary-border, #8a7a30); }
+.badge-artifact  { background: var(--badge-artifact-bg, #3a1a1a); color: var(--badge-artifact-text, #d47a7a); border: 1px solid var(--badge-artifact-border, #8a3a3a); }
 
 /* =============================================
    Quick Reference
@@ -1195,10 +1223,10 @@ hr { border: none; border-top: 1px solid var(--border-dim); margin: 28px 0; }
   letter-spacing: 0.3px;
 }
 .diff-trivial { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border-dim); }
-.diff-easy    { background: #1e3020; color: #7ac87a; border: 1px solid #3a6040; }
-.diff-medium  { background: #2a2a10; color: #c8c870; border: 1px solid #6a6030; }
-.diff-hard    { background: #2e1e10; color: #c8902a; border: 1px solid #6a4010; }
-.diff-deadly  { background: #3a1010; color: #c84040; border: 1px solid #7a2020; }
+.diff-easy    { background: var(--diff-easy-bg, #1e3020); color: var(--diff-easy-text, #7ac87a); border: 1px solid var(--diff-easy-border, #3a6040); }
+.diff-medium  { background: var(--diff-medium-bg, #2a2a10); color: var(--diff-medium-text, #c8c870); border: 1px solid var(--diff-medium-border, #6a6030); }
+.diff-hard    { background: var(--diff-hard-bg, #2e1e10); color: var(--diff-hard-text, #c8902a); border: 1px solid var(--diff-hard-border, #6a4010); }
+.diff-deadly  { background: var(--diff-deadly-bg, #3a1010); color: var(--diff-deadly-text, #c84040); border: 1px solid var(--diff-deadly-border, #7a2020); }
 
 /* =============================================
    Campaign Manager
@@ -1225,6 +1253,26 @@ input[type="date"],
 input[type="time"] {
   color-scheme: dark;
   width: auto;
+}
+
+/* Light theme - badge, toast, difficulty, condition overrides */
+[data-theme="light"] {
+  --toast-success-bg: #e8f5e9; --toast-success-text: #2e7d32; --toast-success-border: #a5d6a7;
+  --toast-error-bg: #fbe9e7; --toast-error-text: #c62828; --toast-error-border: #ef9a9a;
+  --cond-active-bg: #fbe9e7; --cond-active-border: #ef9a9a; --cond-active-text: #c62828;
+  --badge-conc-bg: #e3f2fd; --badge-conc-text: #1565c0; --badge-conc-border: #90caf9;
+  --badge-ritual-bg: #f3e5f5; --badge-ritual-text: #7b1fa2; --badge-ritual-border: #ce93d8;
+  --badge-common-bg: #f5f5f5; --badge-common-text: #616161; --badge-common-border: #bdbdbd;
+  --badge-uncommon-bg: #e8f5e9; --badge-uncommon-text: #2e7d32; --badge-uncommon-border: #a5d6a7;
+  --badge-rare-bg: #e3f2fd; --badge-rare-text: #1565c0; --badge-rare-border: #90caf9;
+  --badge-veryrare-bg: #f3e5f5; --badge-veryrare-text: #7b1fa2; --badge-veryrare-border: #ce93d8;
+  --badge-legendary-bg: #fff8e1; --badge-legendary-text: #f57f17; --badge-legendary-border: #ffe082;
+  --badge-artifact-bg: #fbe9e7; --badge-artifact-text: #c62828; --badge-artifact-border: #ef9a9a;
+  --diff-easy-bg: #e8f5e9; --diff-easy-text: #2e7d32; --diff-easy-border: #a5d6a7;
+  --diff-medium-bg: #fffde7; --diff-medium-text: #f9a825; --diff-medium-border: #fff176;
+  --diff-hard-bg: #fff3e0; --diff-hard-text: #e65100; --diff-hard-border: #ffcc80;
+  --diff-deadly-bg: #fbe9e7; --diff-deadly-text: #c62828; --diff-deadly-border: #ef9a9a;
+  --btn-active-text: #fff;
 }
 
 [data-theme="light"] input[type="date"],
@@ -1635,7 +1683,7 @@ input[type="time"] {
 .method-btn:hover { border-color: var(--primary); color: var(--text); }
 .method-btn.active {
   background: var(--primary);
-  color: #1a1210;
+  color: var(--btn-active-text, #1a1210);
   border-color: var(--primary);
   font-weight: 600;
 }
@@ -1748,7 +1796,7 @@ input[type="time"] {
 }
 .pb-btn:hover:not(:disabled) {
   background: var(--primary);
-  color: #1a1210;
+  color: var(--btn-active-text, #1a1210);
   border-color: var(--primary);
 }
 .pb-btn:disabled {

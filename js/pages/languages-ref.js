@@ -97,3 +97,15 @@ function openLangDetail(index) {
 
   showInfoModal({ title: lang.name, body: body });
 }
+
+function filterLanguages() {
+  var query = (document.getElementById('language-search').value || '').toLowerCase().trim();
+  if (!query) { renderLanguages(allLanguages); return; }
+  var filtered = allLanguages.filter(function (lang) {
+    return lang.name.toLowerCase().includes(query) ||
+      (lang.type && lang.type.toLowerCase().includes(query)) ||
+      (lang.script && lang.script.toLowerCase().includes(query)) ||
+      (lang.speakers && lang.speakers.toLowerCase().includes(query));
+  });
+  renderLanguages(filtered);
+}

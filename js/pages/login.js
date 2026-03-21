@@ -55,7 +55,7 @@ async function handleEmail(e) {
 async function signInWithGoogle() {
   const { error } = await db.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href.replace('login.html', 'home.html') }
+    options: { redirectTo: window.location.origin + '/home.html' }
   });
   if (error) document.getElementById('auth-error').textContent = error.message;
 }
@@ -63,7 +63,7 @@ async function signInWithGoogle() {
 async function signInWithGitHub() {
   const { error } = await db.auth.signInWithOAuth({
     provider: 'github',
-    options: { redirectTo: window.location.href.replace('login.html', 'home.html') }
+    options: { redirectTo: window.location.origin + '/home.html' }
   });
   if (error) document.getElementById('auth-error').textContent = error.message;
 }

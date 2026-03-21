@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https://www.transparenttextures.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
   <title>DM Companion – Languages</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
@@ -10,13 +11,20 @@
 </head>
 <body>
 
-  <nav id="main-nav"></nav>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <main>
+  <nav id="main-nav" aria-label="Main navigation"></nav>
+
+  <main id="main-content">
     <h1><i class="fi fi-rr-comment"></i> Languages</h1>
     <p class="subtitle">D&amp;D languages - typical speakers, scripts, and usage notes.</p>
 
-    <div id="languages-list"></div>
+    <div class="spell-search">
+      <input type="text" id="language-search" placeholder="Search languages..." aria-label="Search languages"
+        oninput="filterLanguages()" style="margin-bottom:10px;" />
+    </div>
+
+    <div id="languages-list" aria-live="polite"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

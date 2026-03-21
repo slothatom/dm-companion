@@ -78,3 +78,15 @@ function openClassDetail(index) {
 
   showInfoModal({ title: c.name, body: body });
 }
+
+function filterClasses() {
+  var query = (document.getElementById('class-search').value || '').toLowerCase().trim();
+  if (!query) { renderClasses(allClasses); return; }
+  var filtered = allClasses.filter(function (c) {
+    return c.name.toLowerCase().includes(query) ||
+      (c.hitDie && c.hitDie.toLowerCase().includes(query)) ||
+      (c.primaryAbility && c.primaryAbility.toLowerCase().includes(query)) ||
+      (c.desc && c.desc.toLowerCase().includes(query));
+  });
+  renderClasses(filtered);
+}

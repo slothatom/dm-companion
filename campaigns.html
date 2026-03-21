@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn-uicons.flaticon.com https://fonts.googleapis.com; font-src https://cdn-uicons.flaticon.com https://fonts.gstatic.com; img-src 'self' data: https://www.transparenttextures.com https://*.googleusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co https://api.open5e.com https://www.dnd5eapi.co;" />
   <title>DM Companion – Campaigns</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css" />
@@ -10,9 +11,11 @@
 </head>
 <body>
 
-  <nav id="main-nav"></nav>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <main>
+  <nav id="main-nav" aria-label="Main navigation"></nav>
+
+  <main id="main-content">
     <h1><i class="fi fi-rr-map"></i> Campaigns</h1>
     <p class="subtitle">Manage your campaigns and one-shots. Log sessions, keep world notes, and never lose the thread.</p>
 
